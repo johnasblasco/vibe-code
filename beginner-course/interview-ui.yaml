@@ -1,6 +1,30 @@
 schema: interview-ui/v1
 command_name: vibecode
 title: Vibecode idea interview
+banner: |2-
+         _ _                         _
+   __   _(_) |__   ___  ___ ___   __| | ___
+   \ \ / / | '_ \ / _ \/ __/ _ \ / _` |/ _ \
+    \ V /| | |_) |  __/ (_| (_) | (_| |  __/
+     \_/ |_|_.__/ \___|\___\___/ \__,_|\___|
+tagline: From idea to a clear next step.
+welcome: Let's shape your project. Start simple; you can decide more later.
+welcome_back: Welcome back. Let's continue where you left off.
+session_help: Your answers save as you go. Ctrl+C pauses; vibecode next resumes.
+section_details: A little more detail
+section_review: Recommended defaults
+question_progress: '{number}. {question}'
+menu_rows: '7'
+review_hint: Space toggles a recommendation. Enter keeps your selection; anything unchecked is asked individually.
+next_steps_title: Your next steps
+next_steps: |-
+  vibecode doctor          Check your development setup
+  vibecode generate        Preview project files
+  vibecode generate --write  Review and confirm writing files
+  Missing details are asked before generation. Existing files stay safe.
+paused: Paused.
+value_pick_for_me: Recommend for me
+value_auto_detect: Detect automatically
 help: Show command help
 usage: Usage
 options: Options
@@ -10,8 +34,8 @@ next: Resume the saved idea interview
 state_option: Path to the local state file
 state: How would you like to record this answer?
 answered: Answer now
-deferred: Defer with an owner and revisit trigger
-not_applicable: Not applicable, with a reason
+deferred: Decide later
+not_applicable: Doesn't apply
 yes: Yes
 no: No
 owner: Who owns this deferred answer?
@@ -19,18 +43,19 @@ revisit: When or after what event should it be revisited?
 reason: Why does this question not apply?
 defer_command: /defer
 na_command: /na
-direct_hint: "Answer directly. Type /defer to leave this for later, or /na if it does not apply."
-masked: Text input is hidden to prevent accidental disclosure. Enter project information only; never enter credentials.
+direct_hint: '/defer = decide later; /na = does not apply'
+masked: Text stays hidden for privacy; never enter credentials. Menus show your available choices.
 why: Why this matters
 required: Enter a nonempty answer.
 number: Enter a finite number.
 invalid: The answer was not accepted. Check its type and allowed values, and remove any credentials.
-review: Keep selected recommendations; deselect any you want to answer individually. Space toggles; Enter confirms.
+review: Which recommendations would you like to keep?
 source: Source
+source_question: Built-in default
 verified: Verified
 bank_change: The question bank or knowledge packs changed. Affected questions need review; saved progress does not verify gates.
-cancelled: Interview cancelled. Previously accepted answers are saved. Run next to resume.
-completed: Idea interview complete. Use gates to inspect a course boundary. Later-stage execution is not available yet.
+cancelled: Progress saved. Run vibecode next to resume.
+completed: Your project brief is ready. Let's take the next step.
 blocked: Resolve the displayed blocking contradictions before proceeding.
 stop: Interview stopped. Follow the displayed expert guidance before proceeding.
 terminal_required: An interactive terminal is required for the interview. Use --help to view commands.

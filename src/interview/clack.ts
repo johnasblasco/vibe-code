@@ -1,19 +1,36 @@
-import { isCancel, select, multiselect, password, note, log, updateSettings } from '@clack/prompts';
+import { isCancel, select, multiselect, password, note, log, updateSettings, intro, outro, S_BAR, settings as clackSettings } from '@clack/prompts';
+import { styleText } from 'node:util';
 import type { LoadedKit } from '../data/types.js';
 import { CANCELLED } from './index.js';
 import type { InterviewPort } from './index.js';
-import { display, interfaceText } from './ui.js';
+import { banner, choiceLabel, display, interfaceText, wrap } from './ui.js';
 
 export function createClackPort(kit: LoadedKit, signal: AbortSignal, settings: { directAnswers?: boolean } = {}): InterviewPort {
   const ui = interfaceText(kit);
-  updateSettings({ accessible: true, messages: { cancel: ui.cancelled!, error: ui.invalid! } });
+  const maxItems = Number(ui.menu_rows);
+  if (!Number.isSafeInteger(maxItems) || maxItems < 1) throw new Error('Invalid interface data');
+  updateSettings({ messages: { cancel: ui.paused!, error: ui.invalid! } });
+  const columns = () => process.stdout.columns ?? 80;
+  const muted = (text: string) => styleText('dim', wrap(text, columns()));
+  const textMessage = (message: string) => wrap(message, columns()).replaceAll('\n',
+    `\n${clackSettings.withGuide ? `${styleText('gray', S_BAR)}  ` : '   '}`);
+  let privacyShown = false; let currentSection = ''; let activeMessage = '';
+  const asked = new Map<string, number>();
+  const privacy = () => { if (!privacyShown) { log.info(muted(ui.masked!)); privacyShown = true; } };
+  const section = (label: string) => {
+    if (currentSection !== label) { log.step(styleText('bold', display(label))); currentSection = label; }
+  };
+  const flow = kit.documents.find((document) => document.path === 'beginner-course/interview-flow.yaml')?.data;
+  const sections = flow?.sections as
+    { label: string; questions: string[] }[] | undefined;
+  const reviewLabels = flow?.review_labels as Record<string, string> | undefined;
   const cancelled = (value: unknown) => signal.aborted || isCancel(value);
-  const text = (message: string) => password({ message, signal, mask: '*',
+  const text = (message: string) => password({ message: textMessage(message), signal, mask: '*',
     validate: (value) => value?.trim() ? undefined : ui.required });
   const choices = (values: unknown[], labels: Record<string, unknown> = {}) => values.map((value, index) => ({ value: index,
-    label: display(typeof value === 'string' && Object.hasOwn(labels, value) ? labels[value] : value) }));
+    label: choiceLabel(value, { option_labels: labels }, ui) }));
   const metadata = async (state: 'deferred' | 'not_applicable') => {
-    note(ui.masked);
+    privacy();
     if (state === 'deferred') {
       const owner = await text(ui.owner!); if (cancelled(owner)) return CANCELLED;
       const revisit = await text(ui.revisit!);
@@ -23,39 +40,60 @@ export function createClackPort(kit: LoadedKit, signal: AbortSignal, settings: {
     return cancelled(reason) ? CANCELLED : { state, reason };
   };
   const direct = async (question: Readonly<Record<string, unknown>>, allowed: string[]) => {
-    const message = display(question.ask); const options = (question.options ?? []) as unknown[];
+    const message = activeMessage; const options = (question.options ?? []) as unknown[];
     if (question.type === 'boolean' || question.type === 'single_select') {
       const answers: { value: boolean | number | string; label: string }[] = question.type === 'boolean'
         ? [{ value: true, label: ui.yes! }, { value: false, label: ui.no! }]
         : choices(options, question.option_labels as Record<string, unknown> | undefined);
       answers.push(...allowed.filter((value) => value !== 'answered').map((value) => ({ value, label: ui[value]! })));
-      const selected = await select({ message, signal, options: answers });
+      const selected = await select({ message, signal, options: answers, maxItems });
       if (cancelled(selected)) return CANCELLED;
       if (selected === 'deferred' || selected === 'not_applicable') return metadata(selected);
       return { state: 'answered', value: question.type === 'boolean' ? selected : options[selected as number] };
     }
-    note(ui.masked);
+    privacy();
     const action = (input: string) => input === ui.defer_command && allowed.includes('deferred') ? 'deferred'
       : input === ui.na_command && allowed.includes('not_applicable') ? 'not_applicable' : null;
-    const answer = await password({ message: `${message}${allowed.length > 1 ? `\n${ui.direct_hint}` : ''}`, signal, mask: '*',
+    if (allowed.length > 1) log.message(muted(ui.direct_hint!), { spacing: 0 });
+    const answer = await password({ message: textMessage(message), signal, mask: '*',
       validate: (input) => !input?.trim() ? ui.required : !action(input) && question.type === 'number' && !Number.isFinite(Number(input)) ? ui.number : undefined });
     if (cancelled(answer)) return CANCELLED;
     const selectedAction = action(answer as string);
     return selectedAction ? metadata(selectedAction) : { state: 'answered', value: question.type === 'number' ? Number(answer) : answer };
   };
   return {
+    start({ resuming }) {
+      if (signal.aborted) return;
+      intro(styleText(['bgCyan', 'black', 'bold'], ` ${display(ui.command_name)} `));
+      const accessible = clackSettings.accessible ?? Boolean(process.env.ACCESSIBLE && !['0', 'false'].includes(process.env.ACCESSIBLE));
+      if (!resuming && !accessible) log.message(styleText('cyan', banner(kit, columns())));
+      log.info(styleText('bold', wrap(resuming ? ui.welcome_back! : ui.tagline!, columns())));
+      if (!resuming) log.message(wrap(ui.welcome!, columns()), { spacing: 0 });
+      log.message(muted(ui.session_help!), { spacing: 0 });
+      privacy();
+    },
+    finish(status) {
+      if (status === 'completed') note(wrap(ui.next_steps!, columns()), ui.next_steps_title);
+      outro(display(ui[status]));
+    },
     isCancelled: () => signal.aborted,
     async ask(question) {
       if (signal.aborted) return CANCELLED;
-      const message = display(question.ask);
-      if (question.why) note(display(question.why), ui.why);
+      const id = String(question.id ?? question.ask);
+      if (!asked.has(id)) asked.set(id, asked.size + 1);
+      if (settings.directAnswers) section(sections?.find((item) => item.questions.includes(id))?.label ?? ui.section_details!);
+      const message = settings.directAnswers
+        ? display(ui.question_progress).replace('{number}', String(asked.get(id))).replace('{question}', display(question.ask))
+        : display(question.ask);
+      activeMessage = message;
+      if (question.why) log.message(muted(display(question.why)), { spacing: 0 });
       const allowed = (question.states_allowed ?? ['answered', 'deferred', 'not_applicable']) as string[];
       if (settings.directAnswers && allowed.includes('answered') && ['text', 'number', 'boolean', 'single_select'].includes(String(question.type))) return direct(question, allowed);
-      const state = allowed.length === 1 ? allowed[0] : await select({ message: `${message}\n${ui.state}`, signal,
+      const state = allowed.length === 1 ? allowed[0] : await select({ message: `${message}\n${ui.state}`, signal, maxItems,
         options: allowed.map((value) => ({ value, label: ui[value]! })) });
       if (cancelled(state)) return CANCELLED;
       if (state === 'deferred') {
-        note(ui.masked);
+        privacy();
         const owner = await text(ui.owner!);
         if (cancelled(owner)) return CANCELLED;
         const revisit = await text(ui.revisit!);
@@ -63,36 +101,36 @@ export function createClackPort(kit: LoadedKit, signal: AbortSignal, settings: {
         return { state, owner, revisit_when: revisit };
       }
       if (state === 'not_applicable') {
-        note(ui.masked);
+        privacy();
         const reason = await text(ui.reason!);
         return cancelled(reason) ? CANCELLED : { state, reason };
       }
       let value: unknown;
       const options = (question.options ?? []) as unknown[];
       if (question.type === 'boolean') {
-        value = await select({ message, signal,
+        value = await select({ message, signal, maxItems,
           options: [{ value: true, label: ui.yes! }, { value: false, label: ui.no! }] });
       } else if (question.type === 'single_select') {
-        const index = await select({ message, signal, options: choices(options, question.option_labels as Record<string, unknown> | undefined) });
+        const index = await select({ message, signal, options: choices(options, question.option_labels as Record<string, unknown> | undefined), maxItems });
         if (cancelled(index)) return CANCELLED;
         value = options[index as number];
       } else if (question.type === 'multi_select') {
-        const indices = await multiselect({ message, signal, options: choices(options, question.option_labels as Record<string, unknown> | undefined), required: false });
+        const indices = await multiselect({ message, signal, options: choices(options, question.option_labels as Record<string, unknown> | undefined), required: false, maxItems });
         if (cancelled(indices)) return CANCELLED;
         value = (indices as number[]).map((index) => options[index]);
       } else if (question.type === 'rank_priorities') {
         const remaining = choices(options);
         const ranked: unknown[] = [];
         while (remaining.length > 0) {
-          const index = await select({ message, signal, options: remaining });
+          const index = await select({ message, signal, options: remaining, maxItems });
           if (cancelled(index)) return CANCELLED;
           ranked.push(options[index as number]);
           remaining.splice(remaining.findIndex((option) => option.value === index), 1);
         }
         value = ranked;
       } else {
-        note(ui.masked);
-        const answer = await password({ message, signal, mask: '*', validate: (input) => {
+        privacy();
+        const answer = await password({ message: textMessage(message), signal, mask: '*', validate: (input) => {
           if (!input?.trim()) return ui.required;
           if (question.type === 'number' && !Number.isFinite(Number(input))) return ui.number;
           return undefined;
@@ -104,12 +142,14 @@ export function createClackPort(kit: LoadedKit, signal: AbortSignal, settings: {
     },
     async review(proposals) {
       if (signal.aborted) return CANCELLED;
-      const selected = await multiselect({ message: ui.review!, signal, required: false,
+      if (settings.directAnswers) section(ui.section_review!);
+      log.info(muted(ui.review_hint!));
+      const selected = await multiselect({ message: ui.review!, signal, required: false, maxItems,
         initialValues: proposals.map((proposal) => proposal.id),
         options: proposals.map((proposal) => ({ value: proposal.id,
-          label: `${display(proposal.question.ask)}: ${display(proposal.value)}`,
-          hint: `${ui.source}: ${display(proposal.source)}. ${display(proposal.why)}` +
-            (proposal.verified ? ` ${ui.verified}: ${display(proposal.verified)}` : '') })) });
+          label: `${display(reviewLabels?.[proposal.id] ?? proposal.question.ask)}: ${choiceLabel(proposal.value, proposal.question, ui)}`,
+          hint: [`${ui.source}: ${display(Object.hasOwn(ui, `source_${proposal.source}`) ? ui[`source_${proposal.source}`] : proposal.source)}`,
+            display(proposal.why), proposal.verified ? `${ui.verified}: ${display(proposal.verified)}` : ''].filter(Boolean).join('. ') })) });
       return cancelled(selected) ? CANCELLED : selected as string[];
     },
     report(event) {

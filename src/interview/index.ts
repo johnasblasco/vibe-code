@@ -11,6 +11,8 @@ export interface Proposal {
 }
 export interface InterviewEvent { kind: 'contradiction' | 'stop' | 'bank-change'; id: string; data: Row }
 export interface InterviewPort {
+  start?(context: { resuming: boolean }): void;
+  finish?(status: 'completed' | 'cancelled' | 'blocked' | 'stop'): void;
   ask(question: Row): Promise<unknown | typeof CANCELLED>;
   review(proposals: Proposal[]): Promise<string[] | typeof CANCELLED>;
   report(event: InterviewEvent): void;

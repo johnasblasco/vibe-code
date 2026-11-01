@@ -82,10 +82,12 @@ export async function runCli(argv: string[], io: CliIO = {}): Promise<number> {
         process.on('SIGINT', cancel);
         try {
           const port = io.portFactory ? io.portFactory(kit, controller.signal) : createClackPort(kit, controller.signal, { directAnswers: true });
+          port.start?.({ resuming: present });
           const result = await interview(kit, state, port, (next) => saveState(path, next), { guided: true });
           code = result.status === 'cancelled' ? EXIT.CANCELLED : result.status === 'blocked' ? EXIT.BLOCKED
             : result.status === 'stop' ? EXIT.STOP : EXIT.SUCCESS;
-          out(`${ui[result.status]}\n`);
+          if (port.finish) port.finish(result.status);
+          else out(`${ui[result.status]}\n`);
         } finally { process.removeListener('SIGINT', cancel); }
       });
   }

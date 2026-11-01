@@ -8,7 +8,7 @@ import { createClackPort } from '../../src/interview/clack.js';
 vi.mock('@clack/prompts', async (original) => ({
   ...await original<typeof import('@clack/prompts')>(),
   select: vi.fn(), password: vi.fn(), multiselect: vi.fn(), note: vi.fn(),
-  log: { warn: vi.fn(), info: vi.fn() },
+  log: { warn: vi.fn(), info: vi.fn(), step: vi.fn(), message: vi.fn() },
 }));
 const kit = await loadKit(fileURLToPath(new URL('../../', import.meta.url)));
 const makePort = () => createClackPort(kit, new AbortController().signal);

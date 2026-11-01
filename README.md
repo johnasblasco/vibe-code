@@ -59,6 +59,10 @@ and a decision engine tested against the nine acceptance personas. State persist
 and the idea-stage interview are implemented.
 Run `npm run build`, then `npm run vibecode -- init` to start or resume it.
 Use `npm run vibecode -- next` to resume; Ctrl+C preserves accepted answers.
+Fresh interviews show the Vibecode banner, then numbered questions grouped into clear sections.
+Long menus scroll; recommendation reviews use brief labels and readable values. Help stays
+compact and a completed brief shows the next commands. See the
+[terminal design guide](specs/012-terminal-design/quickstart.md) for the local preview and checks.
 The guided opening starts with name, description and project type. Optional sign-in, payments
 and other routing features share one checklist. Budget, scale, detailed data choices and AI
 workflow policies are asked later when needed. Ordinary opening questions accept a direct

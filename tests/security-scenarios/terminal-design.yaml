@@ -1,0 +1,11 @@
+schema: security-scenario/v1
+id: terminal-design
+failure_modes: [SW-32]
+checks:
+  - fresh_and_resumed_welcome
+  - narrow_terminal_wordmark
+  - one_privacy_notice_and_masked_text
+  - readable_values_with_provenance
+  - cancellation_is_not_completion
+  - cli_lifecycle_preserves_exit_codes
+test: tests/unit/terminal-design.test.ts

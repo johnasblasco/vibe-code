@@ -1,5 +1,19 @@
 schema: interview-flow/v1
 opening: [product.name, product.summary, product.platform]
+sections:
+  - label: Your project
+    questions: [product.name, product.summary, product.platform]
+  - label: What it needs
+    questions: [interview.capabilities, interview.hardware]
+review_labels:
+  product.maturity: Project goal
+  product.depth: Setup depth
+  aic.autonomy: AI can
+  aic.always_ask: Ask before
+  aic.protected_paths: Protected files
+  aic.ambiguity: When unsure
+  aic.done: A task is done when
+  aic.production_guard: Keep production off limits
 groups:
   - id: interview.capabilities
     ask: Which of these does your first version actually need?

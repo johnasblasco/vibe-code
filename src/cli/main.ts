@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 import { runCli, EXIT } from './program.js';
 
 // No raw exception messages: loader/IO errors can carry private input or local paths.

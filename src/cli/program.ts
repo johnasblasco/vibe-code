@@ -81,8 +81,8 @@ export async function runCli(argv: string[], io: CliIO = {}): Promise<number> {
         const cancel = () => { controller.abort(); };
         process.on('SIGINT', cancel);
         try {
-          const port = (io.portFactory ?? createClackPort)(kit, controller.signal);
-          const result = await interview(kit, state, port, (next) => saveState(path, next));
+          const port = io.portFactory ? io.portFactory(kit, controller.signal) : createClackPort(kit, controller.signal, { directAnswers: true });
+          const result = await interview(kit, state, port, (next) => saveState(path, next), { guided: true });
           code = result.status === 'cancelled' ? EXIT.CANCELLED : result.status === 'blocked' ? EXIT.BLOCKED
             : result.status === 'stop' ? EXIT.STOP : EXIT.SUCCESS;
           out(`${ui[result.status]}\n`);

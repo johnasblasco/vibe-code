@@ -1,0 +1,6 @@
+schema: security-scenario/v1
+id: short-interview
+failure_modes: [SW-32]
+opening: [product.name, product.summary, product.platform]
+later_questions: [markets, fleet_scale, unattended_offline, product.budget, product.ai_tool, product.new_or_existing, features.extras, data.sensitive, features.multi_tenant]
+max_software_prompts: 13

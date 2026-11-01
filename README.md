@@ -59,6 +59,11 @@ and a decision engine tested against the nine acceptance personas. State persist
 and the idea-stage interview are implemented.
 Run `npm run build`, then `npm run vibecode -- init` to start or resume it.
 Use `npm run vibecode -- next` to resume; Ctrl+C preserves accepted answers.
+The guided opening starts with name, description and project type. Optional sign-in, payments
+and other routing features share one checklist. Budget, scale, detailed data choices and AI
+workflow policies are asked later when needed. Ordinary opening questions accept a direct
+answer; use `/defer` or `/na` in text fields, or the corresponding menu action, to record an
+explicit alternative. See [the shorter interview guide](specs/011-short-interview/quickstart.md).
 The state file defaults to `.scaffolder/state.json`, which is ignored by Git.
 See [the interview guide](specs/005-idea-interview/quickstart.md) for limits and verification.
 Use `npm run vibecode -- premortem --dry-run` to preview ranked failures, then omit `--dry-run`
@@ -101,7 +106,7 @@ Read `docs/05-gap-analysis.md` first. In short:
   for stages 0–2. The CLI threat-model review is recorded with tested guards and explicit
   release gaps. Later course stages, publishing provenance and independent release testing remain.
 - The checks pass: validator (strict), 9 of 9 scenarios, expression tests. Passing means the kit is consistent and every checklist tag has a question. It does not mean the questions are complete or correct.
-- 64 failure modes are catalogued; 27 cite a source, 37 are engineering practice awaiting a citation.
+- 65 failure modes are catalogued; 27 cite a source, 38 are engineering practice awaiting a citation.
 - The coverage backbone is only partly verified: OWASP ASVS 5.0 chapter names, OWASP Top 10:2025 category names, and ETSI EN 303 645 provision names were written from memory.
 - Most pack research was built from secondary sources on 2026-10-31. Generation pins were
   verified against primary sources on 2026-11-01 and are re-resolved at generation time, with

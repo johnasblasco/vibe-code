@@ -17,6 +17,7 @@ definition snapshots so resume can report changes without silently accepting the
 | `ask` | yes | The question, in plain words. |
 | `type` | yes | `text`, `number`, `boolean`, `single_select`, `multi_select`, `rank_priorities`. |
 | `options` | for selects | Machine-friendly values. The CLI shows friendly labels. |
+| `option_labels` | no | Mapping from option values to friendly display labels; stored values remain unchanged. |
 | `default` | no | The "pick for me" value. Must be one of `options` (or `pick_for_me` / `auto_detect`). |
 | `why` | no | One or two plain sentences for beginners: why this matters, what happens if skipped. |
 | `covers` | yes | Tags from `knowledge-packs/standards-coverage-backbone.yaml`. This is how gaps are detected. |

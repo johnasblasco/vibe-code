@@ -1,0 +1,21 @@
+schema: interview-flow/v1
+opening: [product.name, product.summary, product.platform]
+groups:
+  - id: interview.capabilities
+    ask: Which of these does your first version actually need?
+    why: "Select only what applies. Leave everything unselected for a simple project. Unselected means No; you can add features later. Accounts add sign-in and access-control guidance."
+    flags:
+      - {id: user_accounts, label: People sign in to accounts}
+      - {id: physical, label: Hardware such as sensors or devices}
+      - {id: sensitive_data, label: Personal or sensitive information}
+      - {id: money, label: Payments or stored balances}
+      - {id: ai_decisions, label: AI makes decisions or acts for users}
+      - {id: multi_tenant, label: Separate organizations share the app}
+  - id: interview.hardware
+    ask: Which hardware features apply?
+    why: "Select the features your device uses. These determine its safety and setup checks."
+    flags:
+      - {id: radio, label: Wireless connections}
+      - {id: battery, label: Battery power}
+      - {id: mains, label: Wall-voltage power}
+      - {id: actuator, label: Moving or switching equipment}

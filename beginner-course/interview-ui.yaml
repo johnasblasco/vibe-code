@@ -17,6 +17,9 @@ no: No
 owner: Who owns this deferred answer?
 revisit: When or after what event should it be revisited?
 reason: Why does this question not apply?
+defer_command: /defer
+na_command: /na
+direct_hint: "Answer directly. Type /defer to leave this for later, or /na if it does not apply."
 masked: Text input is hidden to prevent accidental disclosure. Enter project information only; never enter credentials.
 why: Why this matters
 required: Enter a nonempty answer.

@@ -1,6 +1,9 @@
 {
-  "name": "scaffolder",
-  "version": "0.0.0",
+  "name": "@johnasblasco/vibecode",
+  "version": "0.1.0",
+  "description": "Guided project setup and safe project files for beginners",
+  "author": "johnasblasco",
+  "license": "MIT",
   "private": true,
   "type": "module",
   "engines": { "node": ">=26.13.0 <27" },
@@ -12,7 +15,9 @@
     "test": "vitest run",
     "test:tooling": "node --test tests/tooling/skeleton.node.test.mjs",
     "test:dependencies": "node --test tests/tooling/dependencies.node.test.mjs",
-    "test:security": "node --test tests/tooling/security.node.test.mjs"
+    "test:security": "node --test tests/tooling/security.node.test.mjs",
+    "test:release": "node --test tests/tooling/release.node.test.mjs",
+    "release:pack": "node tools/create-release.mjs"
   },
   "devDependencies": {
     "@eslint/js": "10.0.1",

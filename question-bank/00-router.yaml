@@ -1,4 +1,4 @@
-# Phase 0: the router. Asked first. Decides tier and which modules load.
+# Routing facts determine tiers and modules. The guided interview groups them after the project introduction.
 schema: question-bank/v1
 module: router
 flags:
@@ -13,9 +13,6 @@ flags:
   - {id: money, ask: "Will it take payments or hold balances?", type: boolean, covers: [project:payments]}
   - {id: ai_decisions, ask: "Will an AI model make decisions or take actions for users?", type: boolean, covers: [ai-risk:excessive-agency]}
   - {id: multi_tenant, ask: "Will separate organizations or teams share it?", type: boolean, covers: [asvs:authorization]}
-  - {id: markets, ask: "Which countries or regions will it be sold or used in?", type: text, covers: [regulatory:markets]}
-  - {id: fleet_scale, ask: "How many units or users do you expect in the first year?", type: single_select, options: [under_100, under_10000, over_10000], covers: [project:scale]}
-  - {id: unattended_offline, ask: "Must it keep working unattended or without internet?", type: boolean, covers: [iso25010:reliability]}
 tiers:
   - {id: T5, when: "harm_possible in ['serious_injury', 'death']", adds: [extensions/safety-critical, hardware/*]}
   - {id: T4, when: "physical or radio", adds: [hardware/*]}

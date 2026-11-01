@@ -5,18 +5,19 @@ modules:
     phase: 1
     questions:
       - {id: product.name, ask: "What is the project called?", type: text, why: "Used in file names, docs, and the instructions your AI reads.", covers: [arc42:introduction-goals]}
-      - {id: product.platform, ask: "What are you building?", type: single_select, options: [web_app, mobile_app, api_only, cli, browser_extension, desktop_app, game, ai_app, data_pipeline, library, hardware_device], why: "This decides which questions come next.", covers: [arc42:context-scope]}
-      - {id: product.new_or_existing, ask: "Is this a new project or an existing codebase?", type: single_select, options: [new, existing], why: "Existing projects are scanned first, so we only ask what is missing.", covers: [arc42:constraints]}
+      - id: product.platform
+        ask: What kind of project is it?
+        type: single_select
+        options: [web_app, mobile_app, api_only, cli, browser_extension, desktop_app, game, ai_app, data_pipeline, library, hardware_device]
+        option_labels: {web_app: Website or web app, mobile_app: Mobile app, api_only: API or backend, cli: Command-line tool, browser_extension: Browser extension, desktop_app: Desktop app, game: Game, ai_app: AI application, data_pipeline: Data pipeline, library: Reusable library, hardware_device: Hardware or connected device}
+        why: This decides which questions come next.
+        covers: [arc42:context-scope]
       - {id: product.summary, ask: "Describe it in one or two sentences.", type: text, why: "The AI reads this every session so it never forgets the goal.", covers: [arc42:introduction-goals]}
       - {id: product.audience, ask: "Who is it for, and what problem does it solve for them?", type: text, covers: [arc42:introduction-goals]}
       - {id: product.maturity, ask: "Is this a prototype, an MVP, or a long-term product?", type: single_select, options: [prototype, mvp, long_term], default: mvp, covers: [arc42:constraints]}
       - {id: product.team, ask: "Who is building it, and how experienced are they?", type: single_select, options: [solo_beginner, solo_experienced, small_team, larger_team], covers: [arc42:constraints, beginner-ops:skill-level]}
-      - {id: product.budget, ask: "What is your monthly budget for hosting and services?", type: single_select, options: [free_only, under_50_usd, flexible], covers: [arc42:constraints, project:cost]}
-      - {id: product.timeline, ask: "When do you need the first version?", type: text, covers: [arc42:constraints]}
       - {id: product.out_of_scope, ask: "What is explicitly NOT part of version 1?", type: text, why: "A written 'no' list stops the AI from adding features you did not ask for.", covers: [arc42:introduction-goals]}
-      - {id: product.ai_tool, ask: "Which AI coding tool will you use?", type: single_select, options: [claude_code, cursor, github_copilot, codex, other], why: "Decides which instruction files we generate.", covers: [project:ai-collaboration]}
       - {id: product.depth, ask: "How thorough should setup be?", type: single_select, options: [quick, standard, full], default: standard, covers: [arc42:solution-strategy]}
-      - {id: product.glossary, ask: "List any words in your idea that an outsider would not understand.", type: text, covers: [arc42:glossary]}
   - module: users-scale
     stage: plan
     phase: 2
@@ -35,9 +36,6 @@ modules:
     phase: 3
     questions:
       - {id: features.core, ask: "List the core features. Each becomes a user story.", type: text, covers: [arc42:context-scope, iso25010:functional-suitability]}
-      - {id: features.extras, ask: "Which of these will you need?", type: multi_select, options: [search, notifications, file_uploads, payments, admin_panel, analytics, ai_features, realtime, none], covers: [arc42:context-scope]}
-      - {id: data.sensitive, ask: "Will you store any of these?", type: multi_select, options: [passwords, payment_details, health_info, children_data, personal_info, none], why: "Sensitive data adds legal duties and stricter security rules.", covers: [asvs:data-protection, regulatory:privacy]}
-      - {id: features.multi_tenant, ask: "Will separate teams or organizations share one installation?", type: boolean, why: "Keeping one customer's data away from another's is the most common serious bug.", covers: [asvs:authorization, owasp-top10-2025:broken-access-control]}
       - {id: risks.known, ask: "What are you most worried could go wrong?", type: text, covers: [arc42:risks-technical-debt]}
   - module: data-model
     stage: plan
@@ -45,3 +43,26 @@ modules:
     questions:
       - {id: data.entities, ask: "What things does the app store? (users, posts, orders, files...)", type: text, covers: [project:data-model]}
       - {id: data.relations, ask: "How do those things relate? (a user has many posts, an order has many items...)", type: text, covers: [project:data-model, arc42:building-block-view]}
+  - module: project-setup
+    stage: plan
+    phase: 1.5
+    questions:
+      - {id: product.new_or_existing, ask: "Is this a new project or an existing codebase?", type: single_select, options: [new, existing], why: "Existing projects are scanned first, so we only ask what is missing.", covers: [arc42:constraints]}
+      - {id: product.budget, ask: "What is your monthly budget for hosting and services?", type: single_select, options: [free_only, under_50_usd, flexible], covers: [arc42:constraints, project:cost]}
+      - {id: product.timeline, ask: "When do you need the first version?", type: text, covers: [arc42:constraints]}
+      - {id: product.ai_tool, ask: "Which AI coding tool will you use?", type: single_select, options: [claude_code, cursor, github_copilot, codex, other], why: "Decides which instruction files we generate.", covers: [project:ai-collaboration]}
+      - {id: product.glossary, ask: "List any words in your idea that an outsider would not understand.", type: text, covers: [arc42:glossary]}
+  - module: feature-details
+    stage: plan
+    phase: 3
+    questions:
+      - {id: features.extras, ask: "Which of these will you need?", type: multi_select, options: [search, notifications, file_uploads, payments, admin_panel, analytics, ai_features, realtime, none], covers: [arc42:context-scope]}
+      - {id: data.sensitive, ask: "Will you store any of these?", type: multi_select, options: [passwords, payment_details, health_info, children_data, personal_info, none], why: "Sensitive data adds legal duties and stricter security rules.", covers: [asvs:data-protection, regulatory:privacy]}
+      - {id: features.multi_tenant, ask: "Will separate teams or organizations share one installation?", type: boolean, why: "Keeping one customer's data away from another's is the most common serious bug.", covers: [asvs:authorization, owasp-top10-2025:broken-access-control]}
+  - module: usage-context
+    stage: plan
+    phase: 2
+    questions:
+      - {id: markets, ask: "Which countries or regions will it be sold or used in?", type: text, covers: [regulatory:markets]}
+      - {id: fleet_scale, ask: "How many units or users do you expect in the first year?", type: single_select, options: [under_100, under_10000, over_10000], covers: [project:scale]}
+      - {id: unattended_offline, ask: "Must it keep working unattended or without internet?", type: boolean, covers: [iso25010:reliability]}

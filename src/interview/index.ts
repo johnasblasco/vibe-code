@@ -53,11 +53,13 @@ function proposals(kit: LoadedKit, state: State): Proposal[] {
 
 /** Terminal-independent idea interview. The caller supplies an awaited persistence operation. */
 export async function interview(kit: LoadedKit, initial: State, port: InterviewPort,
-  save: (state: State) => Promise<void>) {
+  save: (state: State) => Promise<void>, options: { guided?: boolean } = {}) {
   if (initial.progress.stage !== 'idea') throw new StateError('Interview requires the idea stage');
   let state = structuredClone(initial);
   let announced = new Set<string>();
   let driftAnnounced = false;
+  const flow = options.guided ? kit.documents.find((document) => document.path === 'beginner-course/interview-flow.yaml')?.data : undefined;
+  if (options.guided && (!flow || !Array.isArray(flow.opening) || !flow.opening.every((id) => typeof id === 'string') || !Array.isArray(flow.groups))) throw new StateError('Invalid interview flow');
   const persistAnswer = async (id: string, input: unknown): Promise<boolean> => {
     let next: State;
     try { next = setAnswer(state, kit, id, input); }
@@ -89,6 +91,27 @@ export async function interview(kit: LoadedKit, initial: State, port: InterviewP
     }
     return false;
   };
+  const askGroup = async (group: Row, flags: Row[]): Promise<boolean> => {
+    const labels = group.flags as Row[];
+    const question = { id: group.id, ask: group.ask, why: group.why, type: 'multi_select', states_allowed: ['answered'],
+      options: flags.map((flag) => String(flag.id)),
+      option_labels: Object.fromEntries(labels.map((label) => [String(label.id), label.label])),
+      covers: [...new Set(flags.flatMap((flag) => flag.covers as string[]))] };
+    state = { ...state, progress: { ...state.progress, current_question: String(flags[0]!.id) } };
+    await save(state);
+    while (!port.isCancelled?.()) {
+      const input = await port.ask(question);
+      if (input === CANCELLED || port.isCancelled?.()) return false;
+      let next = state;
+      try {
+        const answer = validateAnswerForQuestion(question, input);
+        if (answer.state !== 'answered' || !Array.isArray(answer.value)) throw new StateError('Invalid checklist answer');
+        for (const flag of flags) next = setAnswer(next, kit, String(flag.id), { state: 'answered', value: answer.value.includes(String(flag.id)) });
+      } catch (error) { if (!(error instanceof StateError)) throw error; port.invalid(); continue; }
+      await save(next); state = next; return true;
+    }
+    return false;
+  };
   while (!port.isCancelled?.()) {
     const session = resume(state, kit);
     if ((session.bankChanged || session.changedPacks.length > 0) && !driftAnnounced) {
@@ -105,8 +128,23 @@ export async function interview(kit: LoadedKit, initial: State, port: InterviewP
       for (const rule of session.decision.stopRules) port.report({ kind: 'stop', id: rule.id, data: rule.data });
       return { status: 'stop' as const, state };
     }
+    const opening = (flow?.opening as string[] | undefined)?.map((id) => session.pending.find((item) => item.id === id)).find((item) => item !== undefined);
+    if (opening) {
+      if (!await ask(opening.question)) return { status: 'cancelled' as const, state };
+      continue;
+    }
     const flag = session.pendingFlags[0];
     if (flag) {
+      const groups = (flow?.groups ?? []) as Row[];
+      const group = groups.find((group) => Array.isArray(group.flags) && (group.flags as Row[]).some((item) => item.id === flag.id));
+      if (group) {
+        const labels = group.flags as Row[];
+        const grouped = session.pendingFlags.filter((item) => labels.some((label) => label.id === item.id));
+        if (grouped.some((item) => item.type !== 'boolean') || typeof group.id !== 'string' || typeof group.ask !== 'string' ||
+            labels.some((label) => typeof label.id !== 'string' || typeof label.label !== 'string')) throw new StateError('Invalid routing checklist');
+        if (!await askGroup(group, grouped)) return { status: 'cancelled' as const, state };
+        continue;
+      }
       if (!await ask(flag)) return { status: 'cancelled' as const, state };
       continue;
     }

@@ -53,3 +53,33 @@ test('aborted signals cancel before starting another prompt', async () => {
   expect(await createClackPort(kit, abort.signal).ask({ ask: 'Question', type: 'text' })).toBe(CANCELLED);
   expect(vi.mocked(clack.select).mock.calls.length).toBe(calls);
 });
+
+test('direct boolean answers use one menu while retaining explicit defer actions', async () => {
+  const before = vi.mocked(clack.select).mock.calls.length;
+  vi.mocked(clack.select).mockResolvedValueOnce(false);
+  const port = createClackPort(kit, new AbortController().signal, { directAnswers: true });
+  expect(await port.ask({ ask: 'Question', type: 'boolean' })).toEqual({ state: 'answered', value: false });
+  expect(vi.mocked(clack.select).mock.calls.length - before).toBe(1);
+  const values = vi.mocked(clack.select).mock.calls.at(-1)?.[0].options.map((item) => item.value);
+  expect(values).toEqual([true, false, 'deferred', 'not_applicable']);
+});
+
+test('direct text has no state menu; an explicit defer command still collects its metadata', async () => {
+  const before = vi.mocked(clack.select).mock.calls.length;
+  const port = createClackPort(kit, new AbortController().signal, { directAnswers: true });
+  vi.mocked(clack.password).mockResolvedValueOnce('Small project');
+  expect(await port.ask({ ask: 'Describe it', type: 'text' })).toEqual({ state: 'answered', value: 'Small project' });
+  vi.mocked(clack.password).mockResolvedValueOnce('/defer').mockResolvedValueOnce('Owner').mockResolvedValueOnce('Before planning');
+  expect(await port.ask({ ask: 'Describe it', type: 'text' })).toEqual({ state: 'deferred', owner: 'Owner', revisit_when: 'Before planning' });
+  expect(vi.mocked(clack.select).mock.calls.length).toBe(before);
+});
+
+test('answered-only capability checklist uses readable labels without a redundant state menu', async () => {
+  const before = vi.mocked(clack.select).mock.calls.length;
+  vi.mocked(clack.multiselect).mockResolvedValueOnce([0]);
+  const port = createClackPort(kit, new AbortController().signal, { directAnswers: true });
+  expect(await port.ask({ ask: 'Features', type: 'multi_select', states_allowed: ['answered'], options: ['user_accounts'],
+    option_labels: { user_accounts: 'People sign in' } })).toEqual({ state: 'answered', value: ['user_accounts'] });
+  expect(vi.mocked(clack.select).mock.calls.length).toBe(before);
+  expect(vi.mocked(clack.multiselect).mock.calls.at(-1)?.[0].options[0]?.label).toBe('People sign in');
+});

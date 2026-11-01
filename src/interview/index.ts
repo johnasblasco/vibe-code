@@ -1,7 +1,7 @@
 import type { LoadedKit } from '../data/types.js';
 import { check } from '../expressions/index.js';
 import type { Value } from '../expressions/index.js';
-import { createState, resume, setAnswer, StateError } from '../state/index.js';
+import { createState, resume, setAnswer, StateError, validateAnswerForQuestion } from '../state/index.js';
 import type { State } from '../state/index.js';
 
 type Row = Readonly<Record<string, unknown>>;
@@ -25,7 +25,9 @@ function proposals(kit: LoadedKit, state: State): Proposal[] {
     const question = available.get(id);
     if (!question || value === 'pick_for_me' || value === 'auto_detect') return;
     try {
-      setAnswer(state, kit, id, { state: 'answered', value });
+      // resume validated the whole state; checking a suggestion must not clone it again.
+      // Accepted answers still use setAnswer and awaited persistence below.
+      validateAnswerForQuestion(question, { state: 'answered', value });
       result.set(id, { id, question, value: value as Value, source, why, verified });
     } catch (error) { if (!(error instanceof StateError)) throw error; }
   };

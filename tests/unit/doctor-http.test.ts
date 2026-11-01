@@ -4,7 +4,7 @@ import { request } from 'node:https';
 import { lookup } from 'node:dns/promises';
 import { fileURLToPath } from 'node:url';
 import { expect, test, vi } from 'vitest';
-import { loadKit } from '../../src/data/loader.js';
+import { loadKit, loadYamlFile } from '../../src/data/loader.js';
 import { requestPreview } from '../../src/doctor/network.js';
 
 vi.mock('node:https', async (original) => ({ ...await original<typeof import('node:https')>(), request: vi.fn() }));
@@ -31,5 +31,15 @@ test('a private DNS result prevents the HTTPS connection entirely', async () => 
   vi.mocked(lookup).mockResolvedValueOnce([{ address: '127.0.0.1', family: 4 }] as unknown as Awaited<ReturnType<typeof lookup>>);
   const before = vi.mocked(request).mock.calls.length;
   await expect(requestPreview('https://preview.example.org/', kit)).rejects.toThrow();
+  expect(vi.mocked(request).mock.calls.length).toBe(before);
+});
+
+test('non-global IPv6 DNS answers prevent HTTPS, including a mixed public/non-global set', async () => {
+  const scenario = (await loadYamlFile(fileURLToPath(new URL('../../', import.meta.url)), 'tests/security-scenarios/cli-hardening.yaml')).data;
+  const before = vi.mocked(request).mock.calls.length;
+  for (const address of scenario.non_public_ipv6 as string[]) {
+    vi.mocked(lookup).mockResolvedValueOnce([{ address: '2001:4860:4860::8888', family: 6 }, { address, family: 6 }] as unknown as Awaited<ReturnType<typeof lookup>>);
+    await expect(requestPreview('https://preview.example.org/', kit)).rejects.toThrow();
+  }
   expect(vi.mocked(request).mock.calls.length).toBe(before);
 });

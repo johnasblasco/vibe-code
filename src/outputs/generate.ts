@@ -5,7 +5,7 @@ import { noSecrets, resume } from '../state/index.js';
 import { check } from '../expressions/index.js';
 import { markdown, premortem, renderTable } from '../premortem/index.js';
 import { interfaceText } from '../interview/ui.js';
-import { field, resolvePins } from './lookups.js';
+import { field, LookupError, resolvePins } from './lookups.js';
 import type { LookupRequest, Pin } from './lookups.js';
 import { portablePath, readTemplate } from './paths.js';
 import { parseYaml } from '../data/loader.js';
@@ -79,7 +79,7 @@ export async function prepareGeneration(root: string, kit: LoadedKit, state: Sta
       continue;
     }
     if (!['markdown', 'yaml', 'env', 'text'].includes(text(file.format))) throw new GenerationError('Unknown output format');
-    const source = (await readTemplate(root, text(file.source))).replaceAll('\r\n', '\n');
+    const source = (await readTemplate(root, text(file.source), kit.verifiedAsset)).replaceAll('\r\n', '\n');
     if (unresolved(source.replace(tokens, ''))) throw new GenerationError('Malformed output placeholder');
     active.push({ definition: file, source });
   }
@@ -123,6 +123,12 @@ export async function prepareGeneration(root: string, kit: LoadedKit, state: Sta
   if (missing.size || needsContact) throw new MissingAnswers([...missing], needsContact);
   const pins = await resolvePins(kit, [...requiredPins], { now, ...(options.offline !== undefined ? { offline: options.offline } : {}),
     ...(options.request ? { request: options.request } : {}), ...(options.signal ? { signal: options.signal } : {}) });
+  // Metadata parsing alone is not approval: an already reviewed release cannot silently move.
+  for (const pin of pins) {
+    const config = mapping(lookupConfigs[pin.id]);
+    if (config.kind === 'github' && pin.tag?.replace(/^v/, '') === String(config.tag).replace(/^v/, '') &&
+        pin.value !== field(toolPack.values, text(config.field))) throw new LookupError('Previously reviewed release changed');
+  }
   const byId = new Map(pins.map((pin) => [pin.id, pin]));
   const resolverText = interfaceText(kit, 'outputs/resolvers.yaml');
   const values = new Map<string, string>();

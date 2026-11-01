@@ -2,7 +2,7 @@ import { Command, CommanderError, InvalidArgumentError } from 'commander';
 import { lstat, mkdir } from 'node:fs/promises';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { loadKit } from '../data/loader.js';
+import { loadVerifiedKit } from '../security/integrity.js';
 import type { LoadedKit } from '../data/types.js';
 import { createState, loadState, saveState } from '../state/index.js';
 import { interview } from '../interview/index.js';
@@ -37,7 +37,13 @@ async function exists(path: string): Promise<boolean> {
 
 export async function runCli(argv: string[], io: CliIO = {}): Promise<number> {
   const kitRoot = io.kitRoot ?? fileURLToPath(new URL('../../', import.meta.url));
-  const kit = await loadKit(kitRoot);
+  let kit: LoadedKit;
+  try { kit = await loadVerifiedKit(kitRoot); }
+  catch {
+    // Bootstrap diagnostic cannot depend on unverified interface assets.
+    (io.err ?? ((text: string) => { process.stderr.write(text); }))('Kit integrity check failed. No actions were started.\n');
+    return EXIT.ERROR;
+  }
   const ui = interfaceText(kit);
   const out = io.out ?? ((text: string) => { process.stdout.write(text); });
   const err = io.err ?? ((text: string) => { process.stderr.write(text); });
@@ -95,7 +101,7 @@ export async function runCli(argv: string[], io: CliIO = {}): Promise<number> {
     .action(async (options: { state: string; project: string; top: number; dryRun?: boolean }) => {
       const state = await loadState(resolve(options.state));
       const report = premortem(kit, state, { top: options.top });
-      const text = renderRiskRegister(kit, state, report, await readRiskTemplate(kitRoot));
+      const text = renderRiskRegister(kit, state, report, await readRiskTemplate(kitRoot, kit.verifiedAsset));
       await writeRiskRegister(resolve(options.project), text, { dryRun: options.dryRun ?? false });
       out(options.dryRun ? text : `${ui.risk_written}\n`);
     });

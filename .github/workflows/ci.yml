@@ -31,6 +31,8 @@ jobs:
           python-version: '3.14.6'
       - run: npm ci --ignore-scripts
       - run: npm run test:dependencies
+      - run: npm run test:security
+      - run: node tools/update-integrity.mjs
       - run: npm run lint
       - run: npm run typecheck
       - run: npm run build

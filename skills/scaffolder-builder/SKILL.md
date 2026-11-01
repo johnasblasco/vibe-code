@@ -24,6 +24,7 @@ The product is a CLI that interviews a (often beginner) user, decides a compatib
 - Expressions use the grammar in `specs/expressions.md`. Never use `eval`.
 - Tiers are cumulative. Router flags decide what loads (see `question-bank/00-router.yaml`).
 - Treat the CLI as a supply-chain target: it runs shell commands and writes files. Pin dependencies, scan them, never run commands built from unvalidated input.
+- CLI startup verifies runtime assets against integrity/assets.json and rendering uses that verified snapshot. After intentional asset edits, review the actual source diff before explicitly refreshing the inventory with node tools/update-integrity.mjs --write. Never refresh hashes to hide unexpected changes. This checksum reference depends on a trusted checkout; it is not a signed release or permission to add remote updates.
 
 ## Build order
 1. Loader and validator (port `tools/validate.py`).

@@ -11,7 +11,8 @@
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "test:tooling": "node --test tests/tooling/skeleton.node.test.mjs",
-    "test:dependencies": "node --test tests/tooling/dependencies.node.test.mjs"
+    "test:dependencies": "node --test tests/tooling/dependencies.node.test.mjs",
+    "test:security": "node --test tests/tooling/security.node.test.mjs"
   },
   "devDependencies": {
     "@eslint/js": "10.0.1",

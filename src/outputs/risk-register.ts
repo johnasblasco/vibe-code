@@ -40,7 +40,8 @@ async function unlinkedDirectory(path: string): Promise<void> {
 }
 
 /** Read only the installed kit's fixed template; never follow a linked template component. */
-export async function readRiskTemplate(root: string): Promise<string> {
+export async function readRiskTemplate(root: string, verifiedAsset?: (path: string) => string): Promise<string> {
+  if (verifiedAsset) return verifiedAsset('templates/project/docs/risk-register.md.tmpl');
   const base = await realpath(root);
   let path = base;
   for (const part of ['templates', 'project', 'docs', 'risk-register.md.tmpl']) {

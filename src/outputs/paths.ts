@@ -10,9 +10,10 @@ export function portablePath(path: string): string[] {
   }
   return parts;
 }
-export async function readTemplate(root: string, source: string): Promise<string> {
+export async function readTemplate(root: string, source: string, verifiedAsset?: (path: string) => string): Promise<string> {
   const parts = portablePath(source);
   if (!(source.startsWith('templates/') || source.startsWith('skills/project-templates/'))) throw new OutputError('Unknown template root');
+  if (verifiedAsset) return verifiedAsset(source);
   let path = await realpath(root);
   for (const part of parts) {
     path = join(path, part);

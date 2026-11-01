@@ -76,6 +76,12 @@ for current machine readiness. `doctor --stage stage-1` adds Git/secret checks; 
 explicitly approved nonproduction preview/CI checks. `next --course` shows beginner cards and
 `next --course --advance` saves the next cursor only after fresh checks. No do/undo commands,
 packages, hooks, or deployments run automatically. See [the course guide](specs/008-beginner-course/quickstart.md).
+The CLI verifies its reviewed pack/template inventory before any command and uses a verified
+snapshot for generation. Unexpected asset changes stop execution. Intentional source edits
+need review before explicitly refreshing `integrity/assets.json`; see the
+[hardening review](docs/08-cli-hardening-review.md) for all 11 threats, code/test evidence,
+maintenance commands and release prerequisites. Run `npm run test:security` and
+`node tools/update-integrity.mjs` alongside the existing checks.
 Run `npm run lint`, `npm run typecheck`, `npm test`, and `npm run test:tooling`.
 In Windows PowerShell use `npm.cmd` if execution policy blocks `npm.ps1`.
 See [the skeleton validation guide](specs/001-project-skeleton/quickstart.md) for approved
@@ -92,9 +98,10 @@ bank-version metadata, persistence checks, and limitations.
 Read `docs/05-gap-analysis.md` first. In short:
 - The TypeScript CLI supports the idea interview, routing, state/resume, gate enforcement,
   pre-mortem risk registers, bound project file generation, doctor, and checked course guidance
-  for stages 0–2. Later course stages and the final threat-model hardening review remain.
+  for stages 0–2. The CLI threat-model review is recorded with tested guards and explicit
+  release gaps. Later course stages, publishing provenance and independent release testing remain.
 - The checks pass: validator (strict), 9 of 9 scenarios, expression tests. Passing means the kit is consistent and every checklist tag has a question. It does not mean the questions are complete or correct.
-- 62 failure modes are catalogued; 27 cite a source, 35 are engineering practice awaiting a citation.
+- 64 failure modes are catalogued; 27 cite a source, 37 are engineering practice awaiting a citation.
 - The coverage backbone is only partly verified: OWASP ASVS 5.0 chapter names, OWASP Top 10:2025 category names, and ETSI EN 303 645 provision names were written from memory.
 - Most pack research was built from secondary sources on 2026-10-31. Generation pins were
   verified against primary sources on 2026-11-01 and are re-resolved at generation time, with

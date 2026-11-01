@@ -6,4 +6,6 @@ export interface LoadedDocument {
 
 export interface LoadedKit {
   readonly documents: readonly LoadedDocument[];
+  /** Present only for verified runtime kits; raw parser fixtures intentionally omit it. */
+  readonly verifiedAsset?: (path: string) => string;
 }

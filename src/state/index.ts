@@ -43,6 +43,8 @@ export function noSecrets(value: unknown): void {
       /-----BEGIN (?:[A-Z ]+ )?PRIVATE KEY-----/,
       /\b(?:password|api[_ -]?key|secret|token)\s*[:=]\s*\S+/i,
       /\b[a-z][a-z0-9+.-]*:\/\/[^\s/:@]+:[^\s@]+@/i,
+      /\b[a-z][a-z0-9+.-]*:\/\/[^\s/?#]*@/i,
+      /\bauthorization\s*:\s*(?:bearer|basic)\s+\S+/i,
       /\beyJ[A-Za-z0-9_-]{8,}\.[A-Za-z0-9_-]{10,}\.[A-Za-z0-9_-]{10,}/,
     ];
     if (patterns.some((pattern) => pattern.test(value))) throw new StateError('State cannot contain secret-shaped values');
@@ -93,6 +95,11 @@ function validateAnswer(input: unknown, question: Definition): Answer {
   }
   noSecrets(answer);
   return structuredClone(answer) as Answer;
+}
+
+/** Validate an offered value only. This grants no acceptance, persistence or gate status. */
+export function validateAnswerForQuestion(question: unknown, answer: unknown): Answer {
+  return validateAnswer(answer, definition(question));
 }
 
 export function createState(kit: LoadedKit): State {

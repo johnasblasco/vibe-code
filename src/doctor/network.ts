@@ -18,7 +18,7 @@ export function publicAddress(address: string): boolean {
     const groups = address.toLowerCase().split(':');
     const first = Number.parseInt(groups[0] ?? '', 16); const second = Number.parseInt(groups[1] ?? '', 16);
     return first >= 0x2000 && first <= 0x3fff && first !== 0x2002 &&
-      !(first === 0x2001 && (second === 0xdb8 || second === 0));
+      first !== 0x3fff && !(first === 0x2001 && (second === 0xdb8 || second === 0 || second === 2));
   }
   return false;
 }

@@ -24,4 +24,8 @@ Registry to user machine. Pack and template server to CLI. User answers to shell
 | Beginner trusts a wrong recommendation | Misleading output | Show verification dates, never claim certification, show the expert escalation | Review wording against the liability rules |
 
 ## Review
+
+The 2026-11-01 implementation review, code/test links for every row, observed results and
+unverified release prerequisites are in [08-cli-hardening-review.md](08-cli-hardening-review.md).
+The table above remains the original requirements; this link does not mark every threat solved.
 Before each release: rerun this table against what changed; run the Trail of Bits-style static analysis and supply-chain checks on the CLI; have someone outside the team try to break the install and the `stuck` redaction.

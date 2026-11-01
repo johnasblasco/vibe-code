@@ -1,6 +1,7 @@
 ﻿# Research: Project Skeleton
 
-Lookup date: 2026-11-01. No packages installed.
+Lookup date: 2026-11-01. All six listed packages approved by the user; installations attempted
+but blocked by the session environment. No successful package installation claimed.
 
 ## Proposed Direct Dependencies
 
@@ -34,15 +35,35 @@ Do not install commander or @clack/prompts in the skeleton; add them when implem
 
 ## Unresolved Execution Prerequisites
 
-- Explicit installation approval for each proposed direct package.
+- Installation approval received for the six packages listed above.
 - Python reference checks blocked on missing PyYAML; no baseline pass claimed.
 - Confirm final graph and Node typings requirements before installation. If @types/node or any
   additional direct package is needed, verify its name and current version and obtain approval.
-- Verify an exact supported Node release for CI from the official Node release source.
-- Resolve full commit hashes for actions/checkout, actions/setup-node, and actions/setup-python
-  from their official repositories. Never copy hashes from memory.
+- Runtime and full action hashes verified below; implementation remains pending.
 - Verify install-script policy with the selected toolchain before writing CI.
 
 Network limits: shell requests to registry.npmjs.org failed to connect. Several registry/browser
 requests returned access errors. GitHub release pages and official documentation were accessible.
 Source manifests on main establish package identity and peer ranges, not publication by themselves.
+
+## Verified Runtime and Actions
+
+Node 26.13.0 is listed as LTS in https://nodejs.org/dist/index.json and matches the installed runtime.
+The hashes below were obtained by following each official release's commit link on 2026-11-01.
+
+| Action | Release | Full commit and primary source |
+| --- | --- | --- |
+| actions/checkout | v7.0.1 | https://github.com/actions/checkout/commit/3d3c42e5aac5ba805825da76410c181273ba90b1 |
+| actions/setup-node | v7.1.0 | https://github.com/actions/setup-node/commit/949feb2413d6458794dcd2491c4babbbce0c15c1 |
+| actions/setup-python | v7.1.0 | https://github.com/actions/setup-python/commit/6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 |
+
+## Actual Execution Evidence
+
+- python -m venv .venv: exit 0; local environment created.
+- Local pip install PyYAML==6.0.3: exit 1; no matching distribution. An explicit official
+  PyPI index retry also failed. This is not evidence that the package/version does not exist.
+- node --test tests/tooling/skeleton.node.test.mjs before implementation: exit 1;
+  two failures for missing package.json and missing .github/workflows/ci.yml.
+- npm install with ignore-scripts and explicit official registry: exit 1, EACCES fetching
+  https://registry.npmjs.org/@eslint%2fjs. No lockfile produced.
+- Dependent implementation paused on failed installation. No commits or staging performed.

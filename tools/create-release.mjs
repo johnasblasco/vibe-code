@@ -17,6 +17,7 @@ export function publishManifest(workspace, commandName) {
       !workspace.dependencies || !Object.values(workspace.dependencies).every(exact)) fail();
   return { name: workspace.name, version: workspace.version, description: workspace.description,
     author: workspace.author, license: workspace.license, type: 'module', private: false,
+    repository: workspace.repository, homepage: workspace.homepage, bugs: workspace.bugs,
     engines: workspace.engines, bin: { [commandName]: 'dist/cli/main.js' },
     files: ['dist', ...assetRoots, inventoryPath, 'README.md', 'LICENSE', 'release-lock.json'],
     dependencies: workspace.dependencies, bundleDependencies: Object.keys(workspace.dependencies),

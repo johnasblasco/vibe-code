@@ -10,7 +10,7 @@ import { premortem, renderTable } from '../../src/premortem/index.js';
 const root = fileURLToPath(new URL('../../', import.meta.url));
 const kit = await loadKit(root);
 const scenarios = globSync('tests/scenarios/*.yaml', { cwd: root });
-const python = process.platform === 'win32' ? join(root, '.venv/Scripts/python.exe') : 'python';
+const python = process.env.SCAFFOLDER_PYTHON ?? (process.platform === 'win32' ? join(root, '.venv/Scripts/python.exe') : 'python');
 
 for (const path of scenarios) {
   test(`matches Python pre-mortem ranking and scores: ${path}`, async () => {

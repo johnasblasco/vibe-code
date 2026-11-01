@@ -105,7 +105,8 @@ bank-version metadata, persistence checks, and limitations.
 ## Kit validation status and limits
 
 For the scoped npm tarball, packaging checks and exact publication procedure, read the
-[npm release guide](docs/09-npm-release.md). Local packing and isolated extracted-package
+[npm release guide](docs/09-npm-release.md). The [GitHub/npm guide](docs/10-github-npm-publishing.md)
+explains the trusted-publisher connection and release-triggered workflow. Local packing and isolated extracted-package
 checks pass; this environment's registry publication attempt failed with EACCES.
 
 Read `docs/05-gap-analysis.md` first. In short:

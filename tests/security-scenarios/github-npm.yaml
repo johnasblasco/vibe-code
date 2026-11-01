@@ -1,0 +1,14 @@
+schema: security-scenario/v1
+id: github-npm
+failure_modes: [AI-03]
+observed_run: https://github.com/johnasblasco/vibe-code/actions/runs/41324651348
+failures:
+  - python_yaml_dependency_installed_after_reference_tests
+  - windows_reference_tests_assume_a_local_virtual_environment
+  - macos_temporary_path_has_a_symlinked_ancestor
+prevention:
+  - install_approved_pyyaml_before_npm_test
+  - select_the_configured_python_interpreter_explicitly
+  - create_a_physical_runner_owned_temporary_directory
+  - check_stable_tag_version_repository_commit_and_lock_before_packing
+tests: tests/tooling/publishing.node.test.mjs

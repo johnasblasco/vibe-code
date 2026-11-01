@@ -1,5 +1,8 @@
 # npm release
 
+For repeat releases through GitHub Actions, use [GitHub/npm publishing](10-github-npm-publishing.md).
+The 2026-11-01 artifact below is historical; build a new artifact for current source changes.
+
 Package: @johnasblasco/vibecode@0.1.0. Command: vibecode. Owner: johnasblasco.
 The user chose MIT and authorized public publication and bundling the already installed
 locked runtime dependencies. No new dependency installation or git commit is part of this work.

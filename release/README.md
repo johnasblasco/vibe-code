@@ -13,7 +13,7 @@ Requires Node.js >=26.13.0 and <27. The package is @johnasblasco/vibecode; its c
 After this version has been published:
 
 ```sh
-npm install --global @johnasblasco/vibecode@0.1.0 --ignore-scripts
+npm install --global @johnasblasco/vibecode --ignore-scripts
 ```
 
 On Windows PowerShell, use npm.cmd if npm is blocked by execution policy. Use vibecode.cmd

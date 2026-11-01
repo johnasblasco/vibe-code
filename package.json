@@ -3,6 +3,9 @@
   "version": "0.1.0",
   "description": "Guided project setup and safe project files for beginners",
   "author": "johnasblasco",
+  "repository": { "type": "git", "url": "git+https://github.com/johnasblasco/vibe-code.git" },
+  "homepage": "https://github.com/johnasblasco/vibe-code#readme",
+  "bugs": { "url": "https://github.com/johnasblasco/vibe-code/issues" },
   "license": "MIT",
   "private": true,
   "type": "module",
@@ -17,6 +20,8 @@
     "test:dependencies": "node --test tests/tooling/dependencies.node.test.mjs",
     "test:security": "node --test tests/tooling/security.node.test.mjs",
     "test:release": "node --test tests/tooling/release.node.test.mjs",
+    "test:publishing": "node --test tests/tooling/publishing.node.test.mjs",
+    "release:prepare": "node tools/prepare-publish.mjs",
     "release:pack": "node tools/create-release.mjs"
   },
   "devDependencies": {

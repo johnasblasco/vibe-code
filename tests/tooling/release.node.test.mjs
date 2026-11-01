@@ -8,6 +8,7 @@ import { fileURLToPath, URL } from 'node:url';
 import test from 'node:test';
 import { parseDocument } from 'yaml';
 import { createRelease, packMetadata, publishManifest, verifyPackList, verifyRuntimePackage } from '../../tools/create-release.mjs';
+import { smokeRelease } from '../../tools/smoke-release.mjs';
 
 const root = fileURLToPath(new URL('../../', import.meta.url));
 const manifest = JSON.parse(await readFile(new URL('../../package.json', import.meta.url), 'utf8'));
@@ -16,7 +17,8 @@ const scenario = parseDocument(await readFile(new URL('../security-scenarios/npm
 test('staged public metadata exposes vibecode while the workspace retains its publication guard', () => {
   assert.equal(manifest.private, true); assert.equal(manifest.bin, undefined);
   const release = publishManifest(manifest, 'vibecode');
-  assert.equal(release.name, '@johnasblasco/vibecode'); assert.equal(release.version, '0.1.0');
+  assert.equal(release.name, '@johnasblasco/vibecode'); assert.equal(release.version, manifest.version);
+  assert.equal(publishManifest({ ...manifest, version: '0.1.1' }, 'vibecode').version, '0.1.1');
   assert.equal(release.license, 'MIT'); assert.equal(release.private, false);
   assert.deepEqual(release.bin, { vibecode: 'dist/cli/main.js' });
   assert.deepEqual(release.dependencies, manifest.dependencies);
@@ -37,7 +39,7 @@ test('packed inventory rejects omissions, additions and duplicate paths', () => 
 });
 
 test('npm pack metadata accepts one named package in both supported JSON layouts', () => {
-  const row = { name: manifest.name, version: manifest.version };
+  const row = { name: manifest.name, version: '0.1.0' };
   for (const input of Object.values(scenario.pack_metadata)) assert.deepEqual(packMetadata(input, manifest.name), row);
   for (const data of [[row, row], {}, { wrong: row }, { [manifest.name]: row, extra: row }, null]) {
     assert.throws(() => packMetadata(data, manifest.name));
@@ -58,8 +60,10 @@ test('runtime bundles refuse version drift, altered dependencies, install hooks 
 
 test('native release pack includes the launcher, complete assets and only locked production dependencies', async () => {
   const result = await createRelease(root);
+  await smokeRelease(result);
+  await assert.rejects(smokeRelease({ ...result, sha256: '0'.repeat(64) }));
   const receipt = JSON.parse(await readFile(result.receipt, 'utf8'));
-  assert.equal(receipt.name, '@johnasblasco/vibecode'); assert.equal(receipt.version, '0.1.0');
+  assert.equal(receipt.name, '@johnasblasco/vibecode'); assert.equal(receipt.version, manifest.version);
   assert.match(receipt.sha256, /^[a-f0-9]{64}$/); assert.match(receipt.integrity, /^sha512-/);
   const files = receipt.files;
   for (const path of ['dist/cli/main.js', 'LICENSE', 'release-lock.json', 'integrity/assets.json',

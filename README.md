@@ -54,14 +54,16 @@ mkdir -p .claude/skills && cp -r skills/{scaffolder-builder,question-bank-author
 
 ## CLI development
 
-The repository root has an ESM TypeScript project with YAML loading and expression evaluation.
-The interview and decision engine are not built yet.
+The repository root has an ESM TypeScript project with YAML loading, expression evaluation,
+and a decision engine tested against the nine acceptance personas. The interview is not built yet.
 Run `npm run lint`, `npm run typecheck`, `npm test`, and `npm run test:tooling`.
 In Windows PowerShell use `npm.cmd` if execution policy blocks `npm.ps1`.
 See [the skeleton validation guide](specs/001-project-skeleton/quickstart.md) for approved
 dependency setup, Python checks, actual verification limits, and CI details.
 The [loader and expressions guide](specs/002-loader-expressions/quickstart.md) records the
-current module checks and the open dependency advisory review.
+current module checks and the dependency advisory record.
+The [decision engine guide](specs/003-decision-engine/quickstart.md) describes routing, depth,
+stage scheduling, and reference compatibility checks.
 
 ## Kit validation status and limits
 

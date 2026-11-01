@@ -52,13 +52,16 @@ mkdir -p .claude/skills && cp -r skills/{scaffolder-builder,question-bank-author
 
 `skills/project-templates/*` are not for this repo. They are templates the CLI copies into each generated project's `.claude/skills/`, after filling placeholders through `outputs/bindings.yaml`.
 
-## CLI development skeleton
+## CLI development
 
-The repository root now has an ESM TypeScript skeleton. There are no CLI features yet.
+The repository root has an ESM TypeScript project with YAML loading and expression evaluation.
+The interview and decision engine are not built yet.
 Run `npm run lint`, `npm run typecheck`, `npm test`, and `npm run test:tooling`.
 In Windows PowerShell use `npm.cmd` if execution policy blocks `npm.ps1`.
 See [the skeleton validation guide](specs/001-project-skeleton/quickstart.md) for approved
 dependency setup, Python checks, actual verification limits, and CI details.
+The [loader and expressions guide](specs/002-loader-expressions/quickstart.md) records the
+current module checks and the open dependency advisory review.
 
 ## Kit validation status and limits
 

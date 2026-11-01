@@ -12,4 +12,12 @@ Boolean operators short-circuit. An identifier lookup never traverses an object 
 an inherited property. Comparisons with an unanswered operand return false. The documented
 not exception remains true. No expressions are passed to eval, Function, a shell, or a process.
 
-The YAML loader interface is planned in plan.md and is not implemented yet.
+The YAML loader is implemented in src/data/loader.ts:
+
+- parseYaml(source: string, path: string): Readonly<Record<string, unknown>>.
+- loadYamlFile(root: string, path: string): Promise<LoadedDocument>.
+- loadKit(root: string): Promise<LoadedKit>.
+
+Loader failures use DataError and identify the relative file without including input excerpts.
+Kit documents are sorted by portable root-relative path. The loader does not perform complete
+domain-schema or coverage validation and does not authenticate downloaded updates.

@@ -8,13 +8,29 @@
     "lint": "eslint . --max-warnings 0",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
-    "test:tooling": "node --test tests/tooling/skeleton.node.test.mjs"
+    "test:tooling": "node --test tests/tooling/skeleton.node.test.mjs",
+    "test:dependencies": "node --test tests/tooling/dependencies.node.test.mjs"
   },
   "devDependencies": {
     "@eslint/js": "10.0.1",
+    "@types/node": "26.6.6",
     "eslint": "10.14.0",
     "typescript": "6.0.3",
     "typescript-eslint": "8.72.1",
     "vitest": "5.0.5"
+  },
+  "dependencies": {
+    "yaml": "2.9.1"
+  },
+  "overrides": {
+    "eslint": {
+      "minimatch": "11.0.3"
+    },
+    "@eslint/config-array": {
+      "minimatch": "11.0.3"
+    },
+    "@typescript-eslint/typescript-estree": {
+      "minimatch": "11.0.3"
+    }
   }
 }

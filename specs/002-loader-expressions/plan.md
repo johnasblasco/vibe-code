@@ -1,7 +1,7 @@
 ﻿# Implementation Plan: Loader and Expressions
 
 **Feature**: 002-loader-expressions | **Date**: 2026-11-01 | **Spec**: [spec.md](spec.md)
-**Status**: Expression core implemented; loader dependency installation pending.
+**Status**: Implemented and verified locally; dependency advisory review remains open.
 
 ## Summary
 
@@ -11,7 +11,7 @@ expressions using a recursive-descent parser and explicit interpreter. No routin
 ## Technical Context
 
 Language: TypeScript 6.0.3, Node 26.13.0, ESM.
-Dependencies: yaml 2.9.1 (approved; registry fetch blocked); @types/node 26.6.6 (approval pending).
+Dependencies: yaml 2.9.1 and @types/node 26.6.6, both approved, installed, and locked.
 Testing: Vitest, unchanged shared YAML vectors, real repository assets, malformed-input tests.
 Storage: read-only filesystem access; no persisted state.
 Platforms: Windows, macOS, Linux; all document paths use forward slashes.
@@ -25,16 +25,19 @@ Tests precede code, with recorded missing-module and semantic failures.
 No eval, Function, shell execution, prompts, production connections, or generated files.
 All nine scenarios, shared vectors, and question budgets remain unchanged.
 Package names/versions are researched before approval; no staging or commits authorized.
-Gate: expression core can proceed independently; loader installation and validation remain blocked.
+Post-design gate: all local feature checks pass, with unchanged source YAML and acceptance files.
+The user's install reported 11 moderate vulnerabilities; advisory details are pending. No
+dependency changes, threshold changes, or forced remediation have been made to dismiss them.
 
 ## Project Structure
 
 src/expressions/index.ts       AST, parser, evaluator, boolean wrapper, identifier traversal
 src/data/loader.ts             safe YAML parse, contained file reads, deterministic kit discovery
 src/data/types.ts              loaded document and kit interfaces
- tests/unit/expressions.test.ts supplemental grammar and Python-semantic checks
- tests/unit/expr-vectors.test.ts direct consumption of tests/expr-vectors.yaml
- tests/unit/loader.test.ts      authoritative-file inventory and malformed/path input checks
+tests/unit/expressions.test.ts supplemental grammar and Python-semantic checks
+tests/unit/expr-vectors.test.ts direct consumption of tests/expr-vectors.yaml
+tests/unit/loader.test.ts      authoritative-file inventory and malformed/path input checks
+tests/unit/loader-symlinks.test.ts symlink rejection at the filesystem boundary
 
 Existing src/index.ts stays an empty boundary until a public interface is intentionally designed.
 Tests import internal modules directly. No duplicate question or recommendation content in source.

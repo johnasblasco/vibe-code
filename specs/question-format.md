@@ -2,6 +2,13 @@
 
 Every file in `question-bank/` is YAML. The CLI loads modules by tier and flag (see `00-router.yaml`).
 
+## Bank metadata
+
+`question-bank/manifest.yaml` contains exactly `schema: question-bank/v1` and a semantic
+`bank_version`. It contains no flags or modules and is loaded as metadata rather than a router
+addition. The initial version is `1.0.0`. State files retain their originating bank version and
+definition snapshots so resume can report changes without silently accepting them.
+
 ## Question fields
 
 | Field | Required | Meaning |

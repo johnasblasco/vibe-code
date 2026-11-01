@@ -25,6 +25,14 @@ PROTECTED_NS = {"beginner-ops", "safety", "en303645", "cra", "red"}
 PLACEHOLDER = re.compile(r"(?<!\$)\{\{([a-z][a-z0-9_]*)\}\}")
 errors, warnings = [], []
 
+def valid_bank_metadata(value):
+    """Only the version-only manifest is metadata, never a disguised question module."""
+    if not isinstance(value, dict) or set(value) != {"schema", "bank_version"}:
+        return False
+    version = value.get("bank_version")
+    return value.get("schema") == "question-bank/v1" and isinstance(version, str) and bool(re.fullmatch(
+        r"(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-(?:0|[1-9]\d*|\d*[A-Za-z-][0-9A-Za-z-]*)(?:\.(?:0|[1-9]\d*|\d*[A-Za-z-][0-9A-Za-z-]*))*)?(?:\+[0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*)?", version))
+
 def rel(p): return os.path.relpath(p, ROOT)
 def err(msg): errors.append(msg)
 
@@ -100,6 +108,9 @@ def main():
         if base in ("depth-profiles.yaml",): continue
         if d.get("schema") != "question-bank/v1":
             err(f"{rel(path)}: schema must be question-bank/v1"); continue
+        if base == "manifest.yaml":
+            if not valid_bank_metadata(d): err(f"{rel(path)}: invalid bank metadata")
+            continue
         if base == "00-router.yaml": router = d
         file_tier = d.get("tier_min")
         if file_tier and file_tier not in TIERS: err(f"{rel(path)}: bad tier_min {file_tier}")
@@ -132,7 +143,7 @@ def main():
                     loaded.add(os.path.relpath(f, os.path.join(ROOT, "question-bank")))
         for path in qfiles:
             r = os.path.relpath(path, os.path.join(ROOT, "question-bank"))
-            if r in ("00-router.yaml", "depth-profiles.yaml"): continue
+            if r in ("00-router.yaml", "depth-profiles.yaml", "manifest.yaml"): continue
             if r not in loaded and not any(r.startswith(x.rstrip("*")) for x in sum([t.get("adds", []) for t in router["tiers"]], []) if x.endswith("*")):
                 err(f"{r}: question file is never loaded by any router tier (orphan)")
 

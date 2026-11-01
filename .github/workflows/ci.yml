@@ -41,3 +41,4 @@ jobs:
       - run: python tools/run_scenarios.py
       - run: python tools/test_expr.py
       - run: python tools/test_run_scenarios.py
+      - run: python tools/test_validate_metadata.py

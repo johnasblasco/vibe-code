@@ -26,10 +26,21 @@ source: Source
 verified: Verified
 bank_change: The question bank or knowledge packs changed. Affected questions need review; saved progress does not verify gates.
 cancelled: Interview cancelled. Previously accepted answers are saved. Run next to resume.
-completed: Idea interview complete. Later stages and gate checks are not available yet.
+completed: Idea interview complete. Use gates to inspect a course boundary. Later-stage execution is not available yet.
 blocked: Resolve the displayed blocking contradictions before proceeding.
 stop: Interview stopped. Follow the displayed expert guidance before proceeding.
 terminal_required: An interactive terminal is required for the interview. Use --help to view commands.
 missing_state: No saved interview was found. Run init first.
 error: Unable to continue. Check the kit, state file, directory permissions, and selected stage. Existing answers were not reset.
 usage_error: Invalid command or option. Use --help to view supported commands.
+premortem: Rank applicable failures and create docs/risk-register.md
+gates: Check a course boundary or applicable named gate
+gate_argument: Gate ID from the golden path or loaded question modules
+project_option: Existing project directory for the risk register
+top_option: Maximum number of ranked failures to display
+dry_run_option: Preview the risk register without writing files
+deferrals_option: Explicit gate-deferrals YAML file for this evaluation only
+risk_written: Created docs/risk-register.md. Review open rows and assign owners and revisit triggers, or record acceptance with a reason.
+risk_error: Unable to create the register. Check required answers, bindings, directory permissions, and whether docs/risk-register.md already exists. Existing reports are never overwritten.
+gate_error: Unable to check this gate. Check that the gate applies and that explicit deferrals have an owner, reason, and revisit trigger.
+invalid_top: Choose a positive whole number of risks.

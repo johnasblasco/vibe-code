@@ -1,0 +1,22 @@
+schema: premortem-ui/v1
+summary: "{total} failure modes apply. Showing {shown}, ranked by severity times likelihood."
+header: "| Rank | ID | Failure | S | L | Score | Prevention | Questions | Cards | Evidence | Status | Owner | Revisit when | Acceptance reason |"
+separator: "|---|---|---|---|---|---|---|---|---|---|---|---|---|---|"
+evidence: "Evidence: {researched} of {total} applicable entries cite a source. The other {practice} are engineering practice without a citation."
+guidance: "Open rows need an owner and a revisit trigger, or written acceptance with a reason. Answered questions are not proof that a risk is prevented. Unverified cards have not passed. This catalog is not complete."
+answered: answered
+deferred: deferred
+not_applicable: not applicable
+unanswered: unanswered
+unverified: unverified
+passed: passed automatically
+manual: manually attested
+failed: failed
+open: open
+questions: questions
+cards: cards
+skills: skills
+templates: templates
+packs: packs
+researched: researched
+practice: practice

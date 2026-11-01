@@ -1,0 +1,16 @@
+schema: gates-ui/v1
+allowed: No outstanding blockers in this gate evaluation. Deferred checks have not passed verification.
+blocked: This gate is blocked. Resolve the listed checks or explicitly defer them with an owner, reason, and revisit trigger.
+stop: Stop. Follow the displayed expert guidance before proceeding.
+unverified: unverified
+passed: passed automatically
+manual: manually attested
+failed: failed
+deferred: deferred
+answered: answered
+not_applicable: not applicable
+unanswered: unanswered
+owner: Owner
+reason: Reason
+revisit_when: Revisit when
+limitations: Automatic check runners arrive with doctor. No YAML description is executed as a command. No later stage is advanced here.

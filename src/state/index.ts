@@ -33,7 +33,7 @@ function nonempty(value: unknown): value is string { return typeof value === 'st
 function exact(value: Row, keys: string[]): void {
   if (Object.keys(value).some((key) => !keys.includes(key)) || keys.some((key) => !Object.hasOwn(value, key))) fail();
 }
-function noSecrets(value: unknown): void {
+export function noSecrets(value: unknown): void {
   if (typeof value === 'string') {
     const patterns = [
       /\b(?:sk|pk)_(?:live|test)_[A-Za-z0-9]{16,}/,

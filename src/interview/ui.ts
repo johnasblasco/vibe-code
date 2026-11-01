@@ -1,7 +1,7 @@
 import type { LoadedKit } from '../data/types.js';
 
-export function interfaceText(kit: LoadedKit): Record<string, string> {
-  const data = kit.documents.find((document) => document.path === 'beginner-course/interview-ui.yaml')?.data;
+export function interfaceText(kit: LoadedKit, path = 'beginner-course/interview-ui.yaml'): Record<string, string> {
+  const data = kit.documents.find((document) => document.path === path)?.data;
   if (!data || Object.values(data).some((value) => typeof value !== 'string')) {
     throw new Error('Invalid interface data');
   }

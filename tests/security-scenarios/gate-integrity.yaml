@@ -1,0 +1,14 @@
+schema: security-scenarios/v1
+failure_mode: AI-09
+cases:
+  - id: empty-verification-group
+    gate: stage-1
+    file: beginner-course/step-cards/stage-0-machine-ready.yaml
+    card: env.install_tools
+    change: empty_verify
+    expected: rejected
+  - id: missing-referenced-card-file
+    gate: stage-1
+    file: beginner-course/step-cards/stage-0-machine-ready.yaml
+    change: remove_file
+    expected: rejected

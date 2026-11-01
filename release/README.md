@@ -58,3 +58,8 @@ Exit codes: 0 success, 1 error, 2 usage error, 3 blocked, 4 safety stop, 130 can
 ## License
 
 MIT. Copyright (c) 2026 johnasblasco. See LICENSE.
+
+This release bundles its eight locked runtime dependencies. Their MIT/ISC license texts
+remain in their respective node_modules package folders. release-lock.json records the
+production versions, original registry URLs and integrity values. It is an audit record;
+the bundled files supply the runtime dependencies without a registry fetch.

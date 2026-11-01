@@ -46,8 +46,9 @@ Strict Python validation reported 343 questions and no structural errors or gaps
 personas passed; expression tests passed 30 vectors plus 7 invalid cases. Asset inventory
 verification and git diff --check passed. Optional asvs:webrtc remains unchanged.
 
-The separate release-packaging test is not passing: npm 12 removes shrinkwrap support. Its
-contract remains unchanged pending the user's dependency-bundling decision. No release-ready
-tarball or clean installation is claimed by these interview checks.
+At the time of these interview checks, release packaging was blocked by npm 12 removing
+shrinkwrap support. The subsequent authorized bundling change and its evidence are tracked
+separately in specs/010-npm-release and docs/09-npm-release.md. These interview checks alone
+do not establish a clean installation or publication.
 
 Publication remains a separate task. No package installation or publication is performed here.

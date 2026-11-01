@@ -39,6 +39,7 @@ jobs:
       - run: npm run vibecode -- --help
       - run: npm test
       - run: npm run test:tooling
+      - run: npm run test:release
       - run: npm audit --audit-level=high
       - run: python -m pip install --disable-pip-version-check PyYAML==6.0.3
       - run: python tools/validate.py --today "$(date -u +%F)" --strict

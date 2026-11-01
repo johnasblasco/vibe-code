@@ -1,0 +1,11 @@
+schema: security-scenario/v1
+id: npm-release
+failure_modes: [AI-03]
+pack_metadata:
+  legacy_array:
+    - {name: '@johnasblasco/vibecode', version: 0.1.0}
+  keyed_by_name:
+    '@johnasblasco/vibecode': {name: '@johnasblasco/vibecode', version: 0.1.0}
+removed_lockfile: npm-shrinkwrap.json
+bundled_lock_record: release-lock.json
+source: https://docs.npmjs.com/cli/v12/using-npm/changelog/

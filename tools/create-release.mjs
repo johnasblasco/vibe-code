@@ -18,8 +18,9 @@ export function publishManifest(workspace, commandName) {
   return { name: workspace.name, version: workspace.version, description: workspace.description,
     author: workspace.author, license: workspace.license, type: 'module', private: false,
     engines: workspace.engines, bin: { [commandName]: 'dist/cli/main.js' },
-    files: ['dist', ...assetRoots, inventoryPath, 'README.md', 'LICENSE', 'npm-shrinkwrap.json'],
-    dependencies: workspace.dependencies, publishConfig: { access: 'public', registry } };
+    files: ['dist', ...assetRoots, inventoryPath, 'README.md', 'LICENSE', 'release-lock.json'],
+    dependencies: workspace.dependencies, bundleDependencies: Object.keys(workspace.dependencies),
+    publishConfig: { access: 'public', registry } };
 }
 export function verifyPackList(files, expected) {
   if (!Array.isArray(files) || !files.every((file) => file && typeof file.path === 'string')) fail();
@@ -47,7 +48,7 @@ async function walk(directory, prefix = '') {
 async function ownedParents(base, path) {
   let current = base;
   for (const part of path.split('/')) {
-    if (!/^[A-Za-z0-9._-]+$/.test(part) || part === '.' || part === '..') fail();
+    if (!/^@?[A-Za-z0-9._-]+$/.test(part) || part === '.' || part === '..') fail();
     current = join(current, part);
     try { await mkdir(current, { mode: 0o700 }); } catch (error) { if (error.code !== 'EEXIST') throw error; }
     const info = await lstat(current); if (!info.isDirectory() || info.isSymbolicLink()) fail();
@@ -84,6 +85,33 @@ function productionLock(lock, manifest) {
   return { name: manifest.name, version: manifest.version, lockfileVersion: 3, requires: true, packages };
 }
 
+export function verifyRuntimePackage(path, row, installed, files) {
+  const dependencies = Object.entries(row.dependencies ?? {}).sort(([a], [b]) => a.localeCompare(b));
+  const actualDependencies = Object.entries(installed.dependencies ?? {}).sort(([a], [b]) => a.localeCompare(b));
+  if (!/^node_modules\/(?:@[a-z0-9_-]+\/)?[a-z0-9_-]+$/.test(path) ||
+      !exact(row.version) || installed.name !== path.slice('node_modules/'.length) || installed.version !== row.version ||
+      JSON.stringify(actualDependencies) !== JSON.stringify(dependencies) ||
+      !['MIT', 'ISC'].includes(installed.license) || installed.license !== row.license ||
+      ['preinstall', 'install', 'postinstall'].some((hook) => Object.hasOwn(installed.scripts ?? {}, hook)) ||
+      !files.some((file) => /^licen[cs]e(?:\.[^/]+)?$/i.test(file)) || files.some((file) => file.startsWith('node_modules/'))) fail();
+}
+
+async function bundleRuntime(base, stage, lock) {
+  const hashes = {};
+  for (const [path, row] of Object.entries(lock.packages)) {
+    if (!path) continue;
+    const source = join(base, path); const files = await walk(source);
+    const installed = JSON.parse(await readFile(join(source, 'package.json'), 'utf8'));
+    verifyRuntimePackage(path, row, installed, files);
+    for (const file of files) {
+      const bytes = await readFile(join(source, file)); const target = `${path}/${file}`;
+      await put(stage, target, bytes);
+      hashes[target] = createHash('sha256').update(bytes).digest('hex');
+    }
+  }
+  return hashes;
+}
+
 /** Offline packing only: never installs, publishes, runs hooks, or removes a release directory. */
 export async function createRelease(workspaceRoot = root) {
   const base = await realpath(workspaceRoot);
@@ -107,7 +135,8 @@ export async function createRelease(workspaceRoot = root) {
   for (const [path, text] of assets) await put(stage, path, text);
   await put(stage, inventoryPath, JSON.stringify(inventory, null, 2) + '\n');
   await put(stage, 'package.json', JSON.stringify(manifest, null, 2) + '\n');
-  await put(stage, 'npm-shrinkwrap.json', JSON.stringify(lock, null, 2) + '\n');
+  await put(stage, 'release-lock.json', JSON.stringify(lock, null, 2) + '\n');
+  const bundledFiles = await bundleRuntime(base, stage, lock);
   await put(stage, 'README.md', readme); await put(stage, 'LICENSE', license);
   const entry = join(stage, manifest.bin[ui.command_name]);
   if (!(await readFile(entry, 'utf8')).startsWith('#!/usr/bin/env node\n')) fail();
@@ -123,14 +152,14 @@ export async function createRelease(workspaceRoot = root) {
   const packed = packMetadata(JSON.parse(output), manifest.name);
   if (!packed || packed.name !== manifest.name || packed.version !== manifest.version ||
       !/^[A-Za-z0-9._-]+\.tgz$/.test(packed.filename) || !/^sha512-[A-Za-z0-9+/]+={0,2}$/.test(packed.integrity)) fail();
-  const expected = [...javascript, ...assets.keys(), inventoryPath, 'package.json', 'npm-shrinkwrap.json', 'README.md', 'LICENSE'];
+  const expected = [...javascript, ...assets.keys(), inventoryPath, 'package.json', 'release-lock.json', 'README.md', 'LICENSE', ...Object.keys(bundledFiles)];
   verifyPackList(packed.files, expected);
   const tarball = join(directory, packed.filename); const bytes = await readFile(tarball);
   if (`sha512-${createHash('sha512').update(bytes).digest('base64')}` !== packed.integrity) fail();
   const receipt = join(directory, 'receipt.json');
   const record = { name: manifest.name, version: manifest.version, license: manifest.license,
     tarball: packed.filename, sha256: createHash('sha256').update(bytes).digest('hex'), integrity: packed.integrity,
-    files: packed.files.map((file) => file.path).sort() };
+    files: packed.files.map((file) => file.path).sort(), bundledFiles };
   await writeFile(receipt, JSON.stringify(record, null, 2) + '\n', { flag: 'wx', mode: 0o600 });
   return { ...record, directory, directoryUrl: pathToFileURL(directory + sep), tarball, receipt };
 }

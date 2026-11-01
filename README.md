@@ -100,6 +100,10 @@ bank-version metadata, persistence checks, and limitations.
 
 ## Kit validation status and limits
 
+For the scoped npm tarball, packaging checks and exact publication procedure, read the
+[npm release guide](docs/09-npm-release.md). Local packing and isolated extracted-package
+checks pass; this environment's registry publication attempt failed with EACCES.
+
 Read `docs/05-gap-analysis.md` first. In short:
 - The TypeScript CLI supports the idea interview, routing, state/resume, gate enforcement,
   pre-mortem risk registers, bound project file generation, doctor, and checked course guidance

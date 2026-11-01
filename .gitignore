@@ -2,6 +2,7 @@ node_modules/
 dist/
 coverage/
 .vitest/
+.tooling-build/
 .npm-cache/
 .venv/
 __pycache__/

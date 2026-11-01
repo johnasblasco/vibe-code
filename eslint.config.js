@@ -3,7 +3,7 @@ import { defineConfig } from 'eslint/config';
 import tseslint from 'typescript-eslint';
 
 export default defineConfig(
-  { ignores: ['node_modules/**', 'dist/**', 'coverage/**', '.venv/**', '.npm-cache/**',
+  { ignores: ['node_modules/**', 'dist/**', 'coverage/**', '.venv/**', '.npm-cache/**', '.tooling-build/**',
     '.agents/**', '.specify/**', 'templates/**', 'skills/**', 'tests/tooling/fixtures/**'] },
   { files: ['**/*.js', '**/*.mjs'], extends: [js.configs.recommended],
     languageOptions: { globals: { process: 'readonly' } } },

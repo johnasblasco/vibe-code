@@ -1,7 +1,7 @@
 ﻿# Implementation Plan: Loader and Expressions
 
 **Feature**: 002-loader-expressions | **Date**: 2026-11-01 | **Spec**: [spec.md](spec.md)
-**Status**: Implemented and verified locally; dependency advisory review remains open.
+**Status**: Implemented and verified locally; reported dependency advisory remediated.
 
 ## Summary
 
@@ -26,8 +26,9 @@ No eval, Function, shell execution, prompts, production connections, or generate
 All nine scenarios, shared vectors, and question budgets remain unchanged.
 Package names/versions are researched before approval; no staging or commits authorized.
 Post-design gate: all local feature checks pass, with unchanged source YAML and acceptance files.
-The user's install reported 11 moderate vulnerabilities; advisory details are pending. No
-dependency changes, threshold changes, or forced remediation have been made to dismiss them.
+The reported minimatch advisory is addressed by the approved scoped override to 11.0.3.
+Local compatibility checks pass and the user's terminal reports zero vulnerabilities.
+No thresholds, budgets, or test expectations were changed. See docs/dependency-audit.md.
 
 ## Project Structure
 

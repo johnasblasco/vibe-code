@@ -31,6 +31,7 @@ Dependencies: T003 was completed by the user's approved local installation.
 Real-file inventory and expression source inspection can run concurrently, but tests precede edits.
 Deliver expression core first, then loader and shared-vector integration. No commits authorized.
 
-Follow-up outside feature acceptance: review the 11 moderate findings reported by the user's
-installation. The session's audit request still cannot reach the endpoint. Full audit JSON
-has been requested; no automatic fix, dependency change, or risk acceptance has occurred.
+Dependency follow-up completed: the user's audit JSON traced the 11 findings to one minimatch
+advisory. The approved 11.0.3 scoped override is installed, the lockfile and compatibility checks
+pass, and the user's terminal reports zero vulnerabilities. See docs/dependency-audit.md for
+evidence and limits. No forced fix, threshold change, staging change, or commit was made.

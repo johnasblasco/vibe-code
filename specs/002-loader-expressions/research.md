@@ -66,6 +66,9 @@ Existing user staging was present at the start of this turn and has not been alt
 
 The user's audit JSON identifies one root advisory, GHSA-g3hv-75wg-m249 in minimatch 10.2.6,
 propagated through ten other lint-tool packages. docs/dependency-audit.md records the primary
-sources, the failing lockfile regression test, and a candidate scoped override to 11.0.3.
-Installation approval and compatibility/audit verification remain pending. No clean audit is
-claimed. No forced fix or package installation was made. Hosted CI remains unrun in this session.
+sources, the failing lockfile regression test, and the approved scoped override to 11.0.3.
+The user installed it with scripts disabled and reported zero vulnerabilities. The agent verified
+all three consumers resolve 11.0.3, reviewed the new helper's lockfile entry, and reran all local
+checks successfully, including both dependency regression tests. The registry audit result is
+user-provided; the session's endpoint access is still blocked. No forced fix, staging change,
+or commit was made. Hosted CI remains unrun in this session.

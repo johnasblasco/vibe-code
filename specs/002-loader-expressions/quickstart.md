@@ -13,6 +13,7 @@ npm.cmd run lint
 npm.cmd run typecheck
 npm.cmd test
 npm.cmd run test:tooling
+npm.cmd run test:dependencies
 .\.venv\Scripts\python.exe tools/validate.py --today 2026-11-01 --strict
 .\.venv\Scripts\python.exe tools/run_scenarios.py
 .\.venv\Scripts\python.exe tools/test_expr.py
@@ -28,6 +29,7 @@ installation. No additional packages are needed for this feature.
 - Lint and typecheck: exit 0.
 - Vitest: 5 files passed, 84 tests passed.
 - Tooling checks: 5 passed, including deliberate nonzero lint/typecheck/assertion probes.
+- Dependency checks: 2 passed, covering the patched lockfile and complete lint discovery.
 - Loader: all 42 authoritative YAML documents read with deterministic portable paths.
 - Shared expressions: all 30 vectors and 7 parse-error cases loaded directly from unchanged YAML.
 - Strict Python validator: passed, with the existing optional coverage and unresolved-version warnings.
@@ -41,10 +43,10 @@ part of later hardening work. Full domain-schema validation is not claimed by th
 
 ## Dependency Advisory Review
 
-The user supplied npm audit JSON: one minimatch advisory propagates through ten other lint-tool
-packages. See ../../docs/dependency-audit.md for verified sources and the candidate override.
-The new npm run test:dependencies guard currently fails on the installed affected version.
-Installation approval and verification of the candidate remain pending. No findings are marked
-resolved and no dependency upgrades or audit fix --force operations were performed.
+The user supplied npm audit JSON: one minimatch advisory propagated through ten other lint-tool
+packages. The approved scoped override to 11.0.3 is now installed and both dependency checks
+pass. The user's installation reports zero vulnerabilities. See ../../docs/dependency-audit.md
+for the verified graph, lockfile review, primary sources, and temporary override policy.
+The agent's session cannot independently reach the advisory endpoint. No forced fix was used.
 Hosted CI and macOS/Linux execution remain unverified in this session. No staging changes or
 commits were made by the agent.

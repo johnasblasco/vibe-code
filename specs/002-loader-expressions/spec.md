@@ -1,7 +1,7 @@
 # Feature Specification: Loader and Expressions
 
 **Created**: 2026-11-01
-**Status**: Implemented; local acceptance passes, dependency advisory review pending
+**Status**: Implemented; local acceptance and dependency compatibility checks pass
 **Input**: Load all YAML files and port tools/expr.py and tools/test_expr.py to TypeScript.
 Same grammar, same shared tests. No decision-engine or interview features yet.
 

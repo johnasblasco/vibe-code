@@ -1,4 +1,4 @@
-# Plain-language definitions for `scaffold explain <term>`. Written for someone who has never programmed.
+# Plain-language definitions for `vibecode explain <term>`. Written for someone who has never programmed.
 schema: glossary/v1
 terms:
   - {term: api, plain: "A doorway that lets one program ask another program for data or actions.", example: "Your app asks a weather service's API for tomorrow's forecast."}

@@ -47,7 +47,7 @@ export async function runCli(argv: string[], io: CliIO = {}): Promise<number> {
   const ui = interfaceText(kit);
   const out = io.out ?? ((text: string) => { process.stdout.write(text); });
   const err = io.err ?? ((text: string) => { process.stderr.write(text); });
-  const program = new Command().name('scaffold').description(ui.title!).exitOverride()
+  const program = new Command().name(ui.command_name!).description(ui.title!).exitOverride()
     .helpOption('-h, --help', ui.help!).addHelpCommand(false)
     .configureHelp({ formatHelp: (command, helper) => {
       const sections = [`${ui.usage}: ${helper.commandUsage(command)}`, helper.commandDescription(command)];

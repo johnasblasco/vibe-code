@@ -4,11 +4,11 @@ Read AGENTS.md first in every session. Use npm.cmd in PowerShell and npm on macO
 
 ```powershell
 npm.cmd run build
-npm.cmd run scaffold -- doctor --dry-run
-npm.cmd run scaffold -- doctor
-npm.cmd run scaffold -- doctor --stage stage-1 --dry-run
-npm.cmd run scaffold -- next --course
-npm.cmd run scaffold -- next --course --advance
+npm.cmd run vibecode -- doctor --dry-run
+npm.cmd run vibecode -- doctor
+npm.cmd run vibecode -- doctor --stage stage-1 --dry-run
+npm.cmd run vibecode -- next --course
+npm.cmd run vibecode -- next --course --advance
 ```
 
 Doctor installs nothing. Missing tools, unsupported hooks, missing manual confirmation, or

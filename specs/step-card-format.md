@@ -22,4 +22,4 @@ One card teaches one thing, checks it, and gates the next stage.
 - Show the date a pack was last verified whenever a card shows prices, limits, or deadlines.
 
 ## Cross-platform rule
-Beginners use Windows, macOS, and Linux. Every command in `do`, `undo`, and `if_fails` must work in PowerShell, macOS, and Linux, or give a variant for each. Do not assume `rm`, `cp`, `export`, or forward slashes. Prefer a CLI-provided action (`scaffold undo stage-1`) over a raw shell command.
+Beginners use Windows, macOS, and Linux. Every command in `do`, `undo`, and `if_fails` must work in PowerShell, macOS, and Linux, or give a variant for each. Do not assume `rm`, `cp`, `export`, or forward slashes. Prefer a CLI-provided action (`vibecode undo stage-1`) over a raw shell command.

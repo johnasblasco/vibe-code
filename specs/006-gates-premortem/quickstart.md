@@ -5,13 +5,13 @@ Use npm in place of npm.cmd on macOS/Linux.
 
 ```powershell
 npm.cmd run build
-npm.cmd run scaffold -- --help
-npm.cmd run scaffold -- premortem --help
-npm.cmd run scaffold -- gates --help
+npm.cmd run vibecode -- --help
+npm.cmd run vibecode -- premortem --help
+npm.cmd run vibecode -- gates --help
 # After saving project.name through the interview:
-npm.cmd run scaffold -- premortem --dry-run
-npm.cmd run scaffold -- premortem
-npm.cmd run scaffold -- gates stage-1
+npm.cmd run vibecode -- premortem --dry-run
+npm.cmd run vibecode -- premortem
+npm.cmd run vibecode -- gates stage-1
 ```
 
 premortem creates docs/risk-register.md in the current project, or the existing directory

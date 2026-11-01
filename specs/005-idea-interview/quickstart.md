@@ -5,10 +5,10 @@ already installed:
 
 ```powershell
 npm.cmd run build
-npm.cmd run scaffold -- --help
-npm.cmd run scaffold -- init
+npm.cmd run vibecode -- --help
+npm.cmd run vibecode -- init
 # Resume after closing the terminal or pressing Ctrl+C:
-npm.cmd run scaffold -- next
+npm.cmd run vibecode -- next
 ```
 
 On macOS/Linux, use npm in place of npm.cmd. Run interview commands in an interactive terminal.

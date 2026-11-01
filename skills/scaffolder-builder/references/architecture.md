@@ -1,7 +1,7 @@
 # Architecture notes
 
 ```
-scaffold init
+vibecode init
   ├─ load packs, question-bank, golden-path
   ├─ router: ask flags -> tier -> module list
   ├─ interview loop: question -> state(answered|deferred|n/a) -> save state file

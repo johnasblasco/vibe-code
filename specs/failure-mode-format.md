@@ -21,7 +21,7 @@ The question bank works forward (ask, then decide). The catalog works backward (
 - Every failure mode with severity 4 or 5 has at least one prevention.
 - Every `applies_when` parses and uses known identifiers.
 
-## Pre-mortem command (`scaffold premortem`)
+## Pre-mortem command (`vibecode premortem`)
 1. Compute applicable entries from the user's flags and answers.
 2. Rank by severity times likelihood.
 3. For each, show whether its prevention questions are answered and its cards passed.

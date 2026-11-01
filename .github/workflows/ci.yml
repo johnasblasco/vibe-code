@@ -36,7 +36,7 @@ jobs:
       - run: npm run lint
       - run: npm run typecheck
       - run: npm run build
-      - run: npm run scaffold -- --help
+      - run: npm run vibecode -- --help
       - run: npm test
       - run: npm run test:tooling
       - run: npm audit --audit-level=high

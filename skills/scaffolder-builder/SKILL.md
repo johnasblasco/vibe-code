@@ -1,6 +1,6 @@
 ---
 name: scaffolder-builder
-description: Build, extend, or debug the guided project-setup CLI (the scaffolder) in this repo. Use whenever the user mentions the scaffolder, scaffold CLI, setup wizard, question bank engine, tiers, router, golden path, doctor, coverage command, resume or state file, or generating AGENTS.md, CLAUDE.md, a Spec Kit constitution, or project skills from answers. Use it even if they only say "continue the CLI" or "add a command".
+description: Build, extend, or debug the guided project-setup CLI (the scaffolder) in this repo. Use whenever the user mentions the scaffolder, vibecode CLI, setup wizard, question bank engine, tiers, router, golden path, doctor, coverage command, resume or state file, or generating AGENTS.md, CLAUDE.md, a Spec Kit constitution, or project skills from answers. Use it even if they only say "continue the CLI" or "add a command".
 ---
 
 # Scaffolder builder

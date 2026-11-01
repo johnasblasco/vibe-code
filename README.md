@@ -57,21 +57,21 @@ mkdir -p .claude/skills && cp -r skills/{scaffolder-builder,question-bank-author
 The repository root has an ESM TypeScript project with YAML loading, expression evaluation,
 and a decision engine tested against the nine acceptance personas. State persistence and resume
 and the idea-stage interview are implemented.
-Run `npm run build`, then `npm run scaffold -- init` to start or resume it.
-Use `npm run scaffold -- next` to resume; Ctrl+C preserves accepted answers.
+Run `npm run build`, then `npm run vibecode -- init` to start or resume it.
+Use `npm run vibecode -- next` to resume; Ctrl+C preserves accepted answers.
 The state file defaults to `.scaffolder/state.json`, which is ignored by Git.
 See [the interview guide](specs/005-idea-interview/quickstart.md) for limits and verification.
-Use `npm run scaffold -- premortem --dry-run` to preview ranked failures, then omit `--dry-run`
+Use `npm run vibecode -- premortem --dry-run` to preview ranked failures, then omit `--dry-run`
 to create `docs/risk-register.md`. Existing registers are never overwritten. A saved project
-name is required. `npm run scaffold -- gates stage-1` inspects that boundary and returns a
+name is required. `npm run vibecode -- gates stage-1` inspects that boundary and returns a
 blocked status for unverified checks. `gates stage-1 --verify` uses the supported doctor runners.
 See [the gates and pre-mortem guide](specs/006-gates-premortem/quickstart.md).
-Use `npm run scaffold -- generate` to preview applicable project files. It asks for missing
+Use `npm run vibecode -- generate` to preview applicable project files. It asks for missing
 bound answers in a terminal. `--file ci` selects an output, `--offline` uses dated verified
 pack pins, and `--write` requires preview and typed confirmation. Existing files are never
 overwritten. No packages, hooks, containers, or project commands are installed or run.
 See [the file-generation guide](specs/007-file-generation/quickstart.md) for provenance and limits.
-Run `npm run scaffold -- doctor --dry-run` to list checks, then `npm run scaffold -- doctor`
+Run `npm run vibecode -- doctor --dry-run` to list checks, then `npm run vibecode -- doctor`
 for current machine readiness. `doctor --stage stage-1` adds Git/secret checks; stage-2 adds
 explicitly approved nonproduction preview/CI checks. `next --course` shows beginner cards and
 `next --course --advance` saves the next cursor only after fresh checks. No do/undo commands,

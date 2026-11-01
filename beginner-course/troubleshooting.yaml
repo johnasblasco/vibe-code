@@ -1,4 +1,4 @@
-# Used by `scaffold stuck`. The CLI matches the error text, shows the plain explanation and fix, and offers a redacted diagnostics block.
+# Used by `vibecode stuck`. The CLI matches the error text, shows the plain explanation and fix, and offers a redacted diagnostics block.
 schema: troubleshooting/v1
 redaction_rules: "Before showing or copying any diagnostics: remove .env contents, tokens, passwords, connection strings, emails, and absolute home paths. Show the user the redacted text first and let them approve."
 entries:

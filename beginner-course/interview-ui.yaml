@@ -1,5 +1,6 @@
 schema: interview-ui/v1
-title: Scaffolder idea interview
+command_name: vibecode
+title: Vibecode idea interview
 help: Show command help
 usage: Usage
 options: Options

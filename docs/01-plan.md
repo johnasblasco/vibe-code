@@ -37,7 +37,7 @@ Each step is a six-part card: why, choose, do, verify, if it fails, gate (plus u
 Spec Kit's flow is constitution, specify, clarify, plan, tasks, analyze, implement. This tool sits before it: answers generate the constitution, stack decisions pre-fill the plan step, and `specify init` runs last. Hardware artifacts (BOM review, certification plan, hazard analysis) are not covered by Spec Kit and should be built as a preset or extension. Install from the official repository and pin a release tag.
 
 ## Commands
-`scaffold init`, `doctor`, `next`, `explain <term>`, `stuck`, `undo`, `coverage`, `update`, `audit`.
+`vibecode init`, `doctor`, `next`, `explain <term>`, `stuck`, `undo`, `coverage`, `update`, `audit`.
 
 ## Generated skills
 The scaffolder writes project skills (see `skills/project-templates/`) into each new project's `.claude/skills/` so every AI session loads the recorded decisions. It also ships a skill describing how an agent drives the CLI.

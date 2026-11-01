@@ -8,6 +8,17 @@ import { CANCELLED } from '../../src/interview/index.js';
 import { loadYamlFile } from '../../src/data/loader.js';
 
 const kitRoot = fileURLToPath(new URL('../../', import.meta.url));
+test('the vibecode npm runner and root/subcommand help use the new command name', async () => {
+  const manifest = JSON.parse(await readFile(new URL('../../package.json', import.meta.url), 'utf8'));
+  expect(manifest.scripts.vibecode).toBe('node dist/cli/main.js');
+  for (const argv of [['--help'], ['init', '--help'], ['generate', '--help']]) {
+    let output = '';
+    expect(await runCli(argv, { kitRoot, tty: false, out: (text) => { output += text; } })).toBe(EXIT.SUCCESS);
+    expect(output).toContain('Usage: vibecode ');
+    expect(output).not.toContain('Usage: scaffold ');
+  }
+});
+
 test('help works without a terminal or state creation', async () => {
   let output = '';
   const code = await runCli(['--help'], { kitRoot, tty: false, out: (text) => { output += text; }, err: () => {} });

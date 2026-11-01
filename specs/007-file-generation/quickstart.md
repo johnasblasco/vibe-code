@@ -5,14 +5,14 @@ Use npm in place of npm.cmd on macOS/Linux. Run init once to create a valid save
 
 ```powershell
 npm.cmd run build
-npm.cmd run scaffold -- generate --help
+npm.cmd run vibecode -- generate --help
 node --input-type=module -e "import {mkdir} from 'node:fs/promises'; await mkdir('.tooling-build/generation-demo', {recursive:true});"
 # Preview CI and its provenance record using dated verified pack pins:
-npm.cmd run scaffold -- generate --file ci --offline --project .tooling-build/generation-demo
+npm.cmd run vibecode -- generate --file ci --offline --project .tooling-build/generation-demo
 # Preview all applicable templates and ask for missing bound answers:
-npm.cmd run scaffold -- generate --project .tooling-build/generation-demo
+npm.cmd run vibecode -- generate --project .tooling-build/generation-demo
 # In a terminal, review and type generate before writing:
-npm.cmd run scaffold -- generate --file ci --offline --project .tooling-build/generation-demo --write
+npm.cmd run vibecode -- generate --file ci --offline --project .tooling-build/generation-demo --write
 ```
 
 The state defaults to .scaffolder/state.json. Use --state to select another valid saved state.

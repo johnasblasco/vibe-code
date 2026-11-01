@@ -1,7 +1,7 @@
 ﻿# Implementation Plan: Project Skeleton
 
 **Feature**: 001-project-skeleton | **Date**: 2026-11-01 | **Spec**: [spec.md](spec.md)
-**Status**: In progress; package installation blocked by session network permissions.
+**Status**: Local skeleton implemented; hosted CI and network audit remain unverified.
 
 ## Summary
 
@@ -14,7 +14,7 @@ Keep existing data and acceptance contracts unchanged. Do not stage or commit ch
 **Language/Version**: TypeScript 6.0.3 proposed; official typescript-eslint support excludes 7.x.
 **Runtime**: Installed Node 26.13.0; CI runtime pin still requires official release verification.
 **Primary Dependencies**: typescript, eslint, @eslint/js, typescript-eslint, vitest.
-**Reference Dependency**: PyYAML 6.0.3 approved; local installation failed.
+**Reference Dependency**: PyYAML 6.0.3 approved and now available in .venv/.
 **Storage**: No application state; tooling configuration and eventual lockfile only.
 **Testing**: Vitest; targeted negative fixtures for lint, type errors, and failing assertions.
 **Target Platform**: Windows PowerShell, macOS, Linux.
@@ -31,11 +31,11 @@ Keep existing data and acceptance contracts unchanged. Do not stage or commit ch
 - Supply chain: exact versions and action hashes require official-source evidence.
 - Beginner scope: no interview, routing, generation, or teaching implementation in this feature.
 - User steering: no staging, commits, or branch mutations.
-- Baseline: all three Python checks currently stop because PyYAML is absent.
+- Baseline restored: strict validator, nine scenarios, and shared expression vectors pass.
 
-Pre-design review: scope conforms. Package approval and action/runtime source verification are
-complete. Implementation gate remains blocked on installation, reference baseline, and final
-dependency graph verification. See research.md for actual command results.
+Post-design review: scope conforms. Approved dependencies are available and local checks pass.
+An isolated regression test covers a required Windows reference-tool path fix. No acceptance
+expectations or budgets changed. Audit cannot reach its endpoint; hosted CI remains unrun.
 
 ## Project Structure
 
@@ -47,8 +47,8 @@ specs/001-project-skeleton/plan.md
 specs/001-project-skeleton/research.md
 
 Data-model and interface-contract artifacts are unnecessary: this skeleton exposes no application
-interface and persists no domain entities. Add a quickstart when exact setup commands are verified.
-Generate tasks only after research prerequisites are resolved.
+interface and persists no domain entities. quickstart.md records validation commands and limits.
+tasks.md tracks the implemented increments.
 
 ### Source Code (repository root)
 
@@ -58,7 +58,7 @@ package-lock.json             Approved dependency graph
 .gitignore                    Generated tooling artifacts and local environment exclusions
 eslint.config.js              Flat lint configuration
 tsconfig.json                 Strict typecheck configuration
-vitest.config.ts              Non-watch test discovery and fixture exclusions
+vitest.config.js              Non-watch test discovery and fixture exclusions
 src/                          Minimal module boundary only; no application features
 tests/tooling/                Skeleton validation and negative fixtures
 .github/workflows/ci.yml      Verified action hashes and platform matrix

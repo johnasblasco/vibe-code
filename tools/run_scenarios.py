@@ -32,7 +32,7 @@ def files_for(router, tier):
             for a in t.get("adds", []):
                 pat = os.path.join(QB, a if "*" in a else a + ".yaml")
                 for f in sorted(glob.glob(pat)):
-                    r = os.path.relpath(f, QB)[:-5]
+                    r = os.path.relpath(f, QB).replace(os.sep, "/")[:-5]
                     if r not in out and r not in ("depth-profiles",):
                         out.append(r)
     return out

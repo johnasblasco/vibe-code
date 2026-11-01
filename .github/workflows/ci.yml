@@ -1,0 +1,42 @@
+name: CI
+
+on: [push, pull_request]
+
+permissions: {}
+
+jobs:
+  checks:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 15
+    permissions:
+      contents: read
+    defaults:
+      run:
+        shell: bash
+    steps:
+      # Verified 2026-11-01; release/commit sources are recorded in research.md.
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: '26.13.0'
+          package-manager-cache: false
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+        with:
+          python-version: '3.14.6'
+      - run: npm ci --ignore-scripts
+      - run: npm run lint
+      - run: npm run typecheck
+      - run: npm test
+      - run: npm run test:tooling
+      - run: npm audit --audit-level=high
+      - run: python -m pip install --disable-pip-version-check PyYAML==6.0.3
+      - run: python tools/validate.py --today "$(date -u +%F)" --strict
+      - run: python tools/run_scenarios.py
+      - run: python tools/test_expr.py
+      - run: python tools/test_run_scenarios.py

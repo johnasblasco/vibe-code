@@ -1,7 +1,7 @@
 ﻿# Research: Project Skeleton
 
-Lookup date: 2026-11-01. All six listed packages approved by the user; installations attempted
-but blocked by the session environment. No successful package installation claimed.
+Lookup date: 2026-11-01. All six listed packages approved by the user. They are now available
+locally, and package-lock.json records the npm dependency graph.
 
 ## Proposed Direct Dependencies
 
@@ -33,14 +33,15 @@ Use npm.cmd in Windows PowerShell because npm.ps1 is blocked by local execution 
 Do not change execution policy system-wide. Use locked installs after the initial approved resolution.
 Do not install commander or @clack/prompts in the skeleton; add them when implementing commands.
 
-## Unresolved Execution Prerequisites
+## Execution Prerequisites and Outcomes
 
 - Installation approval received for the six packages listed above.
-- Python reference checks blocked on missing PyYAML; no baseline pass claimed.
-- Confirm final graph and Node typings requirements before installation. If @types/node or any
-  additional direct package is needed, verify its name and current version and obtain approval.
-- Runtime and full action hashes verified below; implementation remains pending.
-- Verify install-script policy with the selected toolchain before writing CI.
+- Python reference checks now run with PyYAML 6.0.3 and pass after the Windows path fix below.
+- npm ls --depth=0 confirms the five approved exact direct versions. No additional direct
+  packages or Node typings were needed for this skeleton.
+- Runtime and full action hashes verified below; workflow implemented with those pins.
+- ignore-scripts=true is recorded in .npmrc; the installed Vitest toolchain runs successfully.
+- npm audit remains blocked by the registry advisory endpoint; no clean audit claimed.
 
 Network limits: shell requests to registry.npmjs.org failed to connect. Several registry/browser
 requests returned access errors. GitHub release pages and official documentation were accessible.
@@ -57,7 +58,7 @@ The hashes below were obtained by following each official release's commit link 
 | actions/setup-node | v7.1.0 | https://github.com/actions/setup-node/commit/949feb2413d6458794dcd2491c4babbbce0c15c1 |
 | actions/setup-python | v7.1.0 | https://github.com/actions/setup-python/commit/6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 |
 
-## Actual Execution Evidence
+## Initial Execution Evidence
 
 - python -m venv .venv: exit 0; local environment created.
 - Local pip install PyYAML==6.0.3: exit 1; no matching distribution. An explicit official
@@ -67,3 +68,27 @@ The hashes below were obtained by following each official release's commit link 
 - npm install with ignore-scripts and explicit official registry: exit 1, EACCES fetching
   https://registry.npmjs.org/@eslint%2fjs. No lockfile produced.
 - Dependent implementation paused on failed installation. No commits or staging performed.
+
+## Resumed Execution Evidence
+
+- Dependencies became available between sessions: PyYAML 6.0.3 and all five approved npm
+  packages. Existing package-lock.json retained; no additional installation was necessary.
+- Strict Python validator passes: 343 questions, 10 cards, 8 packs, 61 failure modes,
+  18 rules, no structural errors or required coverage gaps.
+- Initial scenario run: 1/9 passed. Eight failed because os.path.relpath returned backslashes
+  in loaded module identifiers on Windows, while expectations use forward slashes.
+- Added tools/test_run_scenarios.py first and observed its failure. Normalized the path
+  separator in the Python reference; regression test and all 9 unchanged scenarios pass.
+- Shared expression suite passes all 30 vectors and 7 parse-error cases.
+- Vitest smoke test first failed on missing src/index.js, then passed after src/index.ts
+  supplied an empty ESM module boundary.
+- Tooling tests first failed for missing lint configuration and tsconfig.json. The completed
+  suite passes 5 tests, verifying real nonzero exits for lint/typecheck/assertion failures,
+  the package script contract, and the pinned workflow/platform matrix.
+- npm run lint, npm run typecheck, and npm test pass locally on Windows.
+- npm audit --audit-level=high fails to reach the registry advisory endpoint. Hosted CI has
+  not been run and macOS/Linux execution is unverified. No staging or commits performed.
+
+The pinned setup action input schemas were checked against their exact commits:
+https://raw.githubusercontent.com/actions/setup-node/949feb2413d6458794dcd2491c4babbbce0c15c1/action.yml
+https://raw.githubusercontent.com/actions/setup-python/6d4fd22b20465ccc0f7354476588e8df7c9ca0e0/action.yml

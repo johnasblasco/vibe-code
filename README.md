@@ -52,7 +52,15 @@ mkdir -p .claude/skills && cp -r skills/{scaffolder-builder,question-bank-author
 
 `skills/project-templates/*` are not for this repo. They are templates the CLI copies into each generated project's `.claude/skills/`, after filling placeholders through `outputs/bindings.yaml`.
 
-## Status and honest limits
+## CLI development skeleton
+
+The repository root now has an ESM TypeScript skeleton. There are no CLI features yet.
+Run `npm run lint`, `npm run typecheck`, `npm test`, and `npm run test:tooling`.
+In Windows PowerShell use `npm.cmd` if execution policy blocks `npm.ps1`.
+See [the skeleton validation guide](specs/001-project-skeleton/quickstart.md) for approved
+dependency setup, Python checks, actual verification limits, and CI details.
+
+## Kit validation status and limits
 
 Read `docs/05-gap-analysis.md` first. In short:
 - This kit is data, specs, tests, and reference tools. The CLI engine is not built.

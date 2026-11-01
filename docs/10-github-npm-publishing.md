@@ -100,6 +100,11 @@ npm.cmd run test:release. The release check now also exercises the same smoke he
 by publication and rejects an altered tarball checksum. No npm installation is needed for
 the extracted-artifact smoke test. No dependency versions were changed or installed locally.
 
+CI also runs npm.cmd run test:archive (npm run test:archive on macOS/Linux). Windows checks
+both its native BSD tar and Git Bash's GNU tar, including binary payloads and destination
+paths with spaces. Extraction passes the verified archive bytes through stdin and uses the
+process working directory for the destination; no drive-prefixed path becomes a tar argument.
+
 The new workflow has not been pushed or executed by this task. No npm settings were changed
 and no release was published by this task. npm package availability could not be verified
 from this environment. The package version is intentionally unchanged until the maintainer

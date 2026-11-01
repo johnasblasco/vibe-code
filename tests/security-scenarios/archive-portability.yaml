@@ -1,0 +1,12 @@
+schema: security-scenario/v1
+id: archive-portability
+failure_modes: [AI-03]
+observed_run: https://github.com/johnasblasco/vibe-code/actions/runs/41326819793
+tools: [windows-bsd-tar, git-bash-gnu-tar]
+cases:
+  - native_windows_drive_prefix
+  - destination_directory_with_spaces
+  - gzip_archive_read_from_verified_binary_stdin
+  - extraction_destination_from_process_cwd
+  - non_ascii_and_null_payload_bytes_preserved
+test: tests/tooling/archive.node.test.mjs

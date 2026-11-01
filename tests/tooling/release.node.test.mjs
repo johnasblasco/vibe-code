@@ -95,7 +95,8 @@ test('native release pack includes the launcher, complete assets and only locked
   assert.ok(files.includes(scenario.bundled_lock_record));
   // Extract into the OS temp directory, outside the checkout's ancestor resolution chain.
   const isolated = await mkdtemp(join(tmpdir(), 'vibecode-release-'));
-  const unpacked = spawnSync('tar', ['-xzf', result.tarball, '-C', isolated], { shell: false, windowsHide: true, encoding: 'utf8', timeout: 30000 });
+  const unpacked = spawnSync('tar', ['-xzf', '-'], { cwd: isolated, input: await readFile(result.tarball),
+    shell: false, windowsHide: true, encoding: 'utf8', timeout: 30000 });
   assert.equal(unpacked.error, undefined); assert.equal(unpacked.status, 0, unpacked.stderr);
   for (const [path, hash] of Object.entries(receipt.bundledFiles)) {
     assert.equal(createHash('sha256').update(await readFile(join(isolated, 'package', path))).digest('hex'), hash);

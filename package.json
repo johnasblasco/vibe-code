@@ -21,6 +21,7 @@
     "test:security": "node --test tests/tooling/security.node.test.mjs",
     "test:release": "node --test tests/tooling/release.node.test.mjs",
     "test:publishing": "node --test tests/tooling/publishing.node.test.mjs",
+    "test:archive": "node --test tests/tooling/archive.node.test.mjs",
     "release:prepare": "node tools/prepare-publish.mjs",
     "release:pack": "node tools/create-release.mjs"
   },

@@ -49,6 +49,7 @@ jobs:
           SCAFFOLDER_PYTHON: ${{ steps.python.outputs.python-path }}
       - run: npm run test:tooling
       - run: npm run test:publishing
+      - run: npm run test:archive
       - run: npm run test:release
       - run: npm audit --audit-level=high
       - run: python tools/validate.py --today "$(date -u +%F)" --strict

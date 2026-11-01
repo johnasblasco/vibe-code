@@ -7,10 +7,11 @@ cards:
     do:
       - run: "git init"
       - write: ".gitignore (includes .env, .env.*, node_modules, build output; excludes .env.example)"
-      - run: "git add . && git commit -m 'chore: initial commit'"
+      - run: "git add ."
+      - run: "git commit -m 'chore: initial commit'"
     verify:
-      - {auto: "git rev-parse HEAD succeeds"}
-      - {auto: "git check-ignore .env confirms .env is ignored"}
+      - {auto: "git rev-parse HEAD succeeds", runner: git_head}
+      - {auto: "git check-ignore .env confirms .env is ignored", runner: git_ignore}
     if_fails:
       - {match: "Please tell me who you are", say: "Run the two git config commands shown, using your name and email, then retry."}
     gate: blocks(stage-2)
@@ -24,8 +25,8 @@ cards:
       - run: "install a secret scanner as a pre-commit hook"
       - run: "create a test file containing a fake key and try to commit it"
     verify:
-      - {auto: "the commit containing the fake key is refused"}
-      - {auto: "the fake file is removed afterwards"}
+      - {auto: "the commit containing the fake key is refused", runner: secret_commit}
+      - {auto: "the fake file is removed afterwards", runner: probe_cleanup}
     if_fails:
       - {match: "hook did not run", say: "Run the hook install command again from the project root."}
     gate: blocks(stage-2)

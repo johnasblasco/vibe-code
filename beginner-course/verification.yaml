@@ -1,0 +1,35 @@
+schema: verification/v1
+process_timeout_ms: 10000
+process_max_bytes: 200000
+network_timeout_ms: 10000
+network_max_bytes: 2000000
+commands:
+  node_version: {command: node, args: [--version]}
+  git_version: {command: git, args: [--version]}
+  docker_version: {command: docker, args: [--version]}
+  docker_context: {command: docker, args: [context, inspect, --format, '{{json .Endpoints.docker.Host}}']}
+  docker_info: {command: docker, args: [info, --format, '{{json .ServerVersion}}']}
+  git_head: {command: git, args: [rev-parse, --verify, HEAD]}
+  git_branch: {command: git, args: [symbolic-ref, --short, HEAD]}
+  git_ignore: {command: git, args: [check-ignore, --no-index, --stdin]}
+  git_tracked: {command: git, args: [ls-files, --cached, '-z', --, .env, '.env.*']}
+  git_hooks: {command: git, args: [config, --get, core.hooksPath]}
+  scanner_version: {command: gitleaks, args: [--version]}
+ignore_probes: [.env, .env.local, .env.example]
+expected_ignored: [.env, .env.local]
+example_file: .env.example
+ci_workflow: ci.yml
+ci_page_size: 20
+probe:
+  filename: probe.txt
+  benign: "A disposable scanner control file.\n"
+  synthetic: "api_key = \"0123456789abcdef0123456789abcdef\"\n"
+  marker: .scaffolder-guard
+  hook: |
+    #!/bin/sh
+    exec gitleaks git --pre-commit --staged --redact --no-banner --exit-code 42
+  guard: |
+    #!/bin/sh
+    printf guard > .scaffolder-guard
+    exit 1
+  hook_setup: "This release proves only the exact direct Gitleaks hook shown here. It does not execute arbitrary hooks or auto-install pre-commit environments. Put this hook in .githooks/pre-commit using your editor, then explicitly choose that directory with git config core.hooksPath .githooks. On macOS/Linux make the hook executable with chmod +x .githooks/pre-commit; Windows Git does not require that chmod step. Install the declared Gitleaks version yourself from its official source only after approval."

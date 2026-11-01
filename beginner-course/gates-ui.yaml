@@ -13,4 +13,4 @@ unanswered: unanswered
 owner: Owner
 reason: Reason
 revisit_when: Revisit when
-limitations: Automatic check runners arrive with doctor. No YAML description is executed as a command. No later stage is advanced here.
+limitations: Use doctor or gates --verify for supported stage-0 to stage-2 checks. Unsupported checks remain unverified. No YAML description is executed as a command.

@@ -6,7 +6,7 @@ type Row = Readonly<Record<string, unknown>>;
 export type Verification = 'passed' | 'manual' | 'failed' | 'unverified';
 export interface Deferral { owner: string; reason: string; revisit_when: string }
 export interface GateCheck {
-  id: string; kind: 'auto' | 'manual' | 'question' | 'review'; description: string; card?: string;
+  id: string; kind: 'auto' | 'manual' | 'question' | 'review'; description: string; card?: string; runner?: string;
 }
 export interface GateResult {
   id: string; allowed: boolean; stop: boolean;
@@ -63,7 +63,8 @@ export async function evaluateGate(kit: LoadedKit, state: State, id: string, opt
           if (!nonempty(card.id) || !nonempty(description) || (kind === 'manual' && check.record !== true)) {
             throw new GateError('Invalid gate check');
           }
-          checks.push({ id: `${card.id}/${index}`, card: card.id, kind, description });
+          checks.push({ id: `${card.id}/${index}`, card: card.id, kind, description,
+            ...(typeof check.runner === 'string' ? { runner: check.runner } : {}) });
         });
       }
     }

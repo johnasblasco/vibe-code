@@ -64,13 +64,18 @@ See [the interview guide](specs/005-idea-interview/quickstart.md) for limits and
 Use `npm run scaffold -- premortem --dry-run` to preview ranked failures, then omit `--dry-run`
 to create `docs/risk-register.md`. Existing registers are never overwritten. A saved project
 name is required. `npm run scaffold -- gates stage-1` inspects that boundary and returns a
-blocked status for unverified checks. Automatic runners arrive with `doctor`; no later course
-stage is advanced yet. See [the gates and pre-mortem guide](specs/006-gates-premortem/quickstart.md).
+blocked status for unverified checks. `gates stage-1 --verify` uses the supported doctor runners.
+See [the gates and pre-mortem guide](specs/006-gates-premortem/quickstart.md).
 Use `npm run scaffold -- generate` to preview applicable project files. It asks for missing
 bound answers in a terminal. `--file ci` selects an output, `--offline` uses dated verified
 pack pins, and `--write` requires preview and typed confirmation. Existing files are never
 overwritten. No packages, hooks, containers, or project commands are installed or run.
 See [the file-generation guide](specs/007-file-generation/quickstart.md) for provenance and limits.
+Run `npm run scaffold -- doctor --dry-run` to list checks, then `npm run scaffold -- doctor`
+for current machine readiness. `doctor --stage stage-1` adds Git/secret checks; stage-2 adds
+explicitly approved nonproduction preview/CI checks. `next --course` shows beginner cards and
+`next --course --advance` saves the next cursor only after fresh checks. No do/undo commands,
+packages, hooks, or deployments run automatically. See [the course guide](specs/008-beginner-course/quickstart.md).
 Run `npm run lint`, `npm run typecheck`, `npm test`, and `npm run test:tooling`.
 In Windows PowerShell use `npm.cmd` if execution policy blocks `npm.ps1`.
 See [the skeleton validation guide](specs/001-project-skeleton/quickstart.md) for approved
@@ -86,10 +91,10 @@ bank-version metadata, persistence checks, and limitations.
 
 Read `docs/05-gap-analysis.md` first. In short:
 - The TypeScript CLI supports the idea interview, routing, state/resume, gate enforcement,
-  pre-mortem risk registers, and bound project file generation. Automatic gate runners,
-  later course stages, and doctor are not implemented yet.
+  pre-mortem risk registers, bound project file generation, doctor, and checked course guidance
+  for stages 0–2. Later course stages and the final threat-model hardening review remain.
 - The checks pass: validator (strict), 9 of 9 scenarios, expression tests. Passing means the kit is consistent and every checklist tag has a question. It does not mean the questions are complete or correct.
-- 61 failure modes are catalogued; 27 cite a source, 34 are engineering practice awaiting a citation.
+- 62 failure modes are catalogued; 27 cite a source, 35 are engineering practice awaiting a citation.
 - The coverage backbone is only partly verified: OWASP ASVS 5.0 chapter names, OWASP Top 10:2025 category names, and ETSI EN 303 645 provision names were written from memory.
 - Most pack research was built from secondary sources on 2026-10-31. Generation pins were
   verified against primary sources on 2026-11-01 and are re-resolved at generation time, with

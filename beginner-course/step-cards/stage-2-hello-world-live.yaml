@@ -9,9 +9,9 @@ cards:
       - run: "create a minimal page that shows the app name and a version string"
       - run: "push to GitHub and connect the repository to the host"
     verify:
-      - {auto: "public URL returns HTTP 200"}
-      - {auto: "page shows the expected version string"}
-      - {auto: "CI run is green"}
+      - {auto: "public URL returns HTTP 200", runner: preview_http}
+      - {auto: "page shows the expected version string", runner: preview_version}
+      - {auto: "CI run is green", runner: ci_head}
     if_fails:
       - {match: "build failed", say: "Open the build log, find the first red line, and paste it into the AI with the line above it."}
       - {match: "404", say: "The output folder or framework preset is wrong in the host settings."}

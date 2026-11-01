@@ -51,3 +51,16 @@ write_option: Request writing after preview and typed confirmation in an interac
 contact_option: Reporting email or HTTPS URL for SECURITY.md; never enter credentials
 generation_project_option: Existing target directory for generated project files
 generation_dry_run_option: Preview generated project files without publishing them
+doctor: Run current readiness checks for beginner stages 0 to 2
+doctor_stage_option: Source course stage to check; stage-0, stage-1, or stage-2
+doctor_project_option: Existing local development project directory
+doctor_dry_run_option: Show planned checks without running processes, probes, or network requests
+probe_option: Request an isolated guarded scanner proof after typed consent
+attest_option: Ask and record current manual confirmations in an interactive terminal
+preview_url_option: Explicit nonproduction public HTTPS preview URL; never a production URL
+expected_version_option: Nonsecret version text expected in the preview response
+repository_option: Public GitHub owner/repository for the current commit's CI check
+nonproduction_option: Designate the preview as nonproduction; typed consent is still required
+verify_option: Run supported current doctor checks instead of inspection only
+course_option: View the beginner course separately from the idea interview
+advance_option: Advance one course boundary only after fresh checks pass

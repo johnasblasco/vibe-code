@@ -1,0 +1,82 @@
+schema: doctor-ui/v1
+title: Doctor checks
+passed: passed automatically
+manual: manually attested
+failed: failed
+unverified: unverified
+deferred: deferred
+answered: answered
+not_applicable: not applicable
+unanswered: unanswered
+detected: Supported tool version detected.
+missing_tool: Tool is missing or did not return a recognized version. Install only from its official source after approval.
+unsupported_version: This Node major is outside the pack's selected supported LTS lines.
+local_engine: A local Docker engine answered the version check.
+docker_context: The Docker context could not be checked.
+remote_docker: A remote Docker endpoint was refused. Select a local development engine.
+docker_stopped: The local Docker engine did not answer. Open the local Docker app and retry.
+head_present: An existing Git commit was found.
+head_missing: A current Git commit or branch could not be verified. The scaffolder does not create your project's first commit.
+ignored: Secret-path probes are ignored, the example is not ignored, and secret-path files are not tracked.
+ignore_failed: Fix secret-file ignore rules and tracked secret paths. The tool did not read secret-file contents.
+probe_needed: The scanner proof needs --probe-secrets and interactive typed consent.
+unsupported_hook: The hook does not match the supported direct Gitleaks hook. Arbitrary/framework hooks are not executed or reported as verified.
+scanner_version: Install the declared Gitleaks release from its official source after approval. The current executable could not be matched to that release.
+probe_passed: Isolated benign/synthetic controls and owned-file cleanup passed. No commit was created.
+probe_failed: The guarded scanner controls or cleanup did not pass. Do not assume the hook blocks secrets.
+network_needed: Provide a designated nonproduction HTTPS preview and repository, and explicitly approve read-only checks in a terminal.
+version_needed: Provide the expected version text with --expected-version.
+http_failed: The preview did not return HTTP 200 directly. Check the URL and deployment settings.
+version_mismatch: The returned page did not contain the expected version text.
+preview_checked: The designated nonproduction preview response passed this check.
+ci_current: The latest matching workflow run for this commit and branch completed successfully.
+ci_not_green: No latest successful matching CI run was found for this commit and branch.
+ci_mismatch: The CI response or repository/workflow identity could not be verified.
+ci_unavailable: Public CI metadata was unavailable. No token is requested; private or inaccessible CI remains unverified.
+manual_needed: This check needs a current explicit manual confirmation; stored records do not grant passage.
+attested: Recorded as a manual confirmation, not an automatic check.
+dry_run: Planned check only. No process, probe, or network request was started.
+unknown_runner: No supported automatic runner is configured for this check.
+check_failed: The check failed or returned unsupported data. Raw diagnostics were withheld.
+cancelled: Checks cancelled. Accepted manual records remain saved.
+allowed: All current obligations passed or were explicitly deferred. Deferred checks are not verified.
+blocked: This boundary is blocked. Resolve failed or unverified checks, or explicitly defer allowed items with an owner, reason, and revisit trigger.
+stop: Stop. Follow the displayed expert guidance before continuing.
+instructions: Instructions only. The scaffolder does not execute do/undo commands, install packages or hooks, or deploy anything.
+stage: Course stage
+teach: Why this matters
+choose: Decision
+do: Steps to do yourself
+verify: Checks
+if_fails: If a check fails
+undo: Undo guidance; destructive steps require deliberate approval
+options: Available choices
+recommended: Recommendation only; no answer has been accepted
+auto_detect: Automatic platform detection
+pick_for_me: Review a suggested choice
+command_label: Command to run yourself
+write_label: File to prepare yourself
+tools_label: Tools to have available
+automatic_label: Automatic check
+manual_label: Manual confirmation
+node_lts: Node.js LTS
+git: Git
+docker_desktop: Docker Desktop or another local Docker engine
+code_editor: A code editor
+windows: Windows
+macos: macOS
+linux: Linux
+completed: Stages 0–2 reached their checked completion boundary. Stage-3 actions are not implemented here.
+advanced: Saved the next course cursor. Future entry checks will run again.
+consent_required: Probe/remote checks require an interactive terminal and typed consent. The flag alone does not grant access.
+probe_confirm: Type probe to test the supported hook in a disposable repository. An aborting hook and unavailable signer prevent every commit. Your project's index and hooks are not changed.
+probe_word: probe
+supported_hook: Supported direct hook; review this exact configuration before using it
+preview_target: Nonproduction preview origin
+ci_target: Public CI repository
+network_confirm: Type preview to make bounded read-only requests to the explicitly designated nonproduction preview and public CI metadata. Do not approve a production target.
+network_word: preview
+attest_prompt: Confirm this statement now. It will be recorded as manual evidence.
+yes: Yes, I confirm
+no: No
+error: Unable to continue course checks. Check the selected stage, project, state files, source data, and explicit preview options. Existing state was not reset.

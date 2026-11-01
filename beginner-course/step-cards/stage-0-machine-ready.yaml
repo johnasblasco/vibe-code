@@ -9,9 +9,9 @@ cards:
       - say: "Install each missing tool from its official website, then come back."
       - tools: [node_lts, git, docker_desktop, code_editor]
     verify:
-      - {auto: "node --version prints a version"}
-      - {auto: "git --version prints a version"}
-      - {auto: "docker --version prints a version and the Docker engine is running"}
+      - {auto: "node --version prints a version", runner: node_version}
+      - {auto: "git --version prints a version", runner: git_version}
+      - {auto: "docker --version prints a version and the Docker engine is running", runner: docker_local}
     if_fails:
       - {match: "command not found", say: "Close the terminal and open a new one. New installs are only seen by new terminals."}
       - {match: "Docker daemon not running", say: "Open the Docker Desktop app and wait until it says it is running."}

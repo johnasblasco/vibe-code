@@ -19,9 +19,13 @@ import { GenerationBlocked, GenerationError, MissingAnswers } from '../outputs/g
 import { OutputError } from '../outputs/paths.js';
 import { PublishError } from '../outputs/publish.js';
 import { LookupCancelled, LookupError } from '../outputs/lookups.js';
+import { addDoctorFlags, runDoctorCli } from '../doctor/cli.js';
+import type { DoctorCliIO, DoctorFlags, DoctorOutcome } from '../doctor/cli.js';
+import { DoctorError } from '../doctor/index.js';
+import { CourseError } from '../course/state.js';
 
 export const EXIT = { SUCCESS: 0, ERROR: 1, USAGE: 2, BLOCKED: 3, STOP: 4, CANCELLED: 130 } as const;
-interface CliIO {
+interface CliIO extends DoctorCliIO {
   kitRoot?: string; tty?: boolean; out?: (text: string) => void; err?: (text: string) => void;
   portFactory?: (kit: LoadedKit, signal: AbortSignal) => InterviewPort;
   generationPortFactory?: (kit: LoadedKit, signal: AbortSignal) => GenerationPort;
@@ -51,9 +55,14 @@ export async function runCli(argv: string[], io: CliIO = {}): Promise<number> {
     } })
     .configureOutput({ writeOut: out, writeErr: err, outputError: (_text, write) => write(`${ui.usage_error}\n`) });
   let code: number = EXIT.SUCCESS;
+  const doctorExit = (outcome: DoctorOutcome): number => outcome === 'success' ? EXIT.SUCCESS : outcome === 'cancelled' ? EXIT.CANCELLED : outcome === 'stop' ? EXIT.STOP : EXIT.BLOCKED;
   for (const name of ['init', 'next']) {
-    program.command(name).description(ui[name]!).option('--state <path>', ui.state_option!)
-      .action(async (options: { state?: string }) => {
+    const command = program.command(name).description(ui[name]!).option('--state <path>', ui.state_option!);
+    if (name === 'next') addDoctorFlags(command, ui).option('--course', ui.course_option!).option('--advance', ui.advance_option!)
+      .option('--deferrals <path>', ui.deferrals_option!);
+    command.action(async (options: DoctorFlags) => {
+        if (name === 'next' && options.course) { code = doctorExit(await runDoctorCli(kit, options, io, out, true)); return; }
+        if (options.advance) { err(`${ui.usage_error}\n`); code = EXIT.USAGE; return; }
         if (!(io.tty ?? Boolean(process.stdin.isTTY && process.stdout.isTTY))) {
           err(`${ui.terminal_required}\n`); code = EXIT.ERROR; return;
         }
@@ -90,16 +99,27 @@ export async function runCli(argv: string[], io: CliIO = {}): Promise<number> {
       await writeRiskRegister(resolve(options.project), text, { dryRun: options.dryRun ?? false });
       out(options.dryRun ? text : `${ui.risk_written}\n`);
     });
-  program.command('gates').description(ui.gates!).argument('<gate>', ui.gate_argument!)
+  const gatesCommand = program.command('gates').description(ui.gates!).argument('<gate>', ui.gate_argument!)
     .option('--state <path>', ui.state_option!, '.scaffolder/state.json')
     .option('--deferrals <path>', ui.deferrals_option!)
-    .action(async (id: string, options: { state: string; deferrals?: string }) => {
+    .option('--verify', ui.verify_option!);
+  addDoctorFlags(gatesCommand, ui).action(async (id: string, options: DoctorFlags & { state: string; verify?: boolean }) => {
+      if (options.verify) {
+        if (!['stage-1', 'stage-2', 'stage-3'].includes(id)) throw new DoctorError('Unsupported doctor boundary');
+        // An absent default state is allowed for readiness checks, just as with doctor.
+        const forwarded = { ...options, stage: `stage-${Number(id.slice(-1)) - 1}` };
+        if (forwarded.state === '.scaffolder/state.json' && !await exists(resolve(forwarded.state))) delete (forwarded as DoctorFlags).state;
+        code = doctorExit(await runDoctorCli(kit, forwarded, io, out)); return;
+      }
       const state = await loadState(resolve(options.state));
       const deferrals = options.deferrals ? await readDeferrals(options.deferrals, id) : {};
       const gate = await evaluateGate(kit, state, id, { deferrals });
       out(renderGate(kit, gate));
       code = gate.stop ? EXIT.STOP : gate.allowed ? EXIT.SUCCESS : EXIT.BLOCKED;
     });
+  const doctorCommand = program.command('doctor').description(ui.doctor!).option('--state <path>', ui.state_option!)
+    .option('--stage <stage>', ui.doctor_stage_option!, 'stage-0').option('--deferrals <path>', ui.deferrals_option!);
+  addDoctorFlags(doctorCommand, ui).action(async (options: DoctorFlags) => { code = doctorExit(await runDoctorCli(kit, options, io, out)); });
   const generationUi = interfaceText(kit, 'beginner-course/generation-ui.yaml');
   program.command('generate').description(ui.generate!)
     .option('--state <path>', ui.state_option!, '.scaffolder/state.json')
@@ -134,6 +154,7 @@ export async function runCli(argv: string[], io: CliIO = {}): Promise<number> {
   try { await program.parseAsync(argv.length ? argv : ['--help'], { from: 'user' }); }
   catch (error) {
     if (error instanceof CommanderError) return error.code === 'commander.helpDisplayed' ? EXIT.SUCCESS : EXIT.USAGE;
+    if (error instanceof DoctorError || error instanceof CourseError) { err(`${interfaceText(kit, 'beginner-course/doctor-ui.yaml').error}\n`); return EXIT.ERROR; }
     if (error instanceof GenerationBlocked) { err(`${ui[error.stop ? 'stop' : 'blocked']}\n`); return error.stop ? EXIT.STOP : EXIT.BLOCKED; }
     if (error instanceof LookupCancelled) { err(`${generationUi.cancelled}\n`); return EXIT.CANCELLED; }
     if (error instanceof MissingAnswers) {

@@ -1,0 +1,9 @@
+schema: security-scenarios/v1
+failure_modes: [AI-03, AI-07, AI-09, SW-27, SW-29]
+native_git_null: {win32: NUL, posix: /dev/null}
+corrupt_course:
+  payload: not valid JSON
+  expected_listener_delta: 0
+malformed_ci_run_number: invalid
+redirect_status: 302
+unsafe_descriptor: {id: node_version, command: git, args: [push]}

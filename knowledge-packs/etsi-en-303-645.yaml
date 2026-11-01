@@ -1,0 +1,15 @@
+schema: knowledge-pack/v1
+id: etsi-en-303-645
+title: ETSI EN 303 645 consumer IoT cybersecurity baseline
+last_verified: 2026-10-31
+max_age_days: 180
+volatile: false
+facts:
+  - "Defines 13 cybersecurity provisions plus 5 data-protection provisions for consumer IoT."
+  - "Current edition seen in sources: V3.1.3 (2024-09)."
+  - "Headline provisions: no universal default passwords, a way to report vulnerabilities, keep software updated, securely store sensitive parameters, communicate securely, minimise attack surface, ensure software integrity, protect personal data, be resilient to outages, review telemetry, make data deletion easy, make installation and maintenance easy, validate input data."
+affects_questions: [hw.sec.default_creds, hw.sec.vuln_intake, hw.sec.updates, hw.sec.key_storage, hw.sec.attack_surface, hw.sec.secure_boot, hw.sec.personal_data, hw.sec.delete_data, hw.net.offline, hw.fw.input_validation]
+sources:
+  - https://www.etsi.org/technologies/consumer-iot-security
+  - https://webstore.ansi.org/standards/ds/dsetsien303645v32024
+primary_source_todo: "Confirm the clause numbering of the 13 provisions against the current edition before using clause numbers in tags."

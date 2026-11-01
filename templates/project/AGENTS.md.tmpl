@@ -1,0 +1,42 @@
+# {{project_name}}: rules for AI agents
+
+Read this first in every session. These rules come from decisions the owner recorded. If a request conflicts with them, stop and ask.
+
+## What this is
+{{project_summary}}
+Audience: {{project_audience}}
+Out of scope for version 1: {{project_out_of_scope}}
+
+## Stack on record
+- Platform: {{platform}}
+- Frontend: {{fe_framework}} ({{fe_language}})
+- Backend runtime: {{be_runtime}}, hosting model {{hosting_model}}
+- Database: {{database_engine}} via {{orm}}, hosted on {{database_host}}
+- Hosting: {{hosting}}
+Decisions and their reasons: docs/decisions/. Add a record for every significant choice. Do not change a recorded decision without asking.
+
+## You may do without asking
+{{ai_autonomy}}
+
+## Always ask first
+{{ai_always_ask}}
+
+## Never
+- Run anything against the production database or production services.
+- Print, log, commit, or paste secrets, keys, tokens, or customer data. Browser code may only use public keys.
+- Disable checks, tests, signature verification, or security rules to make something pass.
+- Edit these paths: {{protected_paths}}
+
+## Packages and tools
+Policy: {{dependency_policy}}
+Before adding any dependency: confirm the exact name in the official documentation, check the publisher, age, and repository, commit the lockfile, and ask the owner. Never assume a package named in a snippet is real or safe.
+Do not install third-party skills, plugins, or MCP servers without the owner reading them first. Policy: {{skills_policy}}
+
+## Official documentation to read instead of relying on memory
+{{docs_sources}}
+
+## How to work
+- Conventions: {{conventions}}
+- Test first: {{test_first}}. Commit after {{commit_cadence}}. Keep changes small.
+- Definition of done: {{definition_of_done}}. Report the command output you saw, not what you expect.
+- When the request is unclear: {{ambiguity_policy}}.

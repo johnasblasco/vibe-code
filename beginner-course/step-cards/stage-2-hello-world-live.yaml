@@ -1,0 +1,20 @@
+schema: step-card/v1
+cards:
+  - id: deploy.hello_world
+    stage: stage-2
+    audience: beginner
+    teach: "Put an empty page on the internet today. Deploy problems (build errors, missing settings, wrong region) are cheap to fix while the app is tiny and painful once it is big."
+    choose: {ask: "Where should it be hosted?", default: pick_for_me, show: "current free limits and catches from the hosting pack"}
+    do:
+      - run: "create a minimal page that shows the app name and a version string"
+      - run: "push to GitHub and connect the repository to the host"
+    verify:
+      - {auto: "public URL returns HTTP 200"}
+      - {auto: "page shows the expected version string"}
+      - {auto: "CI run is green"}
+    if_fails:
+      - {match: "build failed", say: "Open the build log, find the first red line, and paste it into the AI with the line above it."}
+      - {match: "404", say: "The output folder or framework preset is wrong in the host settings."}
+    gate: blocks(stage-3)
+    undo: "Delete the project in the host dashboard. Nothing else is affected."
+    covers: [beginner-ops:deploy-early, arc42:deployment-view, project:ci-cd]

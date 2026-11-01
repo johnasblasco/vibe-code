@@ -1,0 +1,44 @@
+schema: question-bank/v1
+tier_min: T4
+modules:
+  - module: H9-manufacturing
+    stage: production
+    gate: before-production
+    questions:
+      - {id: hw.mfg.volumes, ask: "How many units in the pilot build and in year one?", type: text, covers: [hardware:manufacturing, project:scale]}
+      - {id: hw.mfg.stages, ask: "What is the plan for EVT (design works), DVT (repeatable build), and PVT (factory line ready)?", type: text, covers: [hardware:manufacturing]}
+      - {id: hw.mfg.cm, ask: "Which contract manufacturer will build it, and have they built similar products?", type: text, covers: [hardware:manufacturing]}
+      - {id: hw.mfg.bom, ask: "Which parts are single-source, and what is the backup for each?", type: text, covers: [hardware:supply-chain, iso25010:reliability]}
+      - {id: hw.mfg.lifecycle, ask: "Are any parts near end of life, and how will you track part status?", type: text, covers: [hardware:lifecycle, hardware:supply-chain]}
+      - {id: hw.mfg.programming, ask: "How is firmware loaded and each unit's keys installed in the factory without exposing them?", type: text, covers: [hardware:provisioning, en303645:secure-storage]}
+      - {id: hw.mfg.test, ask: "What end-of-line tests must every unit pass?", type: text, covers: [hardware:manufacturing, hardware:verification]}
+      - {id: hw.mfg.logistics, ask: "How will you package and ship it, including batteries and radios?", type: text, covers: [regulatory:battery-transport, hardware:manufacturing]}
+  - module: H10-verification
+    stage: build
+    questions:
+      - {id: hw.ver.simulate, ask: "Which simulators or emulators will you use before real hardware (for example Renode, QEMU, Wokwi)?", type: text, covers: [hardware:verification, project:testing]}
+      - {id: hw.ver.hil, ask: "Will you build a hardware-in-the-loop test rig?", type: boolean, covers: [hardware:verification]}
+      - {id: hw.ver.host_tests, ask: "Which firmware logic runs unit tests on a computer?", type: text, covers: [project:testing, iso25010:maintainability]}
+      - {id: hw.ver.fault_injection, ask: "Which failures will you inject (power loss, sensor fault, bad network, corrupted update)?", type: text, covers: [iso25010:reliability, hardware:verification]}
+      - {id: hw.ver.field_telemetry, ask: "What will tell you about problems once units are in the field?", type: text, covers: [en303645:telemetry-review, project:observability]}
+      - {id: hw.ver.hardware_facts, ask: "Confirm: datasheets, pinout, and errata live in docs/hardware/ and the AI must never invent pins, registers, or timings.", type: boolean, default: true, why: "The AI cannot see your board. This folder is its only source of truth.", covers: [hardware:verification, project:ai-collaboration]}
+      - {id: hw.ver.reliability_tests, ask: "Which environmental and lifetime tests will you run (heat, cold, humidity, drop, vibration)?", type: text, covers: [iso25010:reliability, hardware:physical-context]}
+  - module: H11-operations-end-of-life
+    stage: prelaunch
+    questions:
+      - {id: hw.ops.ota_rollout, ask: "How will updates roll out (small group first, automatic rollback, pause switch)?", type: text, covers: [hardware:ota, iso25010:reliability]}
+      - {id: hw.ops.support_period, ask: "How many years will you provide security updates, and will you state it publicly?", type: number, covers: [cra:support-period, en303645:software-updates]}
+      - {id: hw.ops.vuln_process, ask: "What is the process, owner, and timeline once a vulnerability is reported or exploited?", type: text, covers: [cra:vulnerability-handling, cra:reporting-process]}
+      - {id: hw.ops.returns, ask: "How are returns, repairs, and replacements handled?", type: text, covers: [hardware:lifecycle]}
+      - {id: hw.ops.resale, ask: "What happens to data when a unit is sold on or thrown away?", type: text, covers: [en303645:delete-user-data, regulatory:privacy]}
+      - {id: hw.ops.recycling, ask: "What are the recycling and end-of-life obligations?", type: text, covers: [regulatory:substances, hardware:lifecycle]}
+      - {id: hw.ops.resilience, ask: "How does the fleet behave if your cloud goes down for a day?", type: text, covers: [en303645:resilience-outages, iso25010:reliability]}
+  - module: H12-companion-app-ux
+    stage: design
+    questions:
+      - {id: hw.ux.app, ask: "Is there a phone or web app, and what does it control?", type: text, covers: [hardware:companion-app]}
+      - {id: hw.ux.pairing, ask: "How does pairing work, and how is it protected against a neighbor connecting?", type: text, covers: [hardware:companion-app, en303645:secure-communication]}
+      - {id: hw.ux.households, ask: "Can several people use one device? How are permissions set?", type: text, covers: [asvs:authorization, hardware:companion-app]}
+      - {id: hw.ux.ownership, ask: "How does ownership transfer and factory reset work?", type: text, covers: [en303645:delete-user-data, hardware:companion-app]}
+      - {id: hw.ux.accessibility, ask: "How will people with limited sight, hearing, or mobility use it?", type: text, covers: [iso25010:interaction-capability, regulatory:accessibility]}
+      - {id: hw.ux.status, ask: "How does the device show its state without a screen (lights, sounds, app)?", type: text, covers: [iso25010:interaction-capability]}

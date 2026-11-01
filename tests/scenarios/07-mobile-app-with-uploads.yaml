@@ -1,0 +1,12 @@
+id: mobile-app-with-uploads
+description: A small team builds a mobile app where users upload photos.
+answers: {user_accounts: true, physical: false, radio: false, battery: false, mains: false, actuator: false, harm_possible: none, sensitive_data: false, money: false, ai_decisions: false, multi_tenant: false, product.platform: mobile_app, product.team: small_team, features.extras: [file_uploads, notifications]}
+expect:
+  tier: T2
+  loads_include: [extensions/mobile-and-payments, software/04-security-quality]
+  questions_include: [mob.approach, mob.updates, ugc.moderation, sec.uploads]
+  questions_exclude: [sc.domain, pay.model, hw.plat.mcu, ai.scope]
+  failure_modes_include: [SW-18, SW-01]
+  stop: false
+  max_idea_questions: 50
+  max_idea_needing_input: 32

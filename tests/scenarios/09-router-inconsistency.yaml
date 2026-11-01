@@ -1,0 +1,7 @@
+id: router-inconsistency
+description: The user says the platform is a hardware device but answered 'no' to every physical and radio question. The engine must notice.
+answers: {user_accounts: false, physical: false, radio: false, battery: false, mains: false, actuator: false, harm_possible: none, sensitive_data: false, money: false, ai_decisions: false, multi_tenant: false, product.platform: hardware_device, product.team: solo_beginner}
+expect:
+  tier: T1
+  contradictions_include: [C-019]
+  stop: false

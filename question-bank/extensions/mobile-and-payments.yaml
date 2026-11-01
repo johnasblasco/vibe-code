@@ -1,0 +1,28 @@
+schema: question-bank/v1
+modules:
+  - module: mobile
+    stage: plan
+    load_when: "product.platform == 'mobile_app'"
+    questions:
+      - {id: mob.approach, ask: "Native, cross-platform, or a web app wrapped as an app?", type: single_select, options: [native, cross_platform, web_wrapper, pick_for_me], covers: [project:mobile, arc42:solution-strategy]}
+      - {id: mob.stores, ask: "Which app stores, and have you read their review rules?", type: text, covers: [project:mobile, regulatory:markets]}
+      - {id: mob.offline_sync, ask: "What works offline, and how are conflicts resolved when it reconnects?", type: text, covers: [iso25010:reliability, project:mobile]}
+      - {id: mob.local_storage, ask: "What is stored on the phone, and is it encrypted?", type: text, covers: [asvs:data-protection, project:mobile]}
+      - {id: mob.push, ask: "What push notifications will you send, and can users control them?", type: text, covers: [project:mobile, iso25010:interaction-capability]}
+      - {id: mob.updates, ask: "How do you force or encourage updates when a security fix ships?", type: text, covers: [project:mobile, owasp-top10-2025:supply-chain-failures]}
+  - module: payments
+    stage: plan
+    load_when: "money"
+    questions:
+      - {id: pay.model, ask: "One-time payments, subscriptions, or balances held for users?", type: single_select, options: [one_time, subscription, usage_based, stored_balance], covers: [project:payments]}
+      - {id: pay.provider, ask: "Which payment provider, and will card data ever touch your servers?", type: text, why: "Let the provider handle card data. It keeps your compliance burden small.", covers: [project:payments, asvs:data-protection]}
+      - {id: pay.webhooks, ask: "How do you verify provider webhooks and handle repeats and late arrivals?", type: text, covers: [project:payments, asvs:api-web-service]}
+      - {id: pay.refunds, ask: "How are refunds, failed payments, and disputes handled?", type: text, covers: [project:payments]}
+      - {id: pay.tax, ask: "How are tax and invoices handled in each country?", type: text, covers: [regulatory:markets, project:payments]}
+      - {id: pay.fraud, ask: "What stops stolen cards, abuse of free trials, and duplicate charges?", type: text, covers: [project:payments, owasp-top10-2025:insecure-design]}
+  - module: user-content
+    stage: build
+    load_when: "features.extras contains 'file_uploads'"
+    questions:
+      - {id: ugc.moderation, ask: "How will you handle abusive or illegal user content?", type: text, covers: [project:moderation]}
+      - {id: ugc.reporting, ask: "How can users report content, and who responds?", type: text, covers: [project:moderation]}

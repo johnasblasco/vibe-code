@@ -1,0 +1,12 @@
+id: cli-package
+description: An experienced developer publishes a command-line tool to a package registry. No accounts, no hardware.
+answers: {user_accounts: false, physical: false, radio: false, battery: false, mains: false, actuator: false, harm_possible: none, sensitive_data: false, money: false, ai_decisions: false, multi_tenant: false, product.platform: cli, product.team: solo_experienced}
+expect:
+  tier: T1
+  loads_include: [extensions/package-data-extension, software/06-validation-team-ai-dev]
+  questions_include: [pkg.registry, pkg.provenance, pkg.install_scripts, aic.dependency_policy]
+  questions_exclude: [sc.domain, auth.methods, hw.plat.mcu, pay.model, mob.approach]
+  failure_modes_include: [SW-21, SW-20, AI-01]
+  stop: false
+  max_idea_questions: 50
+  max_idea_needing_input: 32

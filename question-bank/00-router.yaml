@@ -1,0 +1,27 @@
+# Phase 0: the router. Asked first. Decides tier and which modules load.
+schema: question-bank/v1
+module: router
+flags:
+  - {id: user_accounts, ask: "Will people log in to it?", type: boolean, covers: [asvs:authentication]}
+  - {id: physical, ask: "Does it touch the physical world (sensors, motors, pumps, lights, locks)?", type: boolean, covers: [hardware:physical-context]}
+  - {id: radio, ask: "Does it use radio (Wi-Fi, Bluetooth, cellular, LoRa, Zigbee, Thread)?", type: boolean, ask_when: "physical", covers: [hardware:connectivity]}
+  - {id: battery, ask: "Does it run on a battery?", type: boolean, ask_when: "physical", covers: [hardware:power]}
+  - {id: mains, ask: "Does it connect to mains power (wall voltage)?", type: boolean, ask_when: "physical", covers: [hardware:power]}
+  - {id: actuator, ask: "Does it move or switch something (pump, motor, heater, relay, lock)?", type: boolean, ask_when: "physical", covers: [safety:hazard-analysis]}
+  - {id: harm_possible, ask: "If it fails or is misused, could someone be hurt?", type: single_select, options: [none, property_damage, minor_injury, serious_injury, death], covers: [iso25010:safety, safety:hazard-analysis]}
+  - {id: sensitive_data, ask: "Does it handle personal, children, health, or financial data?", type: boolean, covers: [regulatory:privacy]}
+  - {id: money, ask: "Will it take payments or hold balances?", type: boolean, covers: [project:payments]}
+  - {id: ai_decisions, ask: "Will an AI model make decisions or take actions for users?", type: boolean, covers: [ai-risk:excessive-agency]}
+  - {id: multi_tenant, ask: "Will separate organizations or teams share it?", type: boolean, covers: [asvs:authorization]}
+  - {id: markets, ask: "Which countries or regions will it be sold or used in?", type: text, covers: [regulatory:markets]}
+  - {id: fleet_scale, ask: "How many units or users do you expect in the first year?", type: single_select, options: [under_100, under_10000, over_10000], covers: [project:scale]}
+  - {id: unattended_offline, ask: "Must it keep working unattended or without internet?", type: boolean, covers: [iso25010:reliability]}
+tiers:
+  - {id: T5, when: "harm_possible in ['serious_injury', 'death']", adds: [extensions/safety-critical, hardware/*]}
+  - {id: T4, when: "physical or radio", adds: [hardware/*]}
+  - {id: T3, when: "money or ai_decisions or multi_tenant or sensitive_data", adds: []}
+  - {id: T2, when: "user_accounts", adds: [software/03-auth-integrations, software/04-security-quality, software/07-lifecycle-resilience-security-extras]}
+  - {id: T1, when: "otherwise", adds: [software/01-product-users-data, software/02-architecture-stack, software/05-delivery-operations-legal-planning, software/06-validation-team-ai-dev, extensions/*]}
+rule: "Tiers are cumulative: the project's tier is the first rule that matches (top to bottom), and it loads everything its tier and every lower tier adds. Modules inside loaded files still apply their own load_when and tier_min. Hardware (T4 and above) is never run at depth 'quick'; the engine raises it to 'standard'."
+stop_rules:
+  - {id: beginner-safety-critical, when: "harm_possible in ['serious_injury', 'death'] and product.team == 'solo_beginner'", action: "stop and generate an expert brief; do not continue alone"}

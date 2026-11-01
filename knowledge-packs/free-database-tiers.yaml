@@ -1,0 +1,22 @@
+schema: knowledge-pack/v1
+id: free-database-tiers
+title: Free and low-cost hosted database tiers
+last_verified: 2026-10-31
+max_age_days: 30
+volatile: true
+verified_via: secondary comparison articles from 2026; confirm on each provider pricing page before showing to users
+facts:
+  - "Every free tier caps something: storage, compute, connections, or how long the database stays awake. Show the catch, not just the headline."
+  - "Supabase free: about 500 MB database, 50,000 monthly active users, 5 GB bandwidth, 2 free projects; projects pause after 7 days of inactivity."
+  - "Neon free: no credit card, scale-to-zero compute, about 0.5 GB per project and many projects; sources disagree on pause rules, so verify."
+  - "Turso offers a generous free tier but is not Postgres."
+  - "Free tiers disappear: Heroku free and ElephantSQL are gone, PlanetScale removed its free tier in April 2024."
+  - "Use the provider's connection pooler when connecting from serverless functions or many instances."
+affects_questions: [data.host, data.pooling, db.setup_hosted]
+sources:
+  - https://www.itpathsolutions.com/supabase-free-tier-limits
+  - https://www.lilachbullock.com/?p=163596
+  - https://swyftstack.com/blog/free-postgresql-hosting
+  - https://jeangalea.com/beyond-shared-mysql/
+  - https://devtoolpicks.com/blog/best-planetscale-alternatives-indie-hackers-2026
+primary_source_todo: "Fetch live from provider pricing pages at scaffold time, fall back to this file with a stale warning."

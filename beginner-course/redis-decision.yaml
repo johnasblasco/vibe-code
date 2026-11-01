@@ -1,0 +1,13 @@
+# Ask about symptoms, never "do you want Redis?".
+schema: decision-table/v1
+id: cache-or-queue
+rows:
+  - {symptom: "The same slow query runs again and again", consider: cache, first_try: "database index or query fix before adding a cache"}
+  - {symptom: "Login sessions must work across several servers", consider: shared_session_store, first_try: "store sessions in the main database at small scale"}
+  - {symptom: "Someone could spam login or expensive endpoints", consider: rate_limiting, first_try: "built-in or edge rate limiting from the host"}
+  - {symptom: "Work must happen later (emails, reports)", consider: job_queue, first_try: "a database-backed queue or the host's scheduled jobs"}
+  - {symptom: "None of the above", consider: skip_for_now, record: "deferred; revisit when pages are slow because of repeated queries"}
+if_added:
+  local: "run it in Docker next to the app"
+  production: "use a managed service"
+  must: ["set a password", "never expose it publicly", "verify with a ping check"]

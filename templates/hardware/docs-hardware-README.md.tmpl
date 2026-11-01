@@ -1,0 +1,19 @@
+# docs/hardware: the source of truth for {{project_name}}'s hardware
+
+The AI cannot see the board. Everything it may say about pins, registers, voltages, currents, or timings must come from files in this folder.
+
+Board and MCU: {{mcu}}
+Power: {{power_source}}
+Worst-case harm if it fails: {{worst_case_harm}}. Safe state: {{safe_state}}
+
+## Put here
+- `datasheets/` for every chip and module (PDF, with the revision in the file name)
+- `pinout.md`: each pin, its function, voltage level, and the source page
+- `errata.md`: known silicon and module bugs
+- `schematic-notes.md`: decisions and open questions
+- `bom.csv`: parts, second sources, lifecycle status
+- `certification/`: test reports and labels
+- `fault-tests.md`: results of power-cut, corrupt-image, and offline tests
+
+## Rules
+If a fact is not here, ask. Do not infer it from a similar board. Changes to power, radio, or actuator code are safety-relevant: say so and ask for confirmation before flashing.

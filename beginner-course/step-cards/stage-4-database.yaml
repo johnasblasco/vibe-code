@@ -1,0 +1,49 @@
+schema: step-card/v1
+cards:
+  - id: db.setup_local
+    stage: stage-4
+    audience: beginner
+    teach: "A database stores your app's data permanently. Without one, everything disappears when the app restarts. You will use a throwaway one on your computer and a separate one for the live app."
+    choose: {ask: "Which database?", default: postgres, why_default: "Widest support from hosts, tutorials, and AI tools."}
+    do:
+      - run: "docker compose up -d db"
+      - copy: ".env.example -> .env"
+      - run: "npm run db:migrate"
+    verify:
+      - {auto: "SELECT 1 succeeds"}
+      - {auto: "insert a test row, read it back, delete it"}
+      - {auto: "migrate down then up both succeed"}
+    if_fails:
+      - {match: "port 5432 already in use", say: "Another Postgres is running. Stop it, or change the port to 5433 in .env."}
+      - {match: "connection refused", say: "Docker is not running or the container has not finished starting. Wait 10 seconds and retry."}
+    gate: blocks(stage-5)
+    undo: "docker compose down -v deletes the local data only."
+    covers: [iso25010:reliability, arc42:deployment-view]
+  - id: db.setup_hosted
+    stage: stage-4
+    audience: beginner
+    teach: "The live app needs a hosted database. Free plans have catches, such as pausing after a week of no use, which looks like an outage. We show the current limits before you pick."
+    choose: {ask: "Which hosted database?", show: "limits table from knowledge-packs/free-database-tiers.yaml with last_verified date"}
+    do:
+      - say: "Create the project, copy the pooled connection string, and add it to the host as DATABASE_URL (production value only)."
+      - run: "apply migrations to the hosted database"
+    verify:
+      - {auto: "hosted SELECT 1 succeeds from the deployed app's health route"}
+      - {auto: "the local .env does NOT contain the production connection string"}
+    if_fails:
+      - {match: "too many connections", say: "Use the provider's pooled connection string, not the direct one."}
+    gate: blocks(stage-5)
+    undo: "Delete the hosted project. Only do this before real data exists."
+    covers: [project:cost, beginner-ops:cost-alerts, iso25010:reliability]
+  - id: db.backups
+    stage: stage-4
+    audience: beginner
+    teach: "A backup you have never restored is a guess. Turn backups on now and test one restore before launch."
+    do:
+      - say: "Turn on automatic backups in the database dashboard."
+      - run: "restore the latest backup into a temporary test database"
+    verify:
+      - {auto: "row counts match between source and restored copy"}
+    gate: blocks(stage-10)
+    undo: "Delete the temporary test database."
+    covers: [beginner-ops:backup-restore, iso25010:reliability]

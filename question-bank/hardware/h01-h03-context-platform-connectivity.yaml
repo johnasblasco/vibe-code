@@ -1,0 +1,36 @@
+schema: question-bank/v1
+tier_min: T4
+modules:
+  - module: H1-physical-context
+    stage: design
+    gate: before-hardware-design-freeze
+    questions:
+      - {id: hw.env.location, ask: "Where will it be used?", type: single_select, options: [indoor_dry, indoor_humid, outdoor, vehicle, industrial, medical_setting], covers: [hardware:physical-context]}
+      - {id: hw.env.ratings, ask: "What temperature range, water and dust protection, and vibration must it survive?", type: text, covers: [hardware:physical-context, iso25010:reliability]}
+      - {id: hw.env.installer, ask: "Who installs and services it?", type: single_select, options: [end_user, trained_installer, factory_only], covers: [hardware:physical-context, en303645:easy-install-maintenance]}
+      - {id: hw.env.lifetime, ask: "How many years must it last?", type: number, covers: [hardware:lifecycle, cra:support-period]}
+      - {id: hw.env.access, ask: "Could children, the public, or untrained people touch it?", type: single_select, options: [no, children_possible, public_access], covers: [safety:hazard-analysis, iso25010:safety]}
+      - {id: hw.env.tamper, ask: "Could someone steal or physically tamper with it?", type: boolean, covers: [en303645:secure-storage, hardware:debug-access]}
+  - module: H2-hardware-platform
+    stage: design
+    gate: before-hardware-design-freeze
+    questions:
+      - {id: hw.plat.radio_approach, ask: "Use a pre-certified radio module or design the radio on the board?", type: single_select, options: [precertified_module, chip_down, no_radio], why: "A pre-certified module greatly reduces testing cost and time.", covers: [hardware:platform, regulatory:radio-approval, red:radio-cybersecurity]}
+      - {id: hw.plat.mcu, ask: "Which microcontroller or system-on-chip?", type: text, covers: [hardware:platform]}
+      - {id: hw.plat.memory, ask: "How much flash and RAM does the first version need, including room for a second firmware copy for updates?", type: text, covers: [hardware:ota, hardware:platform]}
+      - {id: hw.plat.io, ask: "List every sensor and actuator, with the interface each uses (I2C, SPI, UART, analog).", type: text, covers: [hardware:platform]}
+      - {id: hw.plat.secure_element, ask: "Will a secure element, TPM, or on-chip secure storage hold secrets?", type: single_select, options: [secure_element, on_chip_secure_storage, none], covers: [en303645:secure-storage, hardware:provisioning]}
+      - {id: hw.plat.power_source, ask: "How is it powered?", type: single_select, options: [mains, usb, primary_battery, rechargeable_battery, energy_harvesting, mixed], covers: [hardware:power]}
+      - {id: hw.plat.power_budget, ask: "What is the average and peak current, and does the battery life target still work?", type: text, covers: [hardware:power, iso25010:reliability]}
+      - {id: hw.plat.debug_ports, ask: "Will debug ports (JTAG, SWD, UART console) be locked or removed in production?", type: single_select, options: [locked, removed, left_open_for_now], why: "Open debug ports let anyone read or change the firmware.", covers: [hardware:debug-access, en303645:minimize-attack-surface]}
+  - module: H3-connectivity
+    stage: design
+    gate: before-hardware-design-freeze
+    questions:
+      - {id: hw.net.protocol, ask: "Which connection types will it use?", type: multi_select, options: [wifi, ble, thread_matter, zigbee, lora, lte_m_nb_iot, cellular, ethernet, satellite, none], covers: [hardware:connectivity]}
+      - {id: hw.net.constraints, ask: "What range, data rate, and power limits drive the choice?", type: text, covers: [hardware:connectivity, hardware:power]}
+      - {id: hw.net.gateway, ask: "Does it talk directly to the internet or through a hub or phone?", type: single_select, options: [direct, hub, phone, mixed], covers: [hardware:connectivity, arc42:context-scope]}
+      - {id: hw.net.offline, ask: "What must it do when the network is down?", type: text, covers: [en303645:resilience-outages, iso25010:reliability]}
+      - {id: hw.net.onboarding, ask: "How will a user connect it to Wi-Fi or pair it when it has no screen?", type: text, covers: [hardware:companion-app, en303645:easy-install-maintenance]}
+      - {id: hw.net.data_cost, ask: "How much data does each unit send per month, and who pays for it?", type: text, covers: [project:cost, hardware:cloud-fleet]}
+      - {id: hw.net.transport_security, ask: "How is every link encrypted and authenticated?", type: text, covers: [en303645:secure-communication, red:radio-cybersecurity]}

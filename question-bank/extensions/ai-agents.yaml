@@ -1,0 +1,16 @@
+schema: question-bank/v1
+modules:
+  - module: ai-agents
+    stage: plan
+    load_when: "ai_decisions or product.platform == 'ai_app' or features.extras contains 'ai_features'"
+    questions:
+      - {id: ai.scope, ask: "What can the model decide or do without a human check?", type: text, covers: [ai-risk:excessive-agency]}
+      - {id: ai.tools, ask: "List every tool or API the model can call, and the least access each needs.", type: text, covers: [ai-risk:excessive-agency, asvs:authorization]}
+      - {id: ai.approval, ask: "Which actions need a person to approve first (spend money, send messages, delete, publish)?", type: multi_select, options: [spend_money, send_messages, delete_data, publish, change_settings, none], covers: [ai-risk:excessive-agency]}
+      - {id: ai.untrusted_input, ask: "Which text the model reads comes from outside (web pages, emails, uploads, other users)?", type: text, why: "Hidden instructions in outside text can hijack the model.", covers: [ai-risk:prompt-injection]}
+      - {id: ai.data_leak, ask: "What private data could end up in prompts, logs, or answers?", type: text, covers: [ai-risk:data-leakage, regulatory:privacy]}
+      - {id: ai.cost_caps, ask: "What are the per-user and global spending and rate limits?", type: text, covers: [ai-risk:cost-controls, project:cost]}
+      - {id: ai.evals, ask: "How will you test answer quality and safety before and after each change?", type: text, covers: [ai-risk:evals, project:testing]}
+      - {id: ai.fallback, ask: "What happens when the provider is down or answers badly?", type: text, covers: [iso25010:reliability]}
+      - {id: ai.transparency, ask: "Will users be told they are dealing with an AI, and is generated content labelled where required?", type: text, covers: [ai-risk:transparency, regulatory:ai-act]}
+      - {id: ai.risk_class, ask: "Does the system affect hiring, credit, education, health, law, or safety decisions (possible high-risk class under EU rules)?", type: single_select, options: [no, yes, not_sure], covers: [regulatory:ai-act]}

@@ -1,0 +1,59 @@
+# Maps every {{placeholder}} used in templates/ and skills/project-templates/ to where its value comes from.
+# Placeholder syntax: {{snake_case}} with no spaces. The renderer must leave GitHub expressions like ${{ github.ref }} untouched.
+schema: bindings/v1
+system_resolvers:
+  slugify: "lowercase, a-z0-9 and hyphens only, from an answer"
+  today: "ISO date at generation time"
+  ask_security_contact: "the CLI asks for a monitored email or reporting URL and checks it is not empty"
+  premortem_table: "table of applicable failure modes with owner, status, and revisit trigger (see specs/failure-mode-format.md)"
+  secret_scan_step: "a CI step that runs the secret scanner pinned in tool-versions, or a comment explaining why it is absent"
+  resolve_action_sha: "look up the full commit hash of an action's release tag via the GitHub API, show the date, and write the hash with the tag as a comment"
+placeholders:
+  project_name: {from: question, id: product.name}
+  project_slug: {from: system, resolver: slugify, of: product.name}
+  project_summary: {from: question, id: product.summary}
+  project_audience: {from: question, id: product.audience}
+  project_out_of_scope: {from: question, id: product.out_of_scope}
+  platform: {from: question, id: product.platform}
+  fe_framework: {from: question, id: fe.framework}
+  fe_language: {from: question, id: fe.language}
+  be_runtime: {from: question, id: be.runtime}
+  hosting_model: {from: question, id: be.hosting_model}
+  database_engine: {from: question, id: data.engine}
+  database_host: {from: question, id: data.host}
+  orm: {from: question, id: data.orm}
+  migration_tool: {from: question, id: data.migrations}
+  needs_pooler: {from: question, id: data.pooling}
+  data_sensitive: {from: question, id: data.sensitive}
+  hosting: {from: question, id: ops.hosting}
+  environments: {from: question, id: ops.environments}
+  ci_checks: {from: question, id: ops.ci}
+  rollback_plan: {from: question, id: ops.rollback}
+  main_protected: {from: question, id: team.main_protection}
+  ai_autonomy: {from: question, id: aic.autonomy}
+  ai_always_ask: {from: question, id: aic.always_ask}
+  protected_paths: {from: question, id: aic.protected_paths}
+  dependency_policy: {from: question, id: aic.dependency_policy}
+  skills_policy: {from: question, id: aic.skills_policy}
+  docs_sources: {from: question, id: aic.docs_sources}
+  conventions: {from: question, id: aic.conventions}
+  test_first: {from: question, id: aic.test_first}
+  commit_cadence: {from: question, id: aic.commit_cadence}
+  definition_of_done: {from: question, id: aic.done}
+  ambiguity_policy: {from: question, id: aic.ambiguity}
+  mcu: {from: question, id: hw.plat.mcu}
+  firmware_framework: {from: question, id: hw.fw.framework}
+  power_source: {from: question, id: hw.plat.power_source}
+  worst_case_harm: {from: question, id: hw.safe.worst_case}
+  safe_state: {from: question, id: hw.safe.failsafe}
+  security_contact: {from: system, resolver: ask_security_contact}
+  generated_on: {from: system, resolver: today}
+  premortem_table: {from: system, resolver: premortem_table}
+  secret_scan_step: {from: system, resolver: secret_scan_step}
+  action_sha_checkout: {from: system, resolver: resolve_action_sha, args: [actions/checkout]}
+  action_sha_setup_node: {from: system, resolver: resolve_action_sha, args: [actions/setup-node]}
+  node_major: {from: pack, pack: tool-versions, field: node.recommended_major}
+  postgres_image_tag: {from: pack, pack: tool-versions, field: postgres.image_tag}
+  redis_image_tag: {from: pack, pack: tool-versions, field: redis_or_valkey.image_tag}
+  gitleaks_rev: {from: pack, pack: tool-versions, field: gitleaks.rev}
+on_missing: "If a bound answer is missing, the renderer asks for it. It never writes a guess, and it never leaves a {{placeholder}} in a generated file."

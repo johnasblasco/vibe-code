@@ -1,0 +1,10 @@
+id: medical-device-beginner
+description: A beginner alone wants to build a device whose failure could kill someone. The tool must stop and produce an expert brief.
+answers: {user_accounts: true, physical: true, radio: true, battery: true, mains: false, actuator: true, harm_possible: death, sensitive_data: true, money: false, ai_decisions: false, multi_tenant: false, product.platform: hardware_device, product.team: solo_beginner}
+expect:
+  tier: T5
+  loads_include: [extensions/safety-critical, hardware/h07-h08-safety-regulatory]
+  questions_include: [sc.domain, sc.classification, sc.independent_review, hw.safe.expert]
+  failure_modes_include: [HW-24, HW-12]
+  contradictions_include: [C-011]
+  stop: true

@@ -1,0 +1,13 @@
+# Constitution for {{project_name}}
+
+Non-negotiable rules for every spec, plan, and change. Generated from the owner's recorded answers.
+
+1. **Security first.** Every table with user data has ownership rules and a test that proves another user cannot read it. Secrets never reach the browser or git.
+2. **Tests prove behavior.** Test first: {{test_first}}. Done means: {{definition_of_done}}.
+3. **Small, reversible changes.** Commit after {{commit_cadence}}. Main branch is protected: {{main_protected}}.
+4. **Dependencies are decisions.** Policy: {{dependency_policy}}. Lockfile committed. No unreviewed install scripts.
+5. **Decisions are written down.** Significant choices go in docs/decisions/ with a revisit trigger.
+6. **Production is protected.** Nothing runs against production without the owner's explicit approval.
+7. **Honesty about evidence.** Report what you ran and saw. Say what you could not check.
+
+Amend this file only with a decision record.

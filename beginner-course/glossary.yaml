@@ -1,0 +1,54 @@
+# Plain-language definitions for `scaffold explain <term>`. Written for someone who has never programmed.
+schema: glossary/v1
+terms:
+  - {term: api, plain: "A doorway that lets one program ask another program for data or actions.", example: "Your app asks a weather service's API for tomorrow's forecast."}
+  - {term: backend, plain: "The part of an app that runs on a server, stores data, and enforces rules. Visitors never see it directly."}
+  - {term: frontend, plain: "The part of an app people see and click in their browser or phone."}
+  - {term: database, plain: "Software that stores your app's data permanently and lets you search it. Without one, data disappears when the app restarts."}
+  - {term: migration, plain: "A saved, repeatable set of changes to the database structure, like adding a column. It lets you change the database safely and undo a change.", example: "Adding a 'phone number' column to the users table."}
+  - {term: orm, plain: "A helper library that lets your code talk to the database without writing database commands by hand."}
+  - {term: environment variable, plain: "A setting or secret stored outside your code and given to the app when it starts. It lets the same code use different settings on your computer and in production."}
+  - {term: secret, plain: "A password, key, or token that proves who you are to a service. Anyone who has it can act as you, so it must never be in your code or your browser."}
+  - {term: .env file, plain: "A local file that holds your environment variables. It must be listed in .gitignore so it is never saved to Git."}
+  - {term: git, plain: "A tool that saves every version of your project so you can go back if something breaks."}
+  - {term: repository, plain: "A project folder tracked by Git, often also stored on GitHub."}
+  - {term: commit, plain: "A saved snapshot of your project at one moment, with a short note."}
+  - {term: .gitignore, plain: "A list of files Git must never save. It is how you keep secrets and downloaded libraries out of your project history."}
+  - {term: deploy, plain: "Putting your app on a server so other people can use it through the internet."}
+  - {term: ci, plain: "Continuous integration: a robot that runs your checks and tests automatically every time you push changes."}
+  - {term: docker, plain: "A tool that runs programs, like a database, in a sealed box so they work the same on every computer."}
+  - {term: container, plain: "One sealed box created by Docker. It holds a program and everything it needs."}
+  - {term: localhost, plain: "Your own computer. An address like localhost:3000 means 'the app running on this machine'."}
+  - {term: production, plain: "The live version of your app that real users use. Mistakes here affect real people and real data."}
+  - {term: staging, plain: "A practice copy of production where you test changes before real users see them."}
+  - {term: row-level security, plain: "A database rule that decides which rows each user may read or change. Without it, anyone who can reach the database may see everything.", example: "A user can see only their own orders."}
+  - {term: authentication, plain: "Proving who someone is, usually with a login."}
+  - {term: authorization, plain: "Deciding what a logged-in person is allowed to do."}
+  - {term: jwt, plain: "A signed token that says who you are. The server trusts it without looking you up each time."}
+  - {term: session, plain: "The server remembering that you are logged in between page visits."}
+  - {term: cors, plain: "A browser rule about which websites may call your API. Setting it too open lets other sites act as your logged-in users."}
+  - {term: csrf, plain: "A trick where another website makes your browser send a request to your app while you are logged in. Defenses make such requests fail."}
+  - {term: ssrf, plain: "A trick where an attacker makes your server fetch a web address of their choosing, possibly reaching private systems."}
+  - {term: webhook, plain: "A message another service sends to your app when something happens, like a payment succeeding. You must check it really came from them."}
+  - {term: rate limit, plain: "A cap on how many requests someone can make in a time window, to stop spam and abuse."}
+  - {term: cache, plain: "A fast temporary copy of data so the app does not repeat slow work."}
+  - {term: redis, plain: "A very fast data store often used for caches, sessions, and job queues. Many small apps do not need it yet."}
+  - {term: connection pooler, plain: "A middleman that shares a small number of database connections between many app instances, so the database is not overwhelmed."}
+  - {term: serverless, plain: "Hosting where your code runs only when requested and the provider manages servers. Cheap when idle; many instances can open many database connections."}
+  - {term: dependency, plain: "A library written by someone else that your app uses. Each one is code you must trust."}
+  - {term: lockfile, plain: "A file that records the exact versions of every dependency so installs are repeatable and cannot silently change."}
+  - {term: slopsquatting, plain: "An attack where criminals publish malware under package names that AI tools commonly invent. If you install a name the AI made up, you may install their malware."}
+  - {term: sbom, plain: "A software bill of materials: a list of every component inside your software, like an ingredients label."}
+  - {term: ota, plain: "Over-the-air update: sending new firmware to a device through the network instead of by cable."}
+  - {term: firmware, plain: "The software that runs directly on a device's chip."}
+  - {term: bootloader, plain: "The first small program that starts when a device powers on and decides which firmware to run. A good one can roll back a bad update."}
+  - {term: brick, plain: "A device that no longer starts or can no longer be updated, usually after a failed update."}
+  - {term: watchdog, plain: "A hardware timer that restarts a device if its software stops responding."}
+  - {term: provisioning, plain: "Giving each device its own identity and keys during manufacture or first setup."}
+  - {term: evt dvt pvt, plain: "Three hardware build stages: EVT proves the design works, DVT proves it can be built repeatably, PVT proves the factory line is ready."}
+  - {term: emc, plain: "Electromagnetic compatibility: your device must not disturb other electronics, and must keep working when disturbed."}
+  - {term: pre-certified module, plain: "A ready-made radio part that has already passed radio approval tests, which greatly reduces your own testing."}
+  - {term: hazard analysis, plain: "A structured way to list what could go wrong with a product, how bad it would be, and what stops it."}
+  - {term: safe state, plain: "The condition a device must reach when something fails, such as a pump switched off."}
+  - {term: pre-mortem, plain: "Imagining the project has already failed, then listing the likely reasons, so you can prevent them now."}
+  - {term: adr, plain: "Architecture decision record: a short note explaining a big choice and why you made it, so you and your AI do not forget."}

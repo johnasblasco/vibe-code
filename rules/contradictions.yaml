@@ -1,0 +1,94 @@
+# Combinations of answers that cannot all be true or that usually fail. Evaluated after each answer.
+# severity: info (note), warn (show, allow), block (cannot continue until changed or consciously accepted with a reason), stop (expert needed).
+schema: rules/v1
+rules:
+  - id: C-001
+    when: "hw.plat.power_source == 'primary_battery' and hw.net.protocol contains 'cellular'"
+    severity: warn
+    message: "A non-rechargeable battery with an always-on cellular modem rarely lasts a year. Cellular radios draw large bursts of current."
+    fix: "Run the power budget (hw.plat.power_budget). Consider LTE-M or NB-IoT with deep sleep, a bigger or rechargeable battery, or mains power."
+  - id: C-002
+    when: "hw.plat.debug_ports == 'left_open_for_now' and hw.ops.support_period >= 5"
+    severity: block
+    message: "Open debug ports on a product you will support for years let anyone read or change the firmware."
+    fix: "Lock or remove debug access in production units, or shorten the support promise only if the risk is accepted in writing."
+  - id: C-003
+    when: "hw.plat.radio_approach == 'chip_down' and product.team == 'solo_beginner'"
+    severity: warn
+    message: "Designing the radio on the board adds large testing cost and time. A pre-certified module is far safer for a first product."
+    fix: "Switch hw.plat.radio_approach to precertified_module unless you have RF engineering help."
+  - id: C-004
+    when: "hw.sec.secure_boot == 'none_yet' and hw.sec.cra_category in ['important_class_I', 'important_class_II', 'critical']"
+    severity: block
+    message: "Higher CRA categories expect stronger protection of firmware integrity than none."
+    fix: "Plan secure boot and signed updates before design freeze."
+  - id: C-005
+    when: "be.hosting_model == 'serverless' and data.pooling == false"
+    severity: warn
+    message: "Serverless functions open many database connections. Without a pooler the database runs out of connections."
+    fix: "Answer data.pooling with yes and use the provider's pooled connection string."
+  - id: C-006
+    when: "product.budget == 'free_only' and be.hosting_model == 'long_running_server'"
+    severity: warn
+    message: "Free tiers usually put idle servers to sleep or limit them, so the first visitor waits or the app looks down."
+    fix: "Use serverless or static hosting on the free plan, or budget a small paid plan."
+  - id: C-007
+    when: "auth.build_or_buy == 'custom' and product.team == 'solo_beginner'"
+    severity: block
+    message: "Writing your own login is the most common way beginners create a serious security hole."
+    fix: "Use a managed login service or a well-known library."
+  - id: C-008
+    when: "features.multi_tenant and auth.roles == 'everyone_same'"
+    severity: block
+    message: "Separate organizations sharing one app need rules that keep each one's data private."
+    fix: "Choose per-item permissions and add the ownership test (sec.access_test)."
+  - id: C-009
+    when: "data.sensitive contains 'children_data' and legal.policies == false"
+    severity: block
+    message: "Children's data has strict legal duties and needs published policies and parental-consent design."
+    fix: "Add policies, and get legal advice before collecting any data about children."
+  - id: C-010
+    when: "ai_decisions and ai.approval contains 'none'"
+    severity: warn
+    message: "The model can take actions with no human approval. One hijacked prompt then has full effect."
+    fix: "Require approval for spending money, sending messages, deleting data, and publishing."
+  - id: C-011
+    when: "harm_possible in ['serious_injury', 'death'] and product.team == 'solo_beginner'"
+    severity: stop
+    message: "A product that could seriously hurt someone needs a qualified safety engineer, not a beginner working alone."
+    fix: "Stop. Generate the expert brief and engage a safety engineer and a test lab before continuing."
+  - id: C-012
+    when: "scale.offline == true and arch.rendering == 'server_rendered'"
+    severity: warn
+    message: "Server-rendered pages need the server. Offline use needs local storage and a service worker or a native app."
+    fix: "Choose a single-page or hybrid approach with local data, or drop the offline requirement."
+  - id: C-013
+    when: "aic.autonomy contains 'deploy' and aic.production_guard == false"
+    severity: block
+    message: "The AI is allowed to deploy and to touch production without a guard."
+    fix: "Turn the production guard on, or remove deploy from what the AI may do alone."
+  - id: C-015
+    when: "sec.transport == false"
+    severity: block
+    message: "Sending traffic without HTTPS exposes logins and data."
+    fix: "Use HTTPS everywhere. Hosts provide certificates automatically."
+  - id: C-016
+    when: "dl.test_data == 'real_data_with_controls' and data.sensitive contains 'health_info'"
+    severity: warn
+    message: "Using real health data for testing multiplies your legal and breach risk."
+    fix: "Use synthetic or anonymised data."
+  - id: C-017
+    when: "aic.dependency_policy == 'no_policy_yet'"
+    severity: warn
+    message: "With no rule for new packages, the AI can install a package that does not exist or one an attacker registered under an invented name."
+    fix: "Choose ask_user_and_verify_each and keep the lockfile committed."
+  - id: C-018
+    when: "hw.reg.export_control == 'not_checked' and hw.net.protocol contains 'wifi'"
+    severity: info
+    message: "Products with encryption may have export rules by destination."
+    fix: "Ask a trade-compliance advisor before shipping across borders."
+  - id: C-019
+    when: "product.platform == 'hardware_device' and not physical and not radio"
+    severity: block
+    message: "You said you are building a hardware device but answered no to every physical and radio question. The wrong questions would load."
+    fix: "Go back to the router questions and answer them again."

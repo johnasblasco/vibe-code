@@ -1,0 +1,16 @@
+id: todo-app-with-accounts
+description: A beginner builds a to-do app with logins, serverless hosting, and a custom login they wrote themselves.
+answers: {user_accounts: true, physical: false, radio: false, battery: false, mains: false, actuator: false, harm_possible: none, sensitive_data: false, money: false, ai_decisions: false, multi_tenant: false, product.platform: web_app, product.team: solo_beginner, product.budget: free_only, be.hosting_model: serverless, data.pooling: false, auth.build_or_buy: custom, auth.roles: simple_roles, sec.transport: true}
+expect:
+  tier: T2
+  loads_include: [software/03-auth-integrations, software/04-security-quality, software/07-lifecycle-resilience-security-extras]
+  loads_exclude: [hardware/]
+  questions_include: [auth.methods, sec.access_test, sx.ssrf, dl.retention]
+  questions_exclude: [sc.domain, pay.model, ai.scope, mob.approach, hw.plat.mcu]
+  failure_modes_include: [SW-01, SW-04, SW-07, SW-08, SW-28]
+  failure_modes_exclude: [HW-01, SW-15]
+  contradictions_include: [C-005, C-007]
+  contradictions_exclude: [C-011]
+  stop: false
+  max_idea_questions: 50
+  max_idea_needing_input: 32

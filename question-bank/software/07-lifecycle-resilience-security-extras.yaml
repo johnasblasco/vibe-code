@@ -1,0 +1,29 @@
+schema: question-bank/v1
+modules:
+  - module: data-lifecycle
+    stage: prelaunch
+    questions:
+      - {id: dl.retention, ask: "How long is each kind of data kept, and what deletes it?", type: text, covers: [project:data-lifecycle, regulatory:privacy]}
+      - {id: dl.subject_requests, ask: "How would you find, export, and delete one person's data on request?", type: text, covers: [regulatory:privacy, project:data-lifecycle]}
+      - {id: dl.test_data, ask: "Will developers or the AI ever use real customer data for testing? If yes, how is it protected?", type: single_select, options: [never, anonymised_copy, real_data_with_controls], default: never, covers: [asvs:data-protection, project:data-lifecycle]}
+      - {id: dl.analytics_consent, ask: "Does tracking or analytics need consent before it starts?", type: text, covers: [regulatory:privacy]}
+      - {id: dl.impact_assessment, ask: "Does any use of personal data need a written privacy impact assessment?", type: single_select, options: [no, yes, not_sure], covers: [regulatory:privacy, arc42:risks-technical-debt]}
+      - {id: dl.import_export, ask: "Can users export their data, and can you migrate away from a provider?", type: boolean, covers: [project:vendor-risk, project:data-lifecycle]}
+  - module: resilience
+    stage: prelaunch
+    questions:
+      - {id: res.rpo_rto, ask: "How much data can you afford to lose (RPO) and how long can the app be down (RTO)?", type: text, why: "These two numbers decide how often you back up and how fast you must recover.", covers: [project:disaster-recovery, iso25010:reliability]}
+      - {id: res.vendor_exit, ask: "If your hosting, database, or auth provider vanished or tripled its price, what is your exit plan?", type: text, covers: [project:vendor-risk]}
+      - {id: res.third_party_down, ask: "What does the app do when a third-party service (payments, email, AI) is down?", type: text, covers: [iso25010:reliability, project:vendor-risk]}
+      - {id: res.runtime_support, ask: "Which runtime and framework versions are you on, and when do they stop receiving security fixes?", type: text, why: "Support windows move often. Running an unsupported version means no security patches.", covers: [owasp-top10-2025:supply-chain-failures, project:vendor-risk]}
+      - {id: res.dependency_health, ask: "Which key dependencies are maintained by one person or look abandoned?", type: text, covers: [project:vendor-risk, owasp-top10-2025:supply-chain-failures]}
+      - {id: res.load_test, ask: "What load will you test before launch, and what is the plan if it fails?", type: text, covers: [iso25010:performance-efficiency, project:testing]}
+  - module: security-extras
+    stage: build
+    questions:
+      - {id: sx.csrf, ask: "How are state-changing requests protected from being triggered by other sites?", type: text, covers: [asvs:web-frontend, asvs:session-management]}
+      - {id: sx.ssrf, ask: "Does the server ever fetch a URL supplied by a user (previews, imports, webhooks)? How is it restricted?", type: text, why: "A server that fetches any URL can be tricked into reading your internal network or cloud credentials.", covers: [asvs:api-web-service, owasp-top10-2025:insecure-design]}
+      - {id: sx.admin, ask: "Is there an admin area, and how is it separated, logged, and protected with extra login steps?", type: text, covers: [asvs:authorization, owasp-top10-2025:broken-access-control]}
+      - {id: sx.ci_security, ask: "How are build pipelines protected (pinned actions, minimal token permissions, no secrets in logs)?", type: text, why: "Attackers have hijacked popular build actions by moving version tags. Pin by full commit hash.", covers: [owasp-top10-2025:supply-chain-failures, project:ci-cd]}
+      - {id: sx.lockfile_scripts, ask: "Is the lockfile committed, and are install scripts of dependencies reviewed or disabled?", type: boolean, default: true, covers: [owasp-top10-2025:supply-chain-failures]}
+      - {id: sx.pentest, ask: "Who will try to break it before launch (a person, a scanner, a paid test)?", type: single_select, options: [independent_person, automated_scanner_only, paid_test, nobody_yet], covers: [asvs:secure-coding-architecture, project:testing]}

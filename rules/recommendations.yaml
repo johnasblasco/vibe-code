@@ -1,0 +1,55 @@
+# "Pick for me" profiles. Opinionated defaults, not truths. Each value must be one of the question's options.
+# Re-verify quarterly; show the verified date to users. Anything not listed falls back to asking.
+schema: recommendations/v1
+status: opinionated-defaults
+last_verified: 2026-10-31
+profiles:
+  - id: beginner-web-app
+    when: "product.platform == 'web_app' and product.team == 'solo_beginner'"
+    why: "Few moving parts, wide documentation, and the AI knows these tools well."
+    sets:
+      arch.shape: monolith
+      arch.rendering: hybrid
+      fe.framework: react_nextjs
+      fe.language: typescript
+      fe.styling: tailwind
+      be.api_style: rest
+      be.validation: zod
+      data.engine: postgres
+      auth.build_or_buy: managed_service
+      auth.session: pick_for_me
+      team.branching: pull_requests_with_checks
+    conditional:
+      - {when: "be.hosting_model == 'serverless'", sets: {data.orm: drizzle}, why: "Lighter for serverless cold starts."}
+      - {when: "be.hosting_model != 'serverless'", sets: {data.orm: prisma}, why: "Mature tooling and a visual data browser."}
+  - id: api-only
+    when: "product.platform == 'api_only'"
+    why: "Typed validation at the edge and a database you can migrate safely."
+    sets:
+      be.validation: zod
+      be.api_style: rest
+      data.engine: postgres
+      be.api_docs: true
+  - id: ai-app
+    when: "product.platform == 'ai_app'"
+    why: "Start with human approval on every risky action and strict cost caps."
+    sets:
+      ai.approval: [spend_money, send_messages, delete_data, publish, change_settings]
+      sec.rate_limits: [login, signup, expensive_endpoints, ai_calls]
+  - id: connected-device-beginner
+    when: "product.platform == 'hardware_device' and product.team == 'solo_beginner'"
+    why: "Pre-certified radio module, managed device platform, and a framework with large community support."
+    sets:
+      hw.plat.radio_approach: precertified_module
+      hw.fw.framework: platformio_arduino
+      hw.cloud.build_or_buy: managed_iot_platform
+      hw.sec.secure_boot: secure_boot_and_signed_updates
+      hw.plat.debug_ports: locked
+  - id: connected-device-experienced
+    when: "product.platform == 'hardware_device' and product.team != 'solo_beginner'"
+    why: "Production-grade frameworks with first-class OTA and security features."
+    sets:
+      hw.fw.framework: esp_idf
+      hw.sec.secure_boot: secure_boot_and_signed_updates
+      hw.plat.debug_ports: locked
+caution: "A recommendation is never a certification. For T4 and T5 projects the recommendation still goes through the gates."

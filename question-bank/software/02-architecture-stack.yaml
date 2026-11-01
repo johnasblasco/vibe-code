@@ -1,0 +1,48 @@
+schema: question-bank/v1
+modules:
+  - module: architecture
+    stage: plan
+    phase: 4
+    questions:
+      - {id: arch.shape, ask: "How should the app be organised?", type: single_select, options: [monolith, modular_monolith, separate_frontend_backend], default: monolith, why: "One deployable app is easiest to start with and to debug.", covers: [arc42:solution-strategy, arc42:building-block-view]}
+      - {id: arch.repo, ask: "One repository or several?", type: single_select, options: [single_repo, monorepo, separate_repos], default: single_repo, covers: [arc42:building-block-view]}
+      - {id: arch.rendering, ask: "How are pages produced?", type: single_select, options: [static, server_rendered, single_page_app, hybrid], covers: [iso25010:performance-efficiency, arc42:runtime-view]}
+      - {id: arch.public_api, ask: "Do outside developers need an API?", type: boolean, covers: [asvs:api-web-service]}
+      - {id: arch.background_jobs, ask: "Must anything run later or on a schedule (emails, reports)?", type: boolean, covers: [arc42:runtime-view]}
+      - {id: arch.realtime, ask: "Do users need live updates?", type: single_select, options: [none, websockets, server_sent_events, polling], covers: [arc42:runtime-view]}
+      - {id: arch.cross_cutting, ask: "Which shared concerns need one consistent approach?", type: multi_select, options: [error_handling, logging, configuration, i18n, caching, permissions], covers: [arc42:cross-cutting-concepts]}
+      - {id: arch.decisions_log, ask: "Record every big decision with its reason in docs/decisions/?", type: boolean, default: true, covers: [arc42:architecture-decisions]}
+  - module: frontend
+    stage: plan
+    phase: 5
+    questions:
+      - {id: fe.framework, ask: "Which frontend framework?", type: single_select, options: [react_nextjs, vue_nuxt, svelte_sveltekit, astro, other, pick_for_me], covers: [arc42:solution-strategy, iso25010:maintainability]}
+      - {id: fe.language, ask: "TypeScript or JavaScript?", type: single_select, options: [typescript, javascript], default: typescript, why: "TypeScript catches many mistakes before the app runs, which helps AI-written code.", covers: [iso25010:maintainability]}
+      - {id: fe.styling, ask: "How will you style it?", type: single_select, options: [tailwind, css_modules, component_library, pick_for_me], covers: [iso25010:interaction-capability]}
+      - {id: fe.state, ask: "How will you manage app state?", type: single_select, options: [built_in, zustand, redux, server_state_library, pick_for_me], covers: [arc42:building-block-view]}
+      - {id: fe.design_system, ask: "Do you already have brand colours, a design system, or Figma files?", type: boolean, covers: [iso25010:interaction-capability]}
+      - {id: fe.seo, ask: "Does it need to be found on search engines?", type: boolean, covers: [iso25010:performance-efficiency]}
+      - {id: fe.untrusted_content, ask: "Will it show content written by users or fetched from elsewhere?", type: boolean, why: "That content must be cleaned before display or it can run attacker code in your page.", covers: [asvs:encoding-sanitization, asvs:web-frontend, owasp-top10-2025:injection]}
+  - module: backend
+    stage: plan
+    phase: 6
+    questions:
+      - {id: be.runtime, ask: "Which language and runtime?", type: single_select, options: [node, bun, python, go, other, pick_for_me], covers: [arc42:solution-strategy]}
+      - {id: be.framework, ask: "Which backend framework (or built-in route handlers)?", type: text, covers: [arc42:building-block-view]}
+      - {id: be.api_style, ask: "How will frontend and backend talk?", type: single_select, options: [trpc, rest, graphql, pick_for_me], why: "tRPC suits all-TypeScript projects; REST is the most widely understood.", covers: [asvs:api-web-service]}
+      - {id: be.validation, ask: "Which library checks incoming data?", type: single_select, options: [zod, valibot, other, pick_for_me], default: zod, why: "Every input from outside must be checked before use.", covers: [asvs:validation-business-logic, owasp-top10-2025:injection]}
+      - {id: be.hosting_model, ask: "Serverless, containers, or one long-running server?", type: single_select, options: [serverless, containers, long_running_server, pick_for_me], covers: [arc42:deployment-view]}
+      - {id: be.api_docs, ask: "Should the API be documented automatically?", type: boolean, covers: [iso25010:maintainability]}
+  - module: data
+    stage: plan
+    phase: 7
+    questions:
+      - {id: data.engine, ask: "Which database?", type: single_select, options: [postgres, mysql, sqlite, mongodb, other, pick_for_me], default: postgres, covers: [arc42:solution-strategy]}
+      - {id: data.host, ask: "Where will the production database live?", type: text, why: "Free tiers can pause or have small limits. We will show current limits.", covers: [arc42:deployment-view, project:cost]}
+      - {id: data.orm, ask: "How will code talk to the database?", type: single_select, options: [drizzle, prisma, kysely, raw_sql, pick_for_me], covers: [iso25010:maintainability]}
+      - {id: data.migrations, ask: "How will database changes be tracked?", type: single_select, options: [orm_migrations, sql_files, none_yet], default: orm_migrations, covers: [iso25010:reliability, iso25010:maintainability]}
+      - {id: data.cache, ask: "Do you need a cache? Answer by symptom, see redis-decision.yaml.", type: single_select, options: [none_for_now, redis, edge_cache], default: none_for_now, covers: [iso25010:performance-efficiency]}
+      - {id: data.files, ask: "Where will uploaded files be stored?", type: single_select, options: [no_uploads, s3_compatible, provider_storage], covers: [asvs:file-handling]}
+      - {id: data.backups, ask: "How often are backups taken, and has a restore ever been tested?", type: text, why: "A backup you have never restored is only a guess.", covers: [iso25010:reliability, beginner-ops:backup-restore]}
+      - {id: data.seed, ask: "Do you need sample data for development?", type: boolean, covers: [project:testing]}
+      - {id: data.pooling, ask: "Will the database be reached from serverless functions or many instances?", type: boolean, why: "If yes, a connection pooler is needed or you will run out of connections.", covers: [iso25010:reliability, iso25010:performance-efficiency]}

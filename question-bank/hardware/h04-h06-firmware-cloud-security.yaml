@@ -1,0 +1,42 @@
+schema: question-bank/v1
+tier_min: T4
+modules:
+  - module: H4-firmware
+    stage: design
+    questions:
+      - {id: hw.fw.framework, ask: "Which firmware framework or RTOS?", type: single_select, options: [esp_idf, zephyr, freertos, platformio_arduino, bare_metal, embedded_linux, other, pick_for_me], covers: [hardware:firmware]}
+      - {id: hw.fw.language, ask: "Which language?", type: single_select, options: [c, cpp, rust, micropython], covers: [hardware:firmware, iso25010:maintainability]}
+      - {id: hw.fw.bootloader, ask: "Which bootloader, and does it support a second copy with rollback?", type: text, covers: [hardware:ota, en303645:software-updates]}
+      - {id: hw.fw.watchdog, ask: "Is a hardware watchdog enabled, and what happens on a crash or hang?", type: text, covers: [iso25010:reliability, en303645:resilience-outages]}
+      - {id: hw.fw.fault_states, ask: "What does the device do on a sensor failure, low battery, or memory error?", type: text, covers: [safety:fail-safe-state, iso25010:reliability]}
+      - {id: hw.fw.logging, ask: "What does it log, where, and without leaking secrets?", type: text, covers: [asvs:logging-error-handling, en303645:telemetry-review]}
+      - {id: hw.fw.factory_mode, ask: "How is each unit tested and set up at the factory?", type: text, covers: [hardware:manufacturing, hardware:provisioning]}
+      - {id: hw.fw.input_validation, ask: "How does firmware validate data from the network, sensors, and the app?", type: text, covers: [en303645:input-validation, owasp-top10-2025:injection]}
+      - {id: hw.fw.time, ask: "How does it know the time, and what if the clock is wrong?", type: text, covers: [iso25010:reliability]}
+  - module: H5-cloud-fleet
+    stage: design
+    questions:
+      - {id: hw.cloud.broker, ask: "Which protocol and broker or platform will devices use?", type: text, covers: [hardware:cloud-fleet, arc42:solution-strategy]}
+      - {id: hw.cloud.build_or_buy, ask: "Build your own device backend or use a managed IoT platform?", type: single_select, options: [managed_iot_platform, self_built, pick_for_me], covers: [hardware:cloud-fleet, project:cost]}
+      - {id: hw.cloud.identity, ask: "How does each device prove who it is (unique certificate or key)?", type: text, covers: [hardware:provisioning, en303645:no-default-passwords]}
+      - {id: hw.cloud.provisioning, ask: "How are device identities created and installed at manufacture?", type: text, covers: [hardware:provisioning, hardware:manufacturing]}
+      - {id: hw.cloud.state, ask: "How does the cloud track each device's state and settings?", type: text, covers: [hardware:cloud-fleet, arc42:building-block-view]}
+      - {id: hw.cloud.telemetry, ask: "What telemetry is sent, how often, and how long is it kept?", type: text, covers: [en303645:telemetry-review, regulatory:privacy]}
+      - {id: hw.cloud.multi_tenant, ask: "Do customers share the backend, and how is each customer's device data separated?", type: text, covers: [asvs:authorization, owasp-top10-2025:broken-access-control]}
+      - {id: hw.cloud.ota_service, ask: "What service will deliver firmware updates?", type: text, covers: [hardware:ota, en303645:software-updates]}
+  - module: H6-security
+    stage: design
+    gate: before-hardware-design-freeze
+    questions:
+      - {id: hw.sec.default_creds, ask: "Confirm: no shared default password or key on any unit.", type: boolean, default: true, covers: [en303645:no-default-passwords]}
+      - {id: hw.sec.vuln_intake, ask: "Where can researchers report a vulnerability, and who responds?", type: text, why: "A public reporting contact is expected for connected products.", covers: [en303645:vulnerability-reporting, cra:vulnerability-handling]}
+      - {id: hw.sec.updates, ask: "How are security updates delivered, how are they signed, and what is the support period?", type: text, covers: [en303645:software-updates, cra:support-period, en303645:software-integrity]}
+      - {id: hw.sec.secure_boot, ask: "Will the device only run signed firmware?", type: single_select, options: [secure_boot_and_signed_updates, signed_updates_only, none_yet], covers: [en303645:software-integrity, hardware:ota]}
+      - {id: hw.sec.key_storage, ask: "Where are keys and credentials stored on the device and in the factory?", type: text, covers: [en303645:secure-storage, hardware:provisioning]}
+      - {id: hw.sec.attack_surface, ask: "Which ports, services, and interfaces are enabled? Can any be turned off?", type: text, covers: [en303645:minimize-attack-surface]}
+      - {id: hw.sec.personal_data, ask: "Does the device store or send personal data, and how is it protected?", type: text, covers: [en303645:personal-data-security, regulatory:privacy]}
+      - {id: hw.sec.delete_data, ask: "How can a user delete their data and reset the device?", type: text, covers: [en303645:delete-user-data]}
+      - {id: hw.sec.sbom, ask: "How will you keep a list of every software component inside the firmware?", type: text, covers: [cra:sbom, owasp-top10-2025:supply-chain-failures]}
+      - {id: hw.sec.supply_chain, ask: "Do you trust and verify third-party firmware libraries and the radio module vendor's code?", type: text, covers: [hardware:supply-chain, owasp-top10-2025:supply-chain-failures]}
+      - {id: hw.sec.cra_category, ask: "Which CRA category applies: default, important, or critical product?", type: single_select, options: [default, important_class_I, important_class_II, critical, not_sure], covers: [cra:product-category, cra:conformity]}
+      - {id: hw.sec.reporting, ask: "Who sends the required reports to authorities within the deadlines, and how will you detect exploited vulnerabilities?", type: text, covers: [cra:reporting-process]}

@@ -1,0 +1,39 @@
+schema: question-bank/v1
+modules:
+  - module: validation
+    stage: idea
+    phase: 0.5
+    questions:
+      - {id: val.riskiest_assumption, ask: "What is the single belief that, if wrong, makes this project pointless?", type: text, why: "Build the cheapest test of that belief first. Most failed projects built the wrong thing well.", covers: [project:validation, arc42:risks-technical-debt]}
+      - {id: val.evidence, ask: "What evidence do you already have that people want this (conversations, waiting list, existing workaround)?", type: text, covers: [project:validation]}
+      - {id: val.success_metric, ask: "How will you know version 1 worked? Give one number and a date.", type: text, covers: [project:validation, arc42:quality-requirements]}
+  - module: validation-economics
+    stage: plan
+    phase: 0.5
+    questions:
+      - {id: val.alternatives, ask: "What do people do today instead, and why would they switch?", type: text, covers: [project:validation, arc42:context-scope]}
+      - {id: val.unit_economics, ask: "Roughly what does one active user cost you per month (hosting, AI calls, support), and what do they pay?", type: text, why: "A product that loses money per user fails faster as it grows.", covers: [project:cost, project:validation]}
+      - {id: val.misuse, ask: "How could someone use this to harm others, and what will you do about it?", type: text, covers: [owasp-top10-2025:insecure-design, project:moderation]}
+  - module: team-process
+    stage: plan
+    phase: 11.5
+    questions:
+      - {id: team.branching, ask: "How will changes reach the main branch?", type: single_select, options: [pull_requests_with_checks, direct_to_main_solo, other], default: pull_requests_with_checks, why: "Even solo, a pull request gives you a checkpoint you can undo and a place for automatic checks.", covers: [project:team-process, iso25010:maintainability]}
+      - {id: team.main_protection, ask: "Will the main branch be protected so failing checks block a merge?", type: boolean, default: true, covers: [project:ci-cd, owasp-top10-2025:integrity-failures]}
+      - {id: team.access, ask: "Who has access to code, hosting, database, and domain, and how is access removed when someone leaves?", type: text, covers: [project:team-process, asvs:authorization]}
+      - {id: team.bus_factor, ask: "If you are unavailable for a month, who can deploy and recover the app, and where is that written?", type: text, covers: [project:documentation, project:disaster-recovery]}
+      - {id: team.docs, ask: "Which documents will always be kept current (README, setup steps, runbook, decisions)?", type: multi_select, options: [readme, setup_steps, runbook, decisions_log, api_docs, none], covers: [project:documentation, arc42:architecture-decisions]}
+      - {id: team.issue_tracking, ask: "Where are tasks and bugs tracked?", type: text, covers: [project:planning]}
+  - module: ai-assisted-development
+    stage: idea
+    phase: 15.5
+    questions:
+      - {id: aic.dependency_policy, ask: "How will new packages be approved before they are installed?", type: single_select, options: [ask_user_and_verify_each, allowlist_only, no_policy_yet], default: ask_user_and_verify_each, why: "AI tools sometimes invent package names, and attackers register those names with malware. A name that exists is not proof it is safe.", covers: [owasp-top10-2025:supply-chain-failures, ai-risk:excessive-agency, project:ai-collaboration]}
+      - {id: aic.dependency_checks, ask: "Before installing a package, which checks must pass?", type: multi_select, options: [exact_name_matches_official_docs, publisher_and_age_checked, downloads_and_repo_checked, lockfile_committed, install_scripts_reviewed], default: [exact_name_matches_official_docs, publisher_and_age_checked, lockfile_committed], covers: [owasp-top10-2025:supply-chain-failures]}
+      - {id: aic.docs_sources, ask: "Which official documentation should the AI read for each tool you use, so it does not rely on outdated memory?", type: text, default: "generated from your chosen stack: the official docs site of each tool", why: "AI models learn from older snapshots. Libraries change faster than that.", covers: [project:ai-collaboration, iso25010:maintainability]}
+      - {id: aic.diff_review, ask: "Who reads every AI-written change before it is merged?", type: single_select, options: [me_every_time, second_person, ai_reviewer_plus_me, nobody_yet], default: me_every_time, covers: [project:ai-collaboration, iso25010:maintainability]}
+      - {id: aic.commit_cadence, ask: "How often must the AI commit so you can undo a bad change?", type: single_select, options: [after_each_small_task, after_each_feature, manual], default: after_each_small_task, covers: [project:ai-collaboration, iso25010:reliability]}
+      - {id: aic.test_first, ask: "Should the AI write a failing test before new behavior?", type: boolean, default: true, covers: [project:testing]}
+      - {id: aic.no_secrets_in_prompts, ask: "Confirm: secrets, customer data, and production dumps are never pasted into AI chats.", type: boolean, default: true, covers: [beginner-ops:secrets-hygiene, ai-risk:data-leakage]}
+      - {id: aic.skills_policy, ask: "Which third-party agent skills, plugins, or MCP servers are allowed, and who reads them before install?", type: text, default: "none allowed until the owner has read the SKILL.md and every script, and the version is pinned", why: "Skill files can contain hidden instructions or scripts, and invented skill dependencies have already spread into hundreds of repositories.", covers: [owasp-top10-2025:supply-chain-failures, ai-risk:excessive-agency]}
+      - {id: aic.drift_check, ask: "How will you notice when the code stops matching the written decisions?", type: text, default: "review docs/decisions at every milestone", covers: [arc42:architecture-decisions, project:ai-collaboration]}

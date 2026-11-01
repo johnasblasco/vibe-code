@@ -1,0 +1,51 @@
+# Coverage backbone: the checklists every question is tagged against.
+# tools/validate.py reports tags that have zero questions = the gap detector.
+# NOTE: tag names were written from the author's knowledge of each standard.
+# Confirm every namespace against the primary document before relying on it
+# (see status fields). Ids are stable; display names may change.
+schema: knowledge-pack/v1
+id: standards-coverage-backbone
+last_verified: 2026-10-31
+status: partly-verified   # ISO 25010:2023 and arc42 verified by search; ASVS 5.0 chapters, OWASP Top 10:2025 names and EN 303 645 provision names need a primary-source check
+sources:
+  - https://quality.arc42.org/articles/iso-25010-update-2023
+  - https://www.appknox.com/cyber-security-jargons/owasp-asvs
+  - https://owasp.org/Top10/2025/
+  - https://www.etsi.org/technologies/consumer-iot-security
+  - https://github.com/MSiccDev/arc42-toolkit
+namespaces:
+  iso25010:           # ISO/IEC 25010:2023, nine characteristics (Safety is new in 2023)
+    tags: [functional-suitability, performance-efficiency, compatibility, interaction-capability, reliability, security, maintainability, flexibility, safety]
+  arc42:              # 12 sections
+    tags: [introduction-goals, constraints, context-scope, solution-strategy, building-block-view, runtime-view, deployment-view, cross-cutting-concepts, architecture-decisions, quality-requirements, risks-technical-debt, glossary]
+  asvs:               # OWASP ASVS 5.0, 17 chapters (names to be confirmed)
+    tags: [encoding-sanitization, validation-business-logic, web-frontend, api-web-service, file-handling, authentication, session-management, authorization, self-contained-tokens, oauth-oidc, cryptography, secure-communication, configuration, data-protection, secure-coding-architecture, logging-error-handling, webrtc]
+    optional: [webrtc, oauth-oidc, self-contained-tokens]   # only when the project uses them
+  owasp-top10-2025:   # names to be confirmed
+    tags: [broken-access-control, security-misconfiguration, supply-chain-failures, cryptographic-failures, injection, insecure-design, authentication-failures, integrity-failures, logging-alerting-failures, exceptional-conditions]
+  en303645:           # ETSI EN 303 645 consumer IoT baseline, hardware tiers only
+    tags: [no-default-passwords, vulnerability-reporting, software-updates, secure-storage, secure-communication, minimize-attack-surface, software-integrity, personal-data-security, resilience-outages, telemetry-review, delete-user-data, easy-install-maintenance, input-validation]
+    tiers: [T4, T5]
+  cra:                # EU Cyber Resilience Act, hardware and software products with digital elements
+    tags: [product-category, reporting-process, support-period, sbom, vulnerability-handling, conformity]
+    tiers: [T4, T5]
+  red:
+    tags: [radio-cybersecurity]
+    tiers: [T4, T5]
+  regulatory:
+    tags: [privacy, markets, radio-approval, emc, product-safety, battery-transport, substances, sector-rules, ai-act, licensing, accessibility, export-control, labeling-documentation, liability-insurance]
+    optional: [radio-approval, emc, product-safety, battery-transport, substances, sector-rules, ai-act, export-control, labeling-documentation, liability-insurance]   # conditional on flags
+  safety:
+    tags: [hazard-analysis, fail-safe-state, hardware-interlock, standard-selection, expert-review]
+    tiers: [T4, T5]
+  hardware:
+    tags: [physical-context, platform, power, connectivity, firmware, ota, provisioning, cloud-fleet, manufacturing, verification, lifecycle, companion-app, debug-access, supply-chain, field-reliability, electrical-design, dfm-dft, calibration]
+    tiers: [T4, T5]
+  ai-risk:            # OWASP LLM Top 10 and Agentic Top 10 themes
+    tags: [prompt-injection, excessive-agency, cost-controls, evals, transparency, data-leakage]
+    optional: [prompt-injection, excessive-agency, cost-controls, evals, transparency, data-leakage]
+  beginner-ops:
+    tags: [skill-level, deploy-early, secrets-hygiene, access-control-test, backup-restore, cost-alerts]
+  project:
+    tags: [cost, ai-collaboration, planning, testing, ci-cd, observability, payments, mobile, moderation, scale, data-model, validation, team-process, documentation, disaster-recovery, vendor-risk, data-lifecycle, packaging]
+    optional: [payments, mobile, moderation, packaging]

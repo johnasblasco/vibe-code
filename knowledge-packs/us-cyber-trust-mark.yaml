@@ -1,0 +1,15 @@
+schema: knowledge-pack/v1
+id: us-cyber-trust-mark
+title: US Cyber Trust Mark
+last_verified: 2026-10-31
+max_age_days: 30
+volatile: true
+facts:
+  - "Voluntary labelling programme for consumer smart devices run through the FCC."
+  - "ioXt Alliance was named lead administrator in April 2026 after the first administrator stepped back."
+  - "On 2026-10-28 the FCC named a commissioner to lead rollout. Labelled products are not yet on shelves as of this date."
+affects_questions: [hw.reg.cyber]
+sources:
+  - https://docs.fcc.gov/public/attachments/DOC-420764A1.txt
+  - https://lightreading.com/regulatory-politics/trusty-to-lead-deployment-of-us-cyber-trust-mark-program
+primary_source_todo: "Re-check status before each release. This programme has changed administrators once already."

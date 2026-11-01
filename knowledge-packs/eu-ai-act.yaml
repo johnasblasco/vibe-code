@@ -1,0 +1,14 @@
+schema: knowledge-pack/v1
+id: eu-ai-act
+title: EU AI Act dates after the Digital Omnibus
+last_verified: 2026-10-31
+max_age_days: 45
+volatile: true
+facts:
+  - "High-risk obligations were deferred: 2027-12-02 for stand-alone high-risk systems and 2028-08-02 for AI embedded in regulated products."
+  - "Transparency duties under Article 50 stayed at 2026-08-02 according to sources; confirm any grace periods for existing systems."
+affects_questions: [ai.risk_class, ai.transparency]
+sources:
+  - https://www.processexcellencenetwork.com/ai/articles/eu-ai-act-2026-what-actually-changed-and-what-deployers-still-must-do
+  - https://www.gibsondunn.com/eu-ai-act-omnibus-agreement-postponed-high-risk-deadlines-and-other-key-changes/
+primary_source_todo: "Link the final published text of the omnibus amendment."

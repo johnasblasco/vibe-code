@@ -1,0 +1,29 @@
+schema: question-bank/v1
+modules:
+  - module: library-or-cli-package
+    stage: plan
+    load_when: "product.platform in ['library', 'cli']"
+    questions:
+      - {id: pkg.registry, ask: "Where will it be published, and who controls that account (with two-factor login)?", type: text, covers: [project:packaging, owasp-top10-2025:supply-chain-failures]}
+      - {id: pkg.versioning, ask: "How are versions numbered and breaking changes announced?", type: single_select, options: [semver, calendar, other], default: semver, covers: [project:packaging, iso25010:compatibility]}
+      - {id: pkg.provenance, ask: "How will users verify a release came from your build (signed releases, provenance)?", type: text, covers: [project:packaging, owasp-top10-2025:integrity-failures]}
+      - {id: pkg.install_scripts, ask: "Does installing it run any scripts or download anything?", type: boolean, why: "Install-time code is the most abused part of package ecosystems.", covers: [owasp-top10-2025:supply-chain-failures]}
+      - {id: pkg.platforms, ask: "Which operating systems and runtime versions will you test on?", type: text, covers: [iso25010:compatibility, project:testing]}
+      - {id: pkg.telemetry, ask: "Does it send any usage data? If so, is it opt-in and documented?", type: single_select, options: [none, opt_in, opt_out], default: none, covers: [regulatory:privacy, project:packaging]}
+  - module: data-ml-pipeline
+    stage: plan
+    load_when: "product.platform == 'data_pipeline' or product.platform == 'ai_app'"
+    questions:
+      - {id: ml.data_rights, ask: "Do you have the right to use every data source (licence, terms of service, consent)?", type: text, covers: [regulatory:licensing, regulatory:privacy]}
+      - {id: ml.pii, ask: "Does training or prompt data contain personal information, and how is it removed or protected?", type: text, covers: [regulatory:privacy, ai-risk:data-leakage]}
+      - {id: ml.reproducibility, ask: "Can you rebuild any result from recorded data, code, and settings?", type: boolean, covers: [project:testing, iso25010:reliability]}
+      - {id: ml.drift, ask: "How will you notice quality getting worse after launch?", type: text, covers: [ai-risk:evals, project:observability]}
+      - {id: ml.bias_harm, ask: "Who could be treated unfairly by wrong outputs, and what review catches it?", type: text, covers: [ai-risk:transparency, regulatory:ai-act]}
+  - module: browser-extension-or-desktop
+    stage: plan
+    load_when: "product.platform in ['browser_extension', 'desktop_app']"
+    questions:
+      - {id: ext.permissions, ask: "Which permissions does it request, and can each be removed?", type: text, why: "Every permission is power an attacker gains if your update channel is hijacked.", covers: [asvs:authorization, owasp-top10-2025:insecure-design]}
+      - {id: ext.update_channel, ask: "How do updates reach users and how are they signed?", type: text, covers: [owasp-top10-2025:integrity-failures, hardware:ota]}
+      - {id: ext.signing, ask: "Who holds the code-signing keys, and how are they protected?", type: text, covers: [owasp-top10-2025:integrity-failures, asvs:cryptography]}
+      - {id: ext.store_review, ask: "Which store review rules apply and how long can review delay a security fix?", type: text, covers: [regulatory:markets, project:packaging]}

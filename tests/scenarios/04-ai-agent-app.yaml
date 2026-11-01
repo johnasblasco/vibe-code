@@ -1,0 +1,13 @@
+id: ai-agent-app
+description: A solo developer builds an AI agent app that reads emails and can send messages, with no approvals and no package policy.
+answers: {user_accounts: true, physical: false, radio: false, battery: false, mains: false, actuator: false, harm_possible: none, sensitive_data: true, money: false, ai_decisions: true, multi_tenant: false, product.platform: ai_app, product.team: solo_experienced, ai.approval: [none], aic.dependency_policy: no_policy_yet, int.ai_provider: true}
+expect:
+  tier: T3
+  loads_include: [extensions/ai-agents, extensions/package-data-extension]
+  questions_include: [ai.tools, ai.untrusted_input, ai.cost_caps, ml.data_rights, aic.skills_policy]
+  questions_exclude: [sc.domain, pkg.registry, mob.approach, hw.plat.mcu]
+  failure_modes_include: [SW-14, SW-15, SW-16, AI-01, AI-02, AI-06]
+  contradictions_include: [C-010, C-017]
+  stop: false
+  max_idea_questions: 50
+  max_idea_needing_input: 32

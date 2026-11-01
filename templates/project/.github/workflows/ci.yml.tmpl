@@ -1,0 +1,31 @@
+# Generated with pinned actions. Never replace a pinned hash with a version tag.
+name: ci
+on:
+  pull_request:
+  push:
+    branches: [main]
+permissions: {}
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@{{action_sha_checkout}}
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+      - uses: actions/setup-node@{{action_sha_setup_node}}
+        with:
+          node-version: {{node_major}}
+          cache: npm
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run typecheck
+      - run: npm test
+      - run: npm audit --audit-level=high
+{{secret_scan_step}}

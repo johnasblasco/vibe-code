@@ -1,0 +1,16 @@
+schema: knowledge-pack/v1
+id: eu-red-en18031
+title: EU Radio Equipment Directive cybersecurity (delegated act) and EN 18031
+last_verified: 2026-10-31
+max_age_days: 90
+volatile: true
+facts:
+  - "The delegated act on cybersecurity for radio equipment applies to products placed on the EU market after 2025-08-01."
+  - "The EN 18031 series (parts 1 to 3) became harmonised standards in January 2025 and is the usual route to show conformity."
+  - "Products that cannot fully follow the standard may need assessment by a notified body."
+affects_questions: [hw.reg.cyber, hw.reg.radio, hw.plat.radio_approach]
+sources:
+  - https://www.tuvsud.com/en-us/services/product-certification/red-cybersecurity-requirements
+  - https://dekra.us/en/digital-product-solutions/red-da-cybersecurity-europe/
+  - https://www.vde.com/tic-en/news/2025/01-cyber-security-red
+primary_source_todo: "Link the official journal notice for the harmonised standards."

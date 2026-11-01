@@ -1,0 +1,13 @@
+id: saas-with-payments
+description: A small team builds a multi-tenant SaaS with Stripe, personal data, and weak role design.
+answers: {user_accounts: true, physical: false, radio: false, battery: false, mains: false, actuator: false, harm_possible: none, sensitive_data: true, money: true, ai_decisions: false, multi_tenant: true, features.multi_tenant: true, product.platform: web_app, product.team: small_team, auth.roles: everyone_same, int.webhooks: true, data.sensitive: [personal_info, payment_details]}
+expect:
+  tier: T3
+  loads_include: [extensions/mobile-and-payments, software/04-security-quality]
+  questions_include: [pay.model, pay.webhooks, auth.roles, dl.subject_requests]
+  questions_exclude: [mob.approach, ai.scope, hw.plat.mcu, sc.domain]
+  failure_modes_include: [SW-01, SW-05, SW-17, SW-23, SW-24]
+  contradictions_include: [C-008]
+  stop: false
+  max_idea_questions: 50
+  max_idea_needing_input: 32

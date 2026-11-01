@@ -1,0 +1,14 @@
+id: plant-waterer-iot
+description: A beginner builds a battery-powered ESP32 plant waterer with a pump, sold in the EU and US, with several risky hardware choices.
+answers: {user_accounts: true, physical: true, radio: true, battery: true, mains: false, actuator: true, harm_possible: property_damage, sensitive_data: false, money: false, ai_decisions: false, multi_tenant: false, product.platform: hardware_device, product.team: solo_beginner, hw.plat.radio_approach: chip_down, hw.plat.power_source: primary_battery, hw.net.protocol: [wifi, cellular], hw.plat.debug_ports: left_open_for_now, hw.ops.support_period: 5, hw.reg.markets: "EU, US", hw.reg.export_control: not_checked, hw.safe.worst_case: property_damage}
+expect:
+  tier: T4
+  loads_include: [hardware/h01-h03-context-platform-connectivity, hardware/h07-h08-safety-regulatory, hardware/h13-h15-field-reliability-design-compliance, software/04-security-quality]
+  gates_include: [before-hardware-design-freeze, before-production]
+  questions_include: [hw.plat.radio_approach, hw.safe.failsafe, hw.reg.battery, hw.fw.confirm_boot, sec.access_test, hw.reg.export_control]
+  questions_exclude: [pay.model, sc.domain, mob.approach]
+  failure_modes_include: [HW-01, HW-03, HW-08, HW-10, HW-12, HW-13, HW-14, HW-16, SW-01, AI-01]
+  failure_modes_exclude: [HW-24]
+  contradictions_include: [C-001, C-002, C-003, C-018]
+  contradictions_exclude: [C-011]
+  stop: false

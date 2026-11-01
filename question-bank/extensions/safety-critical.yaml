@@ -1,0 +1,14 @@
+schema: question-bank/v1
+modules:
+  - module: safety-critical
+    stage: idea
+    load_when: "harm_possible in ['serious_injury', 'death']"
+    beginner_policy: "A beginner may not continue alone. The CLI stops, explains why, and generates a brief for a qualified engineer."
+    questions:
+      - {id: sc.domain, ask: "Which domain's rules apply?", type: single_select, options: [medical_device, automotive, industrial_machinery_process, aviation, rail, other_safety_related], covers: [safety:standard-selection, regulatory:sector-rules]}
+      - {id: sc.classification, ask: "What safety class or level has been assigned, and by whom?", type: text, why: "Examples: IEC 62304 classes A/B/C, ISO 26262 ASIL, IEC 61508 SIL, DO-178C DAL.", covers: [safety:standard-selection, safety:expert-review]}
+      - {id: sc.hazards, ask: "List every identified hazard, its severity, and its mitigation.", type: text, covers: [safety:hazard-analysis]}
+      - {id: sc.requirements_trace, ask: "How is each safety requirement traced to design, code, and test?", type: text, covers: [safety:expert-review]}
+      - {id: sc.process_evidence, ask: "Who produces and keeps the process evidence the standard requires?", type: text, covers: [safety:expert-review, regulatory:sector-rules]}
+      - {id: sc.ai_code_policy, ask: "What is the policy on AI-generated code in safety-related parts?", type: single_select, options: [not_allowed, allowed_with_independent_review, not_decided], default: not_decided, covers: [safety:expert-review, project:ai-collaboration]}
+      - {id: sc.independent_review, ask: "Which independent reviewer or notified body is engaged?", type: text, covers: [safety:expert-review]}

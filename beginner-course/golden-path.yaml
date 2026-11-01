@@ -1,0 +1,21 @@
+# The order beginners follow. Each stage unlocks only when its automatic checks pass,
+# or the learner defers it with a recorded reason (state: deferred, with revisit trigger).
+schema: golden-path/v1
+stages:
+  - {id: stage-0, name: "Machine ready", does: "Install Node, Git, Docker, an editor. Create accounts with 2FA and a password manager.", unlocks_when: ["doctor passes"], card: step-cards/stage-0-machine-ready.yaml}
+  - {id: stage-1, name: "Safety net first", does: "Create project, git init, .gitignore covering .env, first commit, secret scanner.", unlocks_when: ["a commit containing a fake secret is blocked"], card: step-cards/stage-1-safety-net.yaml}
+  - {id: stage-2, name: "Hello world, live", does: "Deploy an empty page to a public URL with CI.", unlocks_when: ["public URL returns 200", "CI is green"], card: step-cards/stage-2-hello-world-live.yaml}
+  - {id: stage-3, name: "Environments and secrets", does: ".env.example, host environment variables, dev and prod kept separate.", unlocks_when: ["app stops with a clear message when a required variable is missing"], card: step-cards/stage-3-environments-secrets.yaml}
+  - {id: stage-4, name: "Database", does: "Local database, hosted database, migrations, first table.", unlocks_when: ["migrate up and down both work", "test row round-trips"], card: step-cards/stage-4-database.yaml}
+  - {id: stage-5, name: "Access control", does: "Login plus ownership rules (or row-level security) before any real data.", unlocks_when: ["logged-out request returns nothing", "user A cannot read user B's rows"], card: step-cards/stage-5-access-control.yaml}
+  - {id: stage-6, name: "Cache or queue (only if a symptom appears)", does: "Follow redis-decision.yaml. Skipping is a valid answer.", unlocks_when: ["ping works and the service is not publicly reachable, or the item is deferred with a trigger"]}
+  - {id: stage-7, name: "One vertical slice", does: "One feature end to end, with a test, deployed.", unlocks_when: ["live feature works", "its test passes in CI"]}
+  - {id: stage-8, name: "Quality net", does: "Lint, typecheck, tests, secret scan on every push.", unlocks_when: ["a failing push cannot be merged"]}
+  - {id: stage-9, name: "Watching", does: "Error tracking and an uptime alert.", unlocks_when: ["a deliberate error appears in the dashboard", "a stopped site triggers an alert"]}
+  - {id: stage-10, name: "Pre-launch gate", does: "Security checklist, backup restore test, billing alert, privacy and terms pages.", unlocks_when: ["every check passes or is consciously deferred"]}
+  - {id: stage-11, name: "Launch and after", does: "Practise a rollback. Set an update routine.", unlocks_when: ["rollback tested once"]}
+rules:
+  - "Deploy early: stage 2 happens before any real feature, because the first deploy is where most surprises appear."
+  - "Safety net before secrets: .gitignore and a secret scanner exist before the first secret does."
+  - "Never point the local app at the production database."
+  - "Free tiers change often. Show current limits from knowledge-packs/free-database-tiers.yaml with its last_verified date."

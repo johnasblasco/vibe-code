@@ -1,0 +1,33 @@
+schema: step-card/v1
+cards:
+  - id: env.install_tools
+    stage: stage-0
+    audience: beginner
+    teach: "Your computer needs a few free tools before it can build apps. We check what you already have and only ask you to install what is missing."
+    choose: {ask: "Which operating system are you using?", options: [windows, macos, linux], default: auto_detect}
+    do:
+      - say: "Install each missing tool from its official website, then come back."
+      - tools: [node_lts, git, docker_desktop, code_editor]
+    verify:
+      - {auto: "node --version prints a version"}
+      - {auto: "git --version prints a version"}
+      - {auto: "docker --version prints a version and the Docker engine is running"}
+    if_fails:
+      - {match: "command not found", say: "Close the terminal and open a new one. New installs are only seen by new terminals."}
+      - {match: "Docker daemon not running", say: "Open the Docker Desktop app and wait until it says it is running."}
+    gate: blocks(stage-1)
+    undo: "Nothing to undo. Installing tools does not change your project."
+    covers: [beginner-ops:skill-level]
+  - id: env.accounts_2fa
+    stage: stage-0
+    audience: beginner
+    teach: "Hosting and database accounts hold your app and your data. If someone takes one over, they own both. A password manager and 2FA stop that."
+    do:
+      - say: "Install a password manager. Create unique passwords for every account."
+      - say: "Turn on two-factor authentication on GitHub and your hosting account."
+    verify:
+      - {manual: "I turned on 2FA for GitHub", record: true}
+      - {manual: "I turned on 2FA for my hosting account", record: true}
+    gate: blocks(stage-2)
+    undo: "You can change or remove 2FA in each account's security settings."
+    covers: [beginner-ops:secrets-hygiene]

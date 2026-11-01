@@ -1,0 +1,29 @@
+schema: question-bank/v1
+tier_min: T4
+modules:
+  - module: H7-safety
+    stage: design
+    gate: before-hardware-design-freeze
+    questions:
+      - {id: hw.safe.worst_case, ask: "If this device fails or is misused, what is the worst physical harm?", type: single_select, options: [none, property_damage, minor_injury, serious_injury, death], required_when: "actuator or battery or mains", states_allowed: [answered, deferred], on_answer: {serious_injury: "load extensions/safety-critical; flag needs_qualified_engineer", death: "load extensions/safety-critical; flag needs_qualified_engineer"}, covers: [iso25010:safety, safety:hazard-analysis]}
+      - {id: hw.safe.failsafe, ask: "What state is safe, and does the device reach it when power, network, or software fails?", type: text, why: "Example: a stuck pump must stop. Do not rely on software alone.", covers: [safety:fail-safe-state]}
+      - {id: hw.safe.interlock, ask: "Which hazards are blocked by hardware that works even if the software crashes (fuse, thermal cutoff, mechanical stop)?", type: text, covers: [safety:hardware-interlock]}
+      - {id: hw.safe.thermal_electrical, ask: "Could it overheat, short, shock, or catch fire? What limits that?", type: text, covers: [safety:hazard-analysis, regulatory:product-safety]}
+      - {id: hw.safe.moving_parts, ask: "Are there moving, pinching, cutting, or high-pressure parts?", type: boolean, covers: [safety:hazard-analysis]}
+      - {id: hw.safe.method, ask: "Which hazard analysis will you do (for example FMEA or STPA)?", type: single_select, options: [fmea, stpa, other, none_yet], covers: [safety:hazard-analysis]}
+      - {id: hw.safe.standard, ask: "Which safety standard family applies to this product type?", type: single_select, options: [consumer_product_safety, medical, automotive, industrial_machinery, aviation, rail, not_sure], covers: [safety:standard-selection, regulatory:sector-rules]}
+      - {id: hw.safe.expert, ask: "Has a qualified safety engineer reviewed this design?", type: single_select, options: [yes, planned, no, not_applicable], covers: [safety:expert-review]}
+  - module: H8-regulatory
+    stage: design
+    gate: before-hardware-design-freeze
+    questions:
+      - {id: hw.reg.markets, ask: "Which countries will you sell in? List each.", type: text, covers: [regulatory:markets]}
+      - {id: hw.reg.radio, ask: "Which radio approvals does each market need (for example FCC, CE-RED, UKCA, local type approval)?", type: text, covers: [regulatory:radio-approval, red:radio-cybersecurity]}
+      - {id: hw.reg.emc, ask: "Who will run EMC pre-compliance and full testing, and when?", type: text, covers: [regulatory:emc]}
+      - {id: hw.reg.product_safety, ask: "Which product safety standard and mark applies (for example IEC 62368-1 based schemes)?", type: text, covers: [regulatory:product-safety]}
+      - {id: hw.reg.battery, ask: "Battery chemistry, cell approvals, and shipping rules (UN 38.3 for lithium)?", type: text, why: "Lithium batteries can add months of testing.", required_when: "battery", covers: [regulatory:battery-transport]}
+      - {id: hw.reg.substances, ask: "Which substance and recycling rules apply (RoHS, REACH, WEEE or local equivalents)?", type: text, covers: [regulatory:substances]}
+      - {id: hw.reg.cyber, ask: "Which cybersecurity rules apply: EU RED delegated act, EU CRA, US Cyber Trust Mark (voluntary), local rules?", type: multi_select, options: [eu_red, eu_cra, us_cyber_trust_mark, uk_psti, other, not_sure], covers: [red:radio-cybersecurity, cra:conformity, regulatory:markets]}
+      - {id: hw.reg.privacy, ask: "Which privacy laws apply to the data the device and app collect?", type: text, covers: [regulatory:privacy]}
+      - {id: hw.reg.sector, ask: "Is it sold into a regulated sector (medical, automotive, industrial control, children's products)?", type: single_select, options: [no, medical, automotive, industrial, childrens_product, other], covers: [regulatory:sector-rules, safety:standard-selection]}
+      - {id: hw.reg.lab, ask: "Which accredited test lab and compliance advisor will you use?", type: text, why: "This tool cannot certify anything. A lab and an advisor must.", covers: [safety:expert-review, regulatory:markets]}

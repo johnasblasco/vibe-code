@@ -1,0 +1,56 @@
+schema: question-bank/v1
+modules:
+  - module: devops
+    stage: plan
+    phase: 12
+    questions:
+      - {id: ops.hosting, ask: "Where will the app run?", type: single_select, options: [vercel, netlify, cloudflare, fly_io, railway, aws, vps, pick_for_me], covers: [arc42:deployment-view]}
+      - {id: ops.docker, ask: "Use Docker for local development?", type: boolean, default: true, why: "It gives every machine the same database and services.", covers: [arc42:deployment-view, beginner-ops:deploy-early]}
+      - {id: ops.environments, ask: "Which environments do you need?", type: multi_select, options: [local, preview, staging, production], default: [local, production], covers: [arc42:deployment-view]}
+      - {id: ops.ci, ask: "What must pass automatically on every push?", type: multi_select, options: [lint, typecheck, tests, secret_scan, dependency_scan, build], covers: [project:ci-cd, iso25010:maintainability]}
+      - {id: ops.domain_ssl, ask: "Do you have a domain, and is HTTPS set up?", type: text, covers: [asvs:secure-communication]}
+      - {id: ops.iac, ask: "Describe infrastructure as code, or click through dashboards?", type: single_select, options: [code, dashboards_for_now], default: dashboards_for_now, covers: [arc42:deployment-view]}
+      - {id: ops.rollback, ask: "How do you undo a bad release?", type: text, covers: [iso25010:reliability]}
+      - {id: ops.prod_migrations, ask: "How are database changes applied in production safely?", type: text, covers: [iso25010:reliability]}
+      - {id: ops.cost_alerts, ask: "Will you set billing alerts on every paid service?", type: boolean, default: true, covers: [beginner-ops:cost-alerts, project:cost]}
+      - {id: ops.config, ask: "Which settings differ between environments, and where are they stored?", type: text, covers: [asvs:configuration, owasp-top10-2025:security-misconfiguration]}
+  - module: operations
+    stage: operate
+    phase: 13
+    questions:
+      - {id: run.errors, ask: "Which tool will tell you when the app throws errors?", type: text, covers: [project:observability]}
+      - {id: run.logs, ask: "Where do logs go and how long are they kept?", type: text, covers: [asvs:logging-error-handling]}
+      - {id: run.uptime, ask: "Who is alerted when the site is down, and how?", type: text, why: "Paused free-tier databases look exactly like outages.", covers: [project:observability, iso25010:reliability]}
+      - {id: run.targets, ask: "What speed targets matter (page load, API response)?", type: text, covers: [iso25010:performance-efficiency, arc42:quality-requirements]}
+      - {id: run.incident, ask: "What do you do first when something breaks in production?", type: text, covers: [iso25010:reliability]}
+      - {id: run.restore_test, ask: "When will you next test restoring a backup?", type: text, covers: [beginner-ops:backup-restore]}
+      - {id: run.dependency_updates, ask: "How often are dependencies updated, and who approves?", type: text, covers: [owasp-top10-2025:supply-chain-failures]}
+  - module: legal
+    stage: prelaunch
+    phase: 14
+    questions:
+      - {id: legal.policies, ask: "Do you need a privacy policy and terms of service?", type: boolean, covers: [regulatory:privacy]}
+      - {id: legal.cookies, ask: "Will you set cookies or use trackers that need consent?", type: boolean, covers: [regulatory:privacy]}
+      - {id: legal.regulations, ask: "Which rules might apply?", type: multi_select, options: [gdpr, ccpa, hipaa, children_privacy, financial_rules, none_known, not_sure], why: "Choose not_sure if unsure. We will flag it for a professional.", covers: [regulatory:privacy, regulatory:markets]}
+      - {id: legal.residency, ask: "Must data stay in a particular country or region?", type: text, covers: [regulatory:privacy]}
+      - {id: legal.licenses, ask: "Which licence will your code use, and have you checked your dependencies' licences?", type: text, covers: [regulatory:licensing]}
+      - {id: legal.accessibility_law, ask: "Do accessibility laws apply where you operate?", type: single_select, options: [yes, no, not_sure], covers: [regulatory:accessibility]}
+  - module: ai-collaboration
+    stage: idea
+    phase: 15
+    questions:
+      - {id: aic.autonomy, ask: "What may the AI do without asking?", type: multi_select, options: [edit_code, install_packages, change_database_schema, delete_files, run_migrations, deploy], default: [edit_code], covers: [project:ai-collaboration]}
+      - {id: aic.always_ask, ask: "What must it always ask about first?", type: multi_select, options: [install_packages, change_database_schema, delete_files, run_migrations, deploy, touch_secrets], default: [install_packages, change_database_schema, delete_files, run_migrations, deploy, touch_secrets], covers: [project:ai-collaboration, beginner-ops:secrets-hygiene]}
+      - {id: aic.conventions, ask: "Naming, file layout, and error-handling rules to follow?", type: text, covers: [iso25010:maintainability, arc42:cross-cutting-concepts]}
+      - {id: aic.protected_paths, ask: "Which folders or files must it never change?", type: text, default: ".env*, database migrations already applied, lockfiles, CI workflows, docs/hardware", covers: [project:ai-collaboration]}
+      - {id: aic.ambiguity, ask: "When the request is unclear, should it ask first or choose and log the choice?", type: single_select, options: [ask_first, choose_and_log], default: ask_first, covers: [arc42:architecture-decisions]}
+      - {id: aic.done, ask: "What does done mean for a task?", type: multi_select, options: [tests_pass, lint_clean, types_clean, docs_updated, deployed_preview], default: [tests_pass, lint_clean, types_clean], covers: [project:testing, iso25010:maintainability]}
+      - {id: aic.production_guard, ask: "Confirm: the AI must never run commands against the production database.", type: boolean, default: true, covers: [project:ai-collaboration, beginner-ops:secrets-hygiene]}
+  - module: planning
+    stage: plan
+    phase: 16
+    questions:
+      - {id: plan.milestones, ask: "Review the generated milestones. Anything missing?", type: text, covers: [project:planning]}
+      - {id: plan.first_slice, ask: "Which one feature should work end to end first?", type: text, covers: [project:planning, beginner-ops:deploy-early]}
+      - {id: plan.risks, ask: "Which risks are open, and who owns each?", type: text, covers: [arc42:risks-technical-debt]}
+      - {id: plan.open_questions, ask: "List deferred questions and the event that will make you answer each.", type: text, covers: [arc42:risks-technical-debt, arc42:quality-requirements]}

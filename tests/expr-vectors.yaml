@@ -1,0 +1,46 @@
+# Conformance vectors for the expression language (specs/expressions.md).
+# Every implementation must load this file and pass every case. 'env' lists only the answered questions;
+# anything not listed is UNANSWERED (None).
+schema: expr-vectors/v1
+cases:
+  # basics
+  - {expr: "otherwise", env: {}, expect: true}
+  - {expr: "physical or radio", env: {radio: true}, expect: true}
+  - {expr: "physical or radio", env: {}, expect: false}
+  - {expr: "a and (b or c)", env: {a: true, c: true}, expect: true}
+  - {expr: "harm in ['serious_injury', 'death']", env: {harm: death}, expect: true}
+  - {expr: "harm in ['serious_injury', 'death']", env: {harm: none}, expect: false}
+  - {expr: "features.extras contains 'ai_features'", env: {features.extras: [search, ai_features]}, expect: true}
+  - {expr: "product.platform == 'mobile_app'", env: {product.platform: mobile_app}, expect: true}
+  - {expr: "hw.ops.support_period >= 5 and hw.plat.debug_ports == 'left_open_for_now'", env: {hw.ops.support_period: 7, hw.plat.debug_ports: left_open_for_now}, expect: true}
+  - {expr: "data.pooling == false", env: {data.pooling: false}, expect: true}
+  - {expr: "x != 'a'", env: {x: b}, expect: true}
+  - {expr: "x != 'a'", env: {x: a}, expect: false}
+  # MISSING ANSWERS: a rule must never fire because a question has not been answered yet
+  - {expr: "x == 'a'", env: {}, expect: false}
+  - {expr: "x != 'a'", env: {}, expect: false}          # reference used to return true (bug); spec says false
+  - {expr: "x == y", env: {}, expect: false}            # both unanswered; reference used to return true (bug)
+  - {expr: "x != y", env: {}, expect: false}
+  - {expr: "x == y", env: {x: a}, expect: false}
+  - {expr: "x != y", env: {x: a}, expect: false}
+  - {expr: "x contains 'a'", env: {}, expect: false}
+  - {expr: "x in ['a', 'b']", env: {}, expect: false}
+  - {expr: "x >= 5", env: {}, expect: false}
+  - {expr: "x < 5", env: {}, expect: false}
+  - {expr: "x == false", env: {}, expect: false}
+  - {expr: "data.pooling == false", env: {}, expect: false}
+  - {expr: "product.platform == 'hardware_device' and product.team != 'solo_beginner'", env: {product.platform: hardware_device}, expect: false}
+  - {expr: "be.hosting_model != 'serverless'", env: {}, expect: false}
+  # 'not' on a missing answer is TRUE (documented trap): never write 'not x' alone as a rule, pair it with a positive condition
+  - {expr: "not x", env: {}, expect: true}
+  - {expr: "not x", env: {x: true}, expect: false}
+  - {expr: "product.platform == 'hardware_device' and not physical", env: {product.platform: hardware_device}, expect: true}
+  - {expr: "product.platform == 'hardware_device' and not physical", env: {}, expect: false}
+errors:   # must raise an expression error, never evaluate
+  - ""
+  - "a =="
+  - "a and"
+  - "(a"
+  - "a b"
+  - "a == == b"
+  - "'unterminated"

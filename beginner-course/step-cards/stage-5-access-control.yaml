@@ -1,0 +1,19 @@
+schema: step-card/v1
+cards:
+  - id: access.own_data_only
+    stage: stage-5
+    audience: beginner
+    teach: "The most common serious bug in AI-built apps is a database that answers anyone who asks. Every table with user data needs a rule saying who may read and write each row, and you must test that the rule works."
+    do:
+      - write: "login using a managed service or a vetted library"
+      - write: "ownership rule on every table that holds user data (database row-level security where available, or checks in every query)"
+      - say: "Keep the database secret key on the server only. Browser code may use only the public key."
+    verify:
+      - {auto: "request with no login returns zero rows from every user table"}
+      - {auto: "user A requesting user B's record returns nothing or an error"}
+      - {auto: "search of the built browser files finds no secret or service key"}
+    if_fails:
+      - {match: "all rows returned when logged out", say: "The ownership rule is missing or off for that table. Turn it on and write a rule, then rerun the check."}
+    gate: blocks(stage-7)
+    undo: "Rules can be edited at any time. Do not remove them to make an error go away."
+    covers: [beginner-ops:access-control-test, owasp-top10-2025:broken-access-control, asvs:authorization]

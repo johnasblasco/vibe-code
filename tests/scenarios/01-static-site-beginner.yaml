@@ -1,0 +1,14 @@
+id: static-site-beginner
+description: A beginner builds a simple portfolio site with no logins and no data.
+answers: {user_accounts: false, physical: false, radio: false, battery: false, mains: false, actuator: false, harm_possible: none, sensitive_data: false, money: false, ai_decisions: false, multi_tenant: false, product.platform: web_app, product.team: solo_beginner, product.budget: free_only}
+expect:
+  tier: T1
+  loads_include: [software/01-product-users-data, software/02-architecture-stack, software/05-delivery-operations-legal-planning, software/06-validation-team-ai-dev]
+  loads_exclude: [software/03-auth-integrations, software/04-security-quality, hardware/]
+  questions_include: [product.name, aic.dependency_policy, ops.hosting]
+  questions_exclude: [sc.domain, auth.methods, hw.plat.mcu, pay.model]
+  failure_modes_include: [SW-02, SW-11, SW-19, AI-01, AI-04, SW-06]
+  failure_modes_exclude: [SW-01, HW-01, HW-24]
+  stop: false
+  max_idea_questions: 50
+  max_idea_needing_input: 32

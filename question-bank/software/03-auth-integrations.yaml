@@ -1,0 +1,25 @@
+schema: question-bank/v1
+modules:
+  - module: auth
+    stage: plan
+    phase: 8
+    load_when: "user_accounts"
+    questions:
+      - {id: auth.methods, ask: "How will people log in?", type: multi_select, options: [email_password, magic_link, social_login, passkeys, company_sso], covers: [asvs:authentication]}
+      - {id: auth.build_or_buy, ask: "Use a managed login service, a library, or write your own?", type: single_select, options: [managed_service, library, custom, pick_for_me], default: managed_service, why: "Writing login yourself is the easiest way to create a security hole.", covers: [asvs:authentication, owasp-top10-2025:authentication-failures]}
+      - {id: auth.session, ask: "Sessions or tokens?", type: single_select, options: [server_sessions, jwt, pick_for_me], covers: [asvs:session-management, asvs:self-contained-tokens]}
+      - {id: auth.roles, ask: "What can different users do?", type: single_select, options: [everyone_same, simple_roles, per_item_permissions], covers: [asvs:authorization, owasp-top10-2025:broken-access-control]}
+      - {id: auth.flows, ask: "Which account features do you need?", type: multi_select, options: [email_verification, password_reset, two_factor, none], covers: [owasp-top10-2025:authentication-failures, asvs:authentication]}
+      - {id: auth.deletion, ask: "Can users delete their account and export their data?", type: boolean, covers: [regulatory:privacy]}
+      - {id: auth.oauth_provider, ask: "Will other apps log in through your app (you act as the provider)?", type: boolean, covers: [asvs:oauth-oidc]}
+  - module: integrations
+    stage: plan
+    phase: 9
+    questions:
+      - {id: int.payments, ask: "How will you take payments, if at all?", type: single_select, options: [none, stripe, paddle, lemon_squeezy, other], covers: [project:payments]}
+      - {id: int.email, ask: "How will transactional emails be sent?", type: text, covers: [arc42:context-scope]}
+      - {id: int.messaging, ask: "Do you need SMS or push notifications?", type: boolean, covers: [arc42:context-scope]}
+      - {id: int.ai_provider, ask: "Will you call an AI model provider?", type: boolean, covers: [ai-risk:cost-controls]}
+      - {id: int.analytics_errors, ask: "Which analytics and error tracking tools?", type: text, covers: [project:observability]}
+      - {id: int.webhooks, ask: "Will you receive or send webhooks?", type: boolean, why: "Incoming webhooks must be verified or anyone can fake them.", covers: [asvs:api-web-service]}
+      - {id: int.third_party_list, ask: "List every outside service your app depends on.", type: text, covers: [arc42:context-scope, owasp-top10-2025:supply-chain-failures]}

@@ -1,0 +1,8 @@
+# Which questions each depth asks. 'quick' is a short list of the highest-value questions.
+# 'standard' is every question except full_only. 'full' is everything.
+# Protected questions (gates, required_when, safety, beginner-ops, en303645, cra, red) can never be full_only.
+# T4 and T5 projects are never run at 'quick'.
+schema: depth-profiles/v1
+always: [product.depth, product.new_or_existing, product.platform, product.name]
+quick: [product.summary, product.audience, product.team, product.budget, product.ai_tool, val.riskiest_assumption, features.core, data.sensitive, fe.framework, fe.language, be.runtime, be.hosting_model, data.engine, data.host, data.backups, auth.methods, auth.build_or_buy, auth.roles, sec.secrets, sec.access_test, ops.hosting, ops.environments, ops.cost_alerts, aic.always_ask, aic.production_guard, aic.dependency_policy, aic.no_secrets_in_prompts, plan.first_slice]
+full_only: [product.glossary, product.timeline, scale.growth_12mo, scale.locales, scale.devices, scale.quality_priorities, risks.known, arch.repo, arch.cross_cutting, fe.state, fe.design_system, fe.seo, be.api_docs, be.framework, data.seed, auth.oauth_provider, int.third_party_list, ops.iac, qa.hooks, run.targets, run.dependency_updates, legal.licenses, legal.residency, aic.conventions, plan.milestones, plan.risks, team.issue_tracking, team.docs, dl.analytics_consent, dl.import_export, res.load_test, res.dependency_health, sx.pentest, hw.ux.status, hw.ux.households, hw.ops.recycling, hw.ops.returns, hw.ver.simulate, hw.ver.hil, hw.ver.host_tests]

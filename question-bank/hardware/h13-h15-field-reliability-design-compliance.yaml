@@ -1,0 +1,36 @@
+schema: question-bank/v1
+tier_min: T4
+modules:
+  - module: H13-field-reliability
+    stage: design
+    gate: before-hardware-design-freeze
+    questions:
+      - {id: hw.fw.config_storage, ask: "Where are settings and calibration data stored, and are they kept separate from the firmware so an update cannot overwrite them?", type: text, covers: [hardware:ota, hardware:field-reliability]}
+      - {id: hw.fw.update_preconditions, ask: "What must be true before an update starts (battery level, power source, network quality, device idle)?", type: text, why: "A flash write that takes seconds is a window where a power dip can brick the unit.", covers: [hardware:ota, hardware:power, hardware:field-reliability]}
+      - {id: hw.fw.confirm_boot, ask: "How does the new firmware prove it works before the old copy is discarded (health check, then confirm)?", type: text, covers: [hardware:ota, en303645:software-updates]}
+      - {id: hw.fw.flash_endurance, ask: "How often does the device write to flash, and does the write pattern survive the product lifetime?", type: text, covers: [hardware:field-reliability, iso25010:reliability]}
+      - {id: hw.sec.cert_lifecycle, ask: "When do device and server certificates expire, how are they renewed, and what happens to a device whose certificate expired?", type: text, why: "An expired certificate can mean the device can never update again.", covers: [hardware:provisioning, hardware:ota]}
+      - {id: hw.mfg.variants, ask: "How do firmware versions map to hardware revisions, and how does an update refuse an incompatible board?", type: text, covers: [hardware:manufacturing, hardware:ota]}
+      - {id: hw.design.calibration, ask: "Which sensors drift or need calibration, and how is that done in the factory and in the field?", type: text, covers: [hardware:calibration, iso25010:reliability]}
+      - {id: hw.ops.update_testing, ask: "Which update failures will you test (power cut at 10, 50, and 90 percent, corrupt image, bad signature, downgrade, repeated cycling)?", type: multi_select, options: [power_cut_mid_write, corrupt_image, invalid_signature, downgrade_attempt, repeated_cycling, low_battery, weak_network], covers: [hardware:verification, hardware:ota]}
+      - {id: hw.ops.rollout_stages, ask: "Which share of the fleet gets each update wave, and what stops a bad wave?", type: text, covers: [hardware:ota, iso25010:reliability]}
+  - module: H14-design-practices
+    stage: design
+    gate: before-hardware-design-freeze
+    questions:
+      - {id: hw.design.emc_esd, ask: "Which design measures reduce emissions and static damage (grounding, filtering, shielding, ESD protection on exposed ports)?", type: text, covers: [hardware:electrical-design, regulatory:emc]}
+      - {id: hw.design.antenna, ask: "Where is the antenna, what keeps metal, batteries, and the case away from it, and who tunes it?", type: text, covers: [hardware:electrical-design, regulatory:radio-approval]}
+      - {id: hw.design.thermal, ask: "What are the hottest parts, how is heat removed, and what is the worst-case temperature in the case?", type: text, covers: [hardware:electrical-design, safety:hazard-analysis]}
+      - {id: hw.design.power_protection, ask: "What protects against reverse polarity, surges, short circuits, and brownouts?", type: text, covers: [hardware:electrical-design, hardware:power, safety:hardware-interlock]}
+      - {id: hw.design.dfm_dft, ask: "Does the board have test points, programming access, and tolerances a factory can build and test at volume?", type: text, covers: [hardware:dfm-dft, hardware:manufacturing]}
+      - {id: hw.design.prototype_gap, ask: "What differs between your prototype (dev boards, jumper wires) and the production design, and which results will not carry over?", type: text, covers: [hardware:dfm-dft, hardware:verification]}
+  - module: H15-compliance-documents
+    stage: production
+    gate: before-production
+    questions:
+      - {id: hw.reg.labeling_docs, ask: "Which labels, marks, safety warnings, and user manuals must ship with the product in each market?", type: text, why: "Missing labels or instructions can stop a shipment even if the product passes every test.", covers: [regulatory:labeling-documentation, regulatory:markets]}
+      - {id: hw.reg.export_control, ask: "Does the product contain encryption or other controlled technology, and has someone checked export rules for each destination?", type: single_select, options: [checked_by_advisor, not_checked, not_sure], default: not_sure, covers: [regulatory:export-control]}
+      - {id: hw.reg.oss_licenses, ask: "Which open-source licences are in the firmware and app, and how will you meet each licence's conditions (notices, source offers)?", type: text, covers: [regulatory:licensing, hardware:supply-chain]}
+      - {id: hw.reg.warranty_liability, ask: "What warranty will you give, and do you have liability insurance suitable for this product?", type: text, covers: [regulatory:liability-insurance]}
+      - {id: hw.mfg.counterfeit, ask: "How do you avoid counterfeit or recycled parts (approved distributors, incoming inspection)?", type: text, covers: [hardware:supply-chain, hardware:manufacturing]}
+      - {id: hw.reg.eol_notice, ask: "How will you tell customers when security updates will stop?", type: text, covers: [cra:support-period, regulatory:labeling-documentation]}

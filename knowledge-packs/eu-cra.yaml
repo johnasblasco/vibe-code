@@ -1,0 +1,18 @@
+schema: knowledge-pack/v1
+id: eu-cra
+title: EU Cyber Resilience Act (CRA)
+last_verified: 2026-10-31
+max_age_days: 60
+verified_via: web search of secondary sources; confirm dates on EUR-Lex before shipping
+volatile: true
+facts:
+  - "Reporting obligations for actively exploited vulnerabilities and severe incidents began 2026-09-11 and also cover products already on the EU market."
+  - "Reports follow a staged timeline: early warning within 24 hours, notification within 72 hours, final report within 14 days (for exploited vulnerabilities)."
+  - "Full product requirements and CE marking apply from 2027-12-11."
+  - "Summaries describe a support period of at least five years for security updates, with exceptions for products expected to be used for less time. Confirm the exact rule in the regulation text."
+affects_questions: [hw.sec.cra_category, hw.sec.reporting, hw.sec.sbom, hw.sec.updates, hw.ops.support_period, hw.ops.vuln_process]
+sources:
+  - https://finitestate.io/blog/cyber-resilience-act-timeline-2026-2027
+  - https://ncsc.gov.ie/cra/
+  - https://www.dataguard.com/cyber-resilience-act/timeline/
+primary_source_todo: "Link the EUR-Lex consolidated text."

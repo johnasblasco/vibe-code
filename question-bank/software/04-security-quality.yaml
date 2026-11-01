@@ -1,0 +1,31 @@
+schema: question-bank/v1
+modules:
+  - module: security
+    stage: build
+    phase: 10
+    tier_min: T2
+    questions:
+      - {id: sec.threat_model, ask: "Who might attack this and what would they want?", type: text, covers: [iso25010:security, asvs:secure-coding-architecture, owasp-top10-2025:insecure-design]}
+      - {id: sec.abuse_cases, ask: "For each feature, how could a bad user misuse it?", type: text, covers: [owasp-top10-2025:insecure-design]}
+      - {id: sec.rate_limits, ask: "Which places need rate limits?", type: multi_select, options: [login, signup, password_reset, expensive_endpoints, ai_calls, none], covers: [asvs:validation-business-logic]}
+      - {id: sec.headers_cors, ask: "Which sites may call your API, and which security headers will you set?", type: text, covers: [asvs:web-frontend, owasp-top10-2025:security-misconfiguration]}
+      - {id: sec.secrets, ask: "Where will secrets live locally and in production?", type: text, why: "Secrets must never be in code or in the browser.", covers: [asvs:configuration, beginner-ops:secrets-hygiene]}
+      - {id: sec.dependencies, ask: "How will you scan and update dependencies?", type: single_select, options: [automated_scans_and_updates, manual, none_yet], covers: [owasp-top10-2025:supply-chain-failures]}
+      - {id: sec.logging, ask: "What must never be written to logs?", type: text, covers: [asvs:logging-error-handling, owasp-top10-2025:logging-alerting-failures]}
+      - {id: sec.errors, ask: "What should users see when something fails, and what should be recorded?", type: text, covers: [owasp-top10-2025:exceptional-conditions, asvs:logging-error-handling]}
+      - {id: sec.uploads, ask: "Which file types and sizes are allowed, and how are they checked?", type: text, covers: [asvs:file-handling]}
+      - {id: sec.crypto, ask: "Which data must be encrypted at rest or in transit?", type: text, covers: [asvs:cryptography, owasp-top10-2025:cryptographic-failures]}
+      - {id: sec.transport, ask: "Will everything run over HTTPS only?", type: boolean, default: true, covers: [asvs:secure-communication]}
+      - {id: sec.audit_log, ask: "Which sensitive actions need an audit trail?", type: text, covers: [owasp-top10-2025:logging-alerting-failures]}
+      - {id: sec.input_integrity, ask: "Do you update code or data from outside sources (plugins, updates, imports)? How is integrity checked?", type: text, covers: [owasp-top10-2025:integrity-failures]}
+      - {id: sec.access_test, ask: "Who will test that one user cannot read another user's data before launch?", type: text, why: "This single test catches the most common vibe-coding disaster.", covers: [beginner-ops:access-control-test, owasp-top10-2025:broken-access-control]}
+      - {id: sec.encoding, ask: "How is user-supplied text kept from being treated as code (SQL, HTML, shell)?", type: text, covers: [asvs:encoding-sanitization, owasp-top10-2025:injection]}
+  - module: quality
+    stage: plan
+    phase: 11
+    questions:
+      - {id: qa.levels, ask: "Which kinds of tests will you write?", type: multi_select, options: [unit, integration, end_to_end], covers: [project:testing, iso25010:reliability]}
+      - {id: qa.tools, ask: "Which test tools?", type: text, covers: [project:testing]}
+      - {id: qa.lint_format, ask: "Automatic lint, format, and type checks?", type: boolean, default: true, covers: [iso25010:maintainability]}
+      - {id: qa.hooks, ask: "Run checks before each commit and each push?", type: boolean, default: true, covers: [project:ci-cd]}
+      - {id: qa.review, ask: "Who reviews code before it ships?", type: single_select, options: [human_required, ai_review_plus_human, none_yet], covers: [iso25010:maintainability]}

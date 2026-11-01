@@ -1,0 +1,6 @@
+# Blocks commits that contain secrets. Install with: pre-commit install
+repos:
+  - repo: https://github.com/gitleaks/gitleaks
+    rev: {{gitleaks_rev}}
+    hooks:
+      - id: gitleaks

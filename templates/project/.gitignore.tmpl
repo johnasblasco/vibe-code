@@ -1,0 +1,23 @@
+# Secrets and local config. Never commit these.
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+secrets/
+
+# Dependencies and build output
+node_modules/
+dist/
+build/
+.next/
+.output/
+coverage/
+
+# Local data and tooling
+*.log
+.DS_Store
+.vscode/*
+!.vscode/extensions.json
+docker-data/

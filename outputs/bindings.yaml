@@ -8,6 +8,7 @@ system_resolvers:
   premortem_table: "table of applicable failure modes with owner, status, and revisit trigger (see specs/failure-mode-format.md)"
   secret_scan_step: "a CI step that runs the secret scanner pinned in tool-versions, or a comment explaining why it is absent"
   resolve_action_sha: "look up the full commit hash of an action's release tag via the GitHub API, show the date, and write the hash with the tag as a comment"
+  lookup_report: "a table of resolved pins, official sources, verification dates, and live or dated-pack provenance"
 placeholders:
   project_name: {from: question, id: product.name}
   project_slug: {from: system, resolver: slugify, of: product.name}
@@ -50,10 +51,13 @@ placeholders:
   generated_on: {from: system, resolver: today}
   premortem_table: {from: system, resolver: premortem_table}
   secret_scan_step: {from: system, resolver: secret_scan_step}
+  lookup_report: {from: system, resolver: lookup_report}
   action_sha_checkout: {from: system, resolver: resolve_action_sha, args: [actions/checkout]}
   action_sha_setup_node: {from: system, resolver: resolve_action_sha, args: [actions/setup-node]}
   node_major: {from: pack, pack: tool-versions, field: node.recommended_major}
+  node_version: {from: pack, pack: tool-versions, field: node.recommended_version}
   postgres_image_tag: {from: pack, pack: tool-versions, field: postgres.image_tag}
+  postgres_data_directory: {from: pack, pack: tool-versions, field: postgres.volume_target}
   redis_image_tag: {from: pack, pack: tool-versions, field: redis_or_valkey.image_tag}
   gitleaks_rev: {from: pack, pack: tool-versions, field: gitleaks.rev}
 on_missing: "If a bound answer is missing, the renderer asks for it. It never writes a guess, and it never leaves a {{placeholder}} in a generated file."

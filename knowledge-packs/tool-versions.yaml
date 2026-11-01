@@ -1,23 +1,45 @@
 schema: knowledge-pack/v1
 id: tool-versions
 title: Runtime and tool versions used by generated files
-last_verified: 2026-10-31
+last_verified: 2026-11-01
 max_age_days: 14
 volatile: true
-verified_via: search of Node.js release-schedule coverage and the Node.js announcement of the new release model; other values deliberately left empty
+verified_via: "Generation pins checked against official Node release metadata, Docker Official Images publication manifests, and official GitHub release commit links on 2026-11-01. Lifecycle prose below remains secondary-source research and is not used for generation."
 facts:
   - "Node.js 26 entered Active LTS on 2026-10-28 and is supported to April 2029. Node.js 24 is in maintenance LTS, supported to 2028-04-30. Node.js 22 reaches end of life on 2027-04-30. Node.js 20 and 25 no longer receive patches."
   - "From Node.js 27 the project ships one major release a year (April), promotes it to LTS in October, and every release becomes LTS. Version numbers follow the calendar year."
   - "Pin base container images to a major line, never to latest, so a rebuild cannot silently jump a major version."
   - "Pin CI actions to full commit hashes, not version tags. Tags can be moved after an account compromise."
 values:
-  node: {recommended_major: 26, previous_lts_major: 24, minimum_supported_major: 24}
-  postgres: {image_tag: null, note: "Look up the current supported major at scaffold time from the official release page."}
-  redis_or_valkey: {image_tag: null, note: "Look up at scaffold time; check licence terms before choosing."}
-  gitleaks: {rev: null, note: "Resolve the latest release tag at scaffold time and pin it."}
-resolution_policy: "The CLI fills null values by querying the official registry or release page when generating files, shows the lookup date, and refuses to generate files with unresolved values unless the user accepts a floating default and the choice is logged."
+  node: {recommended_major: 26, recommended_version: 26.13.0, previous_lts_major: 24, minimum_supported_major: 24}
+  postgres: {image_tag: '18.6', volume_target: /var/lib/postgresql, note: "Official image manifest publishes 18.6; 19rc1 is excluded. PostgreSQL 18+ mounts /var/lib/postgresql."}
+  redis_or_valkey: {image_tag: '8.10.3', note: "Redis is the existing template choice, not Valkey. Review the official licence terms before adoption.", licence_source: 'https://redis.io/legal/licenses/'}
+  gitleaks: {rev: 83d9cd684c87d95d656c1458ef04895a7f1cbd8e, tag: v8.30.1}
+  actions:
+    checkout: {sha: 3d3c42e5aac5ba805825da76410c181273ba90b1, tag: v7.0.1}
+    setup_node: {sha: 949feb2413d6458794dcd2491c4babbbce0c15c1, tag: v7.1.0}
+lookups:
+  node: {kind: node, url: 'https://nodejs.org/dist/index.json', field: node.recommended_version, verified_on: '2026-11-01'}
+  postgres: {kind: image, url: 'https://raw.githubusercontent.com/docker-library/official-images/master/library/postgres', field: postgres.image_tag, verified_on: '2026-11-01'}
+  redis: {kind: image, url: 'https://raw.githubusercontent.com/docker-library/official-images/master/library/redis', field: redis_or_valkey.image_tag, verified_on: '2026-11-01'}
+  gitleaks: {kind: github, repository: gitleaks/gitleaks, url: 'https://api.github.com/repos/gitleaks/gitleaks/releases/latest', field: gitleaks.rev, tag: v8.30.1, verified_on: '2026-11-01'}
+  actions/checkout: {kind: github, repository: actions/checkout, url: 'https://api.github.com/repos/actions/checkout/releases/latest', field: actions.checkout.sha, tag: v7.0.1, verified_on: '2026-11-01'}
+  actions/setup-node: {kind: github, repository: actions/setup-node, url: 'https://api.github.com/repos/actions/setup-node/releases/latest', field: actions.setup_node.sha, tag: v7.1.0, verified_on: '2026-11-01'}
+resolution_policy: "Resolve pins from official metadata at generation time. If networking is unavailable, a non-stale dated pin may be used with a visible fallback warning. Reject malformed responses, stale or missing pins, prereleases, and floating defaults. Always record provenance."
 affects_questions: [res.runtime_support, sec.dependencies]
 sources:
+  - https://nodejs.org/dist/index.json
+  - https://raw.githubusercontent.com/docker-library/official-images/master/library/postgres
+  - https://raw.githubusercontent.com/docker-library/official-images/master/library/redis
+  - https://hub.docker.com/_/postgres
+  - https://hub.docker.com/_/redis
+  - https://github.com/actions/checkout/releases/tag/v7.0.1
+  - https://github.com/actions/checkout/commit/3d3c42e5aac5ba805825da76410c181273ba90b1
+  - https://github.com/actions/setup-node/releases/tag/v7.1.0
+  - https://github.com/actions/setup-node/commit/949feb2413d6458794dcd2491c4babbbce0c15c1
+  - https://github.com/gitleaks/gitleaks/releases/tag/v8.30.1
+  - https://github.com/gitleaks/gitleaks/commit/83d9cd684c87d95d656c1458ef04895a7f1cbd8e
+  - https://pre-commit.com/#pre-commit-configyaml---repos
   - https://fireup.pro/news/nodejs-26-lts-whats-new-upgrade
   - https://ecorpit.com/nodejs-development-company/
   - https://dev.to/mr_manushukla/one-nodejs-release-a-year-from-2027-what-the-node-27-lts-change-means-for-your-upgrade-cadence-2fo3

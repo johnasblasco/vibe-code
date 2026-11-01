@@ -1,0 +1,8 @@
+schema: security-scenarios/v1
+failure_mode: AI-01
+unapproved_urls:
+  - https://untrusted.invalid/metadata
+  - https://api.github.com/repos/unapproved/project/releases/latest
+  - https://nodejs.org@untrusted.invalid/dist/index.json
+  - http://nodejs.org/dist/index.json
+  - https://nodejs.org/dist/index.json?destination=other

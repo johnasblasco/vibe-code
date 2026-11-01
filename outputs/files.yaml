@@ -1,0 +1,20 @@
+schema: outputs/v1
+files:
+  - {id: agents, source: templates/project/AGENTS.md.tmpl, path: AGENTS.md, format: markdown, when: otherwise}
+  - {id: claude, source: templates/project/AGENTS.md.tmpl, path: CLAUDE.md, format: markdown, when: otherwise}
+  - {id: constitution, source: templates/project/constitution.md.tmpl, path: .specify/memory/constitution.md, format: markdown, when: otherwise}
+  - {id: gitignore, source: templates/project/.gitignore.tmpl, path: .gitignore, format: text, when: otherwise}
+  - {id: env-example, source: templates/project/.env.example.tmpl, path: .env.example, format: env, when: "data.engine == 'postgres'"}
+  - {id: precommit, source: templates/project/.pre-commit-config.yaml.tmpl, path: .pre-commit-config.yaml, format: yaml, when: otherwise}
+  - {id: ci, source: templates/project/.github/workflows/ci.yml.tmpl, path: .github/workflows/ci.yml, format: yaml, when: otherwise}
+  - {id: compose, source: templates/project/docker-compose.yml.tmpl, path: docker-compose.yml, format: yaml, when: "data.engine == 'postgres'"}
+  - {id: cache-compose, source: templates/project/docker-compose.cache.yml.tmpl, path: docker-compose.cache.yml, format: yaml, when: "data.cache == 'redis'"}
+  - {id: security, source: templates/project/SECURITY.md.tmpl, path: SECURITY.md, format: markdown, when: otherwise}
+  - {id: threat-model, source: templates/project/docs/threat-model.md.tmpl, path: docs/threat-model.md, format: markdown, when: otherwise}
+  - {id: risk-register, source: templates/project/docs/risk-register.md.tmpl, path: docs/risk-register.md, format: markdown, when: otherwise}
+  - {id: decision-template, source: templates/project/docs/decisions/0000-template.md, path: docs/decisions/0000-template.md, format: markdown, when: otherwise}
+  - {id: deploy-skill, source: skills/project-templates/deploy-checklist/SKILL.md, path: .claude/skills/deploy-checklist/SKILL.md, format: markdown, when: otherwise}
+  - {id: database-skill, source: skills/project-templates/db-migration-rules/SKILL.md, path: .claude/skills/db-migration-rules/SKILL.md, format: markdown, when: "data.engine in ['postgres', 'mysql', 'sqlite', 'mongodb', 'other']"}
+  - {id: hardware-readme, source: templates/hardware/docs-hardware-README.md.tmpl, path: docs/hardware/README.md, format: markdown, when: "physical or radio or harm_possible in ['serious_injury', 'death']"}
+  - {id: hardware-skill, source: skills/project-templates/hardware-facts/SKILL.md, path: .claude/skills/hardware-facts/SKILL.md, format: markdown, when: "physical or radio or harm_possible in ['serious_injury', 'death']"}
+  - {id: generation-record, source: templates/project/docs/decisions/0001-scaffolder-generation.md.tmpl, path: docs/decisions/0001-scaffolder-generation.md, format: markdown, when: otherwise, always: true}

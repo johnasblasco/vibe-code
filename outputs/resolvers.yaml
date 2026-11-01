@@ -1,0 +1,8 @@
+schema: output-resolvers/v1
+secret_scan_step: "      # Secret scanning is not installed or verified by this generator. Review the pinned .pre-commit-config.yaml and add a verified CI runner before using real credentials."
+lookup_header: "| Pin | Value | Release | Source | Verified on | Mode |"
+lookup_separator: "|---|---|---|---|---|---|"
+pack_warning: "Dated pack fallback was used. These values were not looked up live during this generation. Review the source and verification dates before use."
+live_note: "Pins were resolved from the listed official metadata during generation."
+no_pins: "No tool or action pins were needed for the selected files."
+licence_note: "Redis is generated only when selected. Review its licence terms at https://redis.io/legal/licenses/ before adoption."

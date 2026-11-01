@@ -1,0 +1,18 @@
+schema: generation-ui/v1
+preview: Preview only. No project files have been written.
+file_header: "--- File: {path} ---"
+confirm: Review the files above. Type generate to write them, or enter anything else to leave the project unchanged.
+confirm_word: generate
+contact: Which monitored email address or HTTPS reporting URL should SECURITY.md use? Never enter credentials.
+invalid_contact: Enter a reporting email address or HTTPS URL without credentials or private query parameters.
+missing: Generation needs current concrete answers for these question IDs. Complete them in an interactive terminal.
+contact_missing: A reporting contact is required. Supply it interactively or use --contact with a reporting email or HTTPS URL.
+concrete: Generation needs a concrete answer. Deferred, not applicable, pick-for-me, and auto-detect values cannot fill a file.
+written: Created the previewed files. No packages or hooks were installed and no project commands were run.
+declined: No project files were written.
+cancelled: Generation cancelled. Accepted question answers remain saved; no project files were written before confirmation.
+pack_warning: Dated pack pins were used. Review their verification dates and sources in the generation record; these were not live lookups.
+no_pins: No tool or action pins were needed for the selected files.
+error: Generation stopped. Check the required answers, bindings, templates, paths, permissions, and existing files. Existing files are never overwritten.
+lookup_error: An official lookup or dated fallback pin could not be validated. No unresolved version or hash will be generated.
+partial: Some files were already created before an IO failure. Review these files before retrying; they were not overwritten or removed.

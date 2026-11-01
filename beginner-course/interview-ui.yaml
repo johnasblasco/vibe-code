@@ -44,3 +44,10 @@ risk_written: Created docs/risk-register.md. Review open rows and assign owners 
 risk_error: Unable to create the register. Check required answers, bindings, directory permissions, and whether docs/risk-register.md already exists. Existing reports are never overwritten.
 gate_error: Unable to check this gate. Check that the gate applies and that explicit deferrals have an owner, reason, and revisit trigger.
 invalid_top: Choose a positive whole number of risks.
+generate: Preview or explicitly write files from the output manifest and bindings
+file_option: Select an applicable output ID; repeat to select more files
+offline_option: Use dated verified pack pins without making network requests
+write_option: Request writing after preview and typed confirmation in an interactive terminal
+contact_option: Reporting email or HTTPS URL for SECURITY.md; never enter credentials
+generation_project_option: Existing target directory for generated project files
+generation_dry_run_option: Preview generated project files without publishing them

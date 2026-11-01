@@ -21,9 +21,9 @@ jobs:
           fetch-depth: 0
       - uses: actions/setup-node@{{action_sha_setup_node}}
         with:
-          node-version: {{node_major}}
+          node-version: {{node_version}} # Node {{node_major}} LTS line
           cache: npm
-      - run: npm ci
+      - run: npm ci --ignore-scripts
       - run: npm run lint
       - run: npm run typecheck
       - run: npm test

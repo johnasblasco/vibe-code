@@ -10,16 +10,11 @@ services:
     ports:
       - "127.0.0.1:5432:5432"
     volumes:
-      - ./docker-data/postgres:/var/lib/postgresql/data
+      - ./docker-data/postgres:{{postgres_data_directory}}
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      test: ["CMD", "pg_isready", "-U", "${POSTGRES_USER}", "-d", "${POSTGRES_DB}"]
       interval: 5s
       timeout: 3s
       retries: 10
 
-  # Add only when redis-decision.yaml says you need it. Keep it private and password protected.
-  # cache:
-  #   image: redis:{{redis_image_tag}}
-  #   command: ["redis-server", "--requirepass", "${REDIS_PASSWORD}"]
-  #   ports:
-  #     - "127.0.0.1:6379:6379"
+  # An explicitly selected Redis cache is generated separately in docker-compose.cache.yml.

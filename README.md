@@ -56,7 +56,11 @@ mkdir -p .claude/skills && cp -r skills/{scaffolder-builder,question-bank-author
 
 The repository root has an ESM TypeScript project with YAML loading, expression evaluation,
 and a decision engine tested against the nine acceptance personas. State persistence and resume
-are implemented; the interview is not built yet.
+and the idea-stage interview are implemented.
+Run `npm run build`, then `npm run scaffold -- init` to start or resume it.
+Use `npm run scaffold -- next` to resume; Ctrl+C preserves accepted answers.
+The state file defaults to `.scaffolder/state.json`, which is ignored by Git.
+See [the interview guide](specs/005-idea-interview/quickstart.md) for limits and verification.
 Run `npm run lint`, `npm run typecheck`, `npm test`, and `npm run test:tooling`.
 In Windows PowerShell use `npm.cmd` if execution policy blocks `npm.ps1`.
 See [the skeleton validation guide](specs/001-project-skeleton/quickstart.md) for approved
@@ -71,7 +75,8 @@ bank-version metadata, persistence checks, and limitations.
 ## Kit validation status and limits
 
 Read `docs/05-gap-analysis.md` first. In short:
-- This kit is data, specs, tests, and reference tools. The CLI engine is not built.
+- The TypeScript CLI supports the idea interview, routing, and state/resume. Later stages,
+  gate verification, project file generation, and doctor are not implemented yet.
 - The checks pass: validator (strict), 9 of 9 scenarios, expression tests. Passing means the kit is consistent and every checklist tag has a question. It does not mean the questions are complete or correct.
 - 61 failure modes are catalogued; 27 cite a source, 34 are engineering practice awaiting a citation.
 - The coverage backbone is only partly verified: OWASP ASVS 5.0 chapter names, OWASP Top 10:2025 category names, and ETSI EN 303 645 provision names were written from memory.

@@ -10,5 +10,12 @@ deferred, and not-applicable records are not re-asked. Current profile/default p
 shown together. Selected proposals are saved individually; unselected ones require explicit edits.
 If edits change applicability, only currently pending questions remain in the action queue.
 
-The core makes no terminal or process calls. The Clack adapter and Commander exit-code contract
-remain pending package approval and implementation; no terminal Ctrl+C guarantee is claimed yet.
+The core makes no terminal or process calls. The Clack adapter maps cancellation at every prompt
+and passes an AbortSignal to Clack. Free-text answers and deferral metadata are masked. Commander
+exposes init/next and --state; init resumes existing state without resetting it, next requires
+an existing state, and interactive commands reject non-TTY input. Help works without a TTY.
+The default state directory is created only for init; explicitly selected parents must exist.
+
+Named exit codes: SUCCESS 0, ERROR 1, USAGE 2, BLOCKED 3, STOP 4, CANCELLED 130.
+The SIGINT listener is removed in finally; saves are awaited rather than aborted by process.exit.
+Diagnostics never echo invalid answers, unknown arguments, or raw IO exceptions.

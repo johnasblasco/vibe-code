@@ -5,6 +5,7 @@ coverage/
 .tooling-build/
 .npm-cache/
 .venv/
+.scaffolder/
 __pycache__/
 *.pyc
 *.log

@@ -1,0 +1,35 @@
+schema: interview-ui/v1
+title: Scaffolder idea interview
+help: Show command help
+usage: Usage
+options: Options
+commands: Commands
+init: Start or resume the idea interview
+next: Resume the saved idea interview
+state_option: Path to the local state file
+state: How would you like to record this answer?
+answered: Answer now
+deferred: Defer with an owner and revisit trigger
+not_applicable: Not applicable, with a reason
+yes: Yes
+no: No
+owner: Who owns this deferred answer?
+revisit: When or after what event should it be revisited?
+reason: Why does this question not apply?
+masked: Text input is hidden to prevent accidental disclosure. Enter project information only; never enter credentials.
+why: Why this matters
+required: Enter a nonempty answer.
+number: Enter a finite number.
+invalid: The answer was not accepted. Check its type and allowed values, and remove any credentials.
+review: Keep selected recommendations; deselect any you want to answer individually. Space toggles; Enter confirms.
+source: Source
+verified: Verified
+bank_change: The question bank or knowledge packs changed. Affected questions need review; saved progress does not verify gates.
+cancelled: Interview cancelled. Previously accepted answers are saved. Run next to resume.
+completed: Idea interview complete. Later stages and gate checks are not available yet.
+blocked: Resolve the displayed blocking contradictions before proceeding.
+stop: Interview stopped. Follow the displayed expert guidance before proceeding.
+terminal_required: An interactive terminal is required for the interview. Use --help to view commands.
+missing_state: No saved interview was found. Run init first.
+error: Unable to continue. Check the kit, state file, directory permissions, and selected stage. Existing answers were not reset.
+usage_error: Invalid command or option. Use --help to view supported commands.

@@ -1,6 +1,6 @@
 # Idea-Stage Interview
 
-Created: 2026-11-01. Status: in progress.
+Created: 2026-11-01. Status: implemented.
 
 US1 (P1): A beginner answers visible router flags and idea-stage questions through Clack prompts.
 No plan/build/hardware-design questions are asked early. Recompute applicability after each answer.

@@ -1,6 +1,6 @@
 {
   "name": "@johnasblasco/vibecode",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Guided project setup and safe project files for beginners",
   "author": "johnasblasco",
   "repository": { "type": "git", "url": "git+https://github.com/johnasblasco/vibe-code.git" },

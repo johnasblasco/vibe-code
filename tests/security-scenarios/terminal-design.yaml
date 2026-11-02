@@ -4,7 +4,7 @@ failure_modes: [SW-32]
 checks:
   - fresh_and_resumed_welcome
   - narrow_terminal_wordmark
-  - one_privacy_notice_and_masked_text
+  - visible_project_text_without_privacy_notice
   - readable_values_with_provenance
   - cancellation_is_not_completion
   - cli_lifecycle_preserves_exit_codes

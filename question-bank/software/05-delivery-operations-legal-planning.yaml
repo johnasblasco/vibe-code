@@ -36,7 +36,7 @@ modules:
       - {id: legal.licenses, ask: "Which licence will your code use, and have you checked your dependencies' licences?", type: text, covers: [regulatory:licensing]}
       - {id: legal.accessibility_law, ask: "Do accessibility laws apply where you operate?", type: single_select, options: [yes, no, not_sure], covers: [regulatory:accessibility]}
   - module: ai-collaboration
-    stage: idea
+    stage: plan
     phase: 15
     questions:
       - {id: aic.autonomy, ask: "What may the AI do without asking?", type: multi_select, options: [edit_code, install_packages, change_database_schema, delete_files, run_migrations, deploy], default: [edit_code], covers: [project:ai-collaboration]}

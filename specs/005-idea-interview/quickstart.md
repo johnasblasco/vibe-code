@@ -14,7 +14,9 @@ npm.cmd run vibecode -- next
 On macOS/Linux, use npm in place of npm.cmd. Run interview commands in an interactive terminal.
 Answers are saved after validation to .scaffolder/state.json, ignored by Git. An existing file
 is resumed, never reset. Use --state with an existing parent directory to choose another path.
-Do not enter credentials. Text is masked; a rejected value is not echoed. Defer requires an
+Project text is visible as typed; rejected values are not saved or repeated in diagnostics.
+See the [current direct interview guide](../014-direct-project-interview/quickstart.md).
+Defer requires an
 owner and revisit trigger; not applicable requires a reason. Concrete proposed defaults appear
 together; deselect any to answer individually. No proposal is accepted before confirmation.
 

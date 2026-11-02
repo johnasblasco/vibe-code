@@ -1,7 +1,7 @@
 schema: question-bank/v1
 modules:
   - module: validation
-    stage: idea
+    stage: plan
     phase: 0.5
     questions:
       - {id: val.riskiest_assumption, ask: "What is the single belief that, if wrong, makes this project pointless?", type: text, why: "Build the cheapest test of that belief first. Most failed projects built the wrong thing well.", covers: [project:validation, arc42:risks-technical-debt]}

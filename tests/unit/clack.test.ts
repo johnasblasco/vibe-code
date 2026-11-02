@@ -7,7 +7,7 @@ import { createClackPort } from '../../src/interview/clack.js';
 
 vi.mock('@clack/prompts', async (original) => ({
   ...await original<typeof import('@clack/prompts')>(),
-  select: vi.fn(), password: vi.fn(), multiselect: vi.fn(), note: vi.fn(),
+  select: vi.fn(), text: vi.fn(), multiselect: vi.fn(), note: vi.fn(),
   log: { warn: vi.fn(), info: vi.fn(), step: vi.fn(), message: vi.fn() },
 }));
 const kit = await loadKit(fileURLToPath(new URL('../../', import.meta.url)));
@@ -17,7 +17,7 @@ test('maps cancellation at the state selector and value prompt', async () => {
   vi.mocked(clack.select).mockResolvedValueOnce(clack.CANCEL_SYMBOL);
   expect(await makePort().ask({ id: 'test', ask: 'Question', type: 'text' })).toBe(CANCELLED);
   vi.mocked(clack.select).mockResolvedValueOnce('answered');
-  vi.mocked(clack.password).mockResolvedValueOnce(clack.CANCEL_SYMBOL);
+  vi.mocked(clack.text).mockResolvedValueOnce(clack.CANCEL_SYMBOL);
   expect(await makePort().ask({ id: 'test', ask: 'Question', type: 'text' })).toBe(CANCELLED);
 });
 
@@ -25,7 +25,7 @@ test('cancellation in either deferral field never returns a partial answer', asy
   const cases: (string | typeof clack.CANCEL_SYMBOL)[][] = [[clack.CANCEL_SYMBOL], ['Owner', clack.CANCEL_SYMBOL]];
   for (const replies of cases) {
     vi.mocked(clack.select).mockResolvedValueOnce('deferred');
-    for (const reply of replies) vi.mocked(clack.password).mockResolvedValueOnce(reply);
+    for (const reply of replies) vi.mocked(clack.text).mockResolvedValueOnce(reply);
     expect(await makePort().ask({ id: 'test', ask: 'Question', type: 'text' })).toBe(CANCELLED);
   }
 });
@@ -67,9 +67,9 @@ test('direct boolean answers use one menu while retaining explicit defer actions
 test('direct text has no state menu; an explicit defer command still collects its metadata', async () => {
   const before = vi.mocked(clack.select).mock.calls.length;
   const port = createClackPort(kit, new AbortController().signal, { directAnswers: true });
-  vi.mocked(clack.password).mockResolvedValueOnce('Small project');
+  vi.mocked(clack.text).mockResolvedValueOnce('Small project');
   expect(await port.ask({ ask: 'Describe it', type: 'text' })).toEqual({ state: 'answered', value: 'Small project' });
-  vi.mocked(clack.password).mockResolvedValueOnce('/defer').mockResolvedValueOnce('Owner').mockResolvedValueOnce('Before planning');
+  vi.mocked(clack.text).mockResolvedValueOnce('/defer').mockResolvedValueOnce('Owner').mockResolvedValueOnce('Before planning');
   expect(await port.ask({ ask: 'Describe it', type: 'text' })).toEqual({ state: 'deferred', owner: 'Owner', revisit_when: 'Before planning' });
   expect(vi.mocked(clack.select).mock.calls.length).toBe(before);
 });

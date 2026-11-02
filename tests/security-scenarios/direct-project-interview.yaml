@@ -1,0 +1,13 @@
+schema: security-scenario/v1
+id: direct-project-interview
+failure_modes: [SW-32]
+opening: [product.name, product.summary, product.platform, product.audience, features.core]
+max_software_prompts: 7
+checks:
+  - visible_project_text
+  - no_privacy_notice_or_why_paragraphs
+  - no_universal_accident_question
+  - ai_policy_and_business_validation_at_plan_stage
+  - high_risk_hardware_and_ai_still_stop
+  - saved_harm_answers_are_not_erased
+test: tests/unit/direct-project-interview.test.ts

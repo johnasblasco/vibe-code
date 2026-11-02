@@ -41,5 +41,7 @@ The compiled command was exercised in a real PowerShell PTY: select Answer now, 
 for user_accounts, then Ctrl+C at physical. The shell reported CLI_EXIT=130. The JSON contained
 answered false and current_question physical. A second next invocation began at physical,
 and Ctrl+C again returned 130. Non-TTY init returned 1 and did not create a default state file.
-Free text uses Clack's masked password primitive; the prompt warns never to enter credentials.
+That original implementation used Clack's masked password primitive with a warning. The user's
+later [direct interview requirement](../014-direct-project-interview/spec.md) supersedes it:
+ordinary project text is visible and that warning is removed.
 This verifies local terminal behavior, not screen-reader usability or hosted CI execution.

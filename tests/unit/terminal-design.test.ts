@@ -12,7 +12,7 @@ import { EXIT, runCli } from '../../src/cli/program.js';
 
 vi.mock('@clack/prompts', async (original) => ({
   ...await original<typeof import('@clack/prompts')>(),
-  intro: vi.fn(), outro: vi.fn(), select: vi.fn(), password: vi.fn(), multiselect: vi.fn(), note: vi.fn(),
+  intro: vi.fn(), outro: vi.fn(), select: vi.fn(), text: vi.fn(), multiselect: vi.fn(), note: vi.fn(),
   updateSettings: vi.fn(), log: { message: vi.fn(), info: vi.fn(), step: vi.fn(), warn: vi.fn() },
 }));
 const root = fileURLToPath(new URL('../../', import.meta.url));
@@ -42,20 +42,20 @@ test('banner comes from YAML and falls back to a compact wordmark in narrow term
   expect(banner(modified, 90)).toBe('CUSTOM BANNER');
 });
 
-test('questions use section headings, stable prompt numbers, concise help and one privacy notice', async () => {
+test('questions use section headings, stable numbers and visible text without privacy notices', async () => {
   const port = make(); port.start?.({ resuming: false });
   for (const [id, ask] of [['product.name', 'Name?'], ['product.summary', 'Description?']]) {
-    vi.mocked(clack.password).mockResolvedValueOnce('Safe project information');
+    vi.mocked(clack.text).mockResolvedValueOnce('Safe project information');
     await port.ask({ id, ask, why: 'Helpful explanation.', type: 'text' });
   }
   expect(clack.note).not.toHaveBeenCalled();
   expect(vi.mocked(clack.log.step).mock.calls).toHaveLength(1);
   expect(vi.mocked(clack.log.step).mock.calls[0]?.[0]).toContain('Your project');
-  const messages = vi.mocked(clack.password).mock.calls.map(([options]) => options.message);
+  const messages = vi.mocked(clack.text).mock.calls.map(([options]) => options.message);
   expect(messages[0]).toContain('1. Name?'); expect(messages[1]).toContain('2. Description?');
   const privacy = vi.mocked(clack.log.info).mock.calls.filter(([message]) => message.includes('never enter credentials'));
-  expect(privacy).toHaveLength(1);
-  expect(vi.mocked(clack.password).mock.calls.every(([options]) => options.mask === '*')).toBe(true);
+  expect(privacy).toHaveLength(0);
+  for (const [options] of vi.mocked(clack.text).mock.calls) expect(options).not.toHaveProperty('mask');
 });
 
 test('default review uses friendly values while keeping reasons, sources and verification dates', async () => {
@@ -80,16 +80,16 @@ test('review uses brief YAML labels and describes built-in defaults without empt
 });
 
 test('text prompts keep action hints outside their primary line so Clack guide bars align', async () => {
-  vi.mocked(clack.password).mockResolvedValueOnce('Demo');
+  vi.mocked(clack.text).mockResolvedValueOnce('Demo');
   await make().ask({ id: 'product.name', ask: 'Name?', type: 'text' });
-  expect(vi.mocked(clack.password).mock.calls[0]?.[0].message).not.toContain('\n');
+  expect(vi.mocked(clack.text).mock.calls[0]?.[0].message).not.toContain('\n');
   expect(JSON.stringify(vi.mocked(clack.log.message).mock.calls)).toContain('/defer');
 });
 
 test('long question continuations retain a guide instead of wrapping into an unlabelled line', async () => {
-  vi.mocked(clack.password).mockResolvedValueOnce('Demo');
+  vi.mocked(clack.text).mockResolvedValueOnce('Demo');
   await make().ask({ id: 'sample', ask: 'A question with context that needs several lines in a normal terminal. '.repeat(3), type: 'text' });
-  expect(vi.mocked(clack.password).mock.calls[0]?.[0].message).toContain(`\n${clack.S_BAR}  `);
+  expect(vi.mocked(clack.text).mock.calls[0]?.[0].message).toContain(`\n${clack.S_BAR}  `);
 });
 
 test('completion shows next commands; cancellation never claims completion', () => {

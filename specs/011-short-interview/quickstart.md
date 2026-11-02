@@ -1,5 +1,9 @@
 # Shorter Opening Interview
 
+This records the first shorter-interview iteration. The user's subsequent
+[direct interview update](../014-direct-project-interview/quickstart.md) adds audience/features
+to the opening, removes explanatory paragraphs and makes harm routing conditional.
+
 From the repository root:
 
 ```powershell
@@ -12,7 +16,8 @@ The first three questions are project name, description and project type. Sign-i
 optional choice in one capability checklist, rather than a separate first question. A second
 hardware checklist appears only when hardware applies. The harm question and safety stops remain.
 
-Ordinary text/number/yes-no/single-choice questions need one answer screen. Text is masked and
+Ordinary text/number/yes-no/single-choice questions need one answer screen. The later
+[direct interview update](../014-direct-project-interview/quickstart.md) makes text visible and
 secret-checked. Type /defer or /na to explicitly collect the required metadata; select the same
 actions from ordinary choice menus. The capability checklist explicitly states that unchecked
 features mean No; flags are saved only after confirmation. Cancelled or invalid selections

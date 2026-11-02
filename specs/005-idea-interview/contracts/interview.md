@@ -11,7 +11,9 @@ shown together. Selected proposals are saved individually; unselected ones requi
 If edits change applicability, only currently pending questions remain in the action queue.
 
 The core makes no terminal or process calls. The Clack adapter maps cancellation at every prompt
-and passes an AbortSignal to Clack. Free-text answers and deferral metadata are masked. Commander
+and passes an AbortSignal to Clack. Free-text answers and deferral metadata are visible, per
+the user's revised [direct interview requirement](../../014-direct-project-interview/spec.md).
+Credential-shaped values remain rejected with generic diagnostics. Commander
 exposes init/next and --state; init resumes existing state without resetting it, next requires
 an existing state, and interactive commands reject non-TTY input. Help works without a TTY.
 The default state directory is created only for init; explicitly selected parents must exist.

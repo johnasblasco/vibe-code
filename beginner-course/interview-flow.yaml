@@ -1,8 +1,8 @@
 schema: interview-flow/v1
-opening: [product.name, product.summary, product.platform]
+opening: [product.name, product.summary, product.platform, product.audience, features.core]
 sections:
   - label: Your project
-    questions: [product.name, product.summary, product.platform]
+    questions: [product.name, product.summary, product.platform, product.audience, features.core]
   - label: What it needs
     questions: [interview.capabilities, interview.hardware]
 review_labels:
@@ -16,7 +16,7 @@ review_labels:
   aic.production_guard: Keep production off limits
 groups:
   - id: interview.capabilities
-    ask: Which of these does your first version actually need?
+    ask: Any of these features?
     why: "Select only what applies. Leave everything unselected for a simple project. Unselected means No; you can add features later. Accounts add sign-in and access-control guidance."
     flags:
       - {id: user_accounts, label: People sign in to accounts}

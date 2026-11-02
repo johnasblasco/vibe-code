@@ -8,7 +8,7 @@ flags:
   - {id: battery, ask: "Does it run on a battery?", type: boolean, ask_when: "physical", covers: [hardware:power]}
   - {id: mains, ask: "Does it connect to mains power (wall voltage)?", type: boolean, ask_when: "physical", covers: [hardware:power]}
   - {id: actuator, ask: "Does it move or switch something (pump, motor, heater, relay, lock)?", type: boolean, ask_when: "physical", covers: [safety:hazard-analysis]}
-  - {id: harm_possible, ask: "If it fails or is misused, could someone be hurt?", type: single_select, options: [none, property_damage, minor_injury, serious_injury, death], covers: [iso25010:safety, safety:hazard-analysis]}
+  - {id: harm_possible, ask: "Could a failure cause physical harm?", type: single_select, ask_when: "physical or radio or mains or actuator or ai_decisions or product.platform == 'hardware_device'", options: [none, property_damage, minor_injury, serious_injury, death], option_labels: {none: No physical harm, property_damage: Property damage, minor_injury: Minor injury, serious_injury: Serious injury, death: Risk to life}, covers: [iso25010:safety, safety:hazard-analysis]}
   - {id: sensitive_data, ask: "Does it handle personal, children, health, or financial data?", type: boolean, covers: [regulatory:privacy]}
   - {id: money, ask: "Will it take payments or hold balances?", type: boolean, covers: [project:payments]}
   - {id: ai_decisions, ask: "Will an AI model make decisions or take actions for users?", type: boolean, covers: [ai-risk:excessive-agency]}

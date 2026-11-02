@@ -10,7 +10,7 @@ banner: |2-
 tagline: From idea to a clear next step.
 welcome: Let's shape your project. Start simple; you can decide more later.
 welcome_back: Welcome back. Let's continue where you left off.
-session_help: Your answers save as you go. Ctrl+C pauses; vibecode next resumes.
+session_help: Enter to continue. /defer for later. Ctrl+C to pause.
 section_details: A little more detail
 section_review: Recommended defaults
 question_progress: '{number}. {question}'
@@ -44,12 +44,11 @@ reason: Why does this question not apply?
 defer_command: /defer
 na_command: /na
 direct_hint: '/defer = decide later; /na = does not apply'
-masked: Text stays hidden for privacy; never enter credentials. Menus show your available choices.
 why: Why this matters
 required: Enter a nonempty answer.
 number: Enter a finite number.
 invalid: The answer was not accepted. Check its type and allowed values, and remove any credentials.
-review: Which recommendations would you like to keep?
+review: Keep these defaults?
 source: Source
 source_question: Built-in default
 verified: Verified

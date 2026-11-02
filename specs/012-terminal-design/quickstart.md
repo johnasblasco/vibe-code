@@ -1,5 +1,10 @@
 # Modern terminal interview
 
+Historical verification of the first terminal redesign. The user subsequently requested visible
+typing, fewer questions and no privacy notice; see the current
+[direct interview guide](../014-direct-project-interview/quickstart.md). The masked-input
+description and observed test counts below refer to that earlier version.
+
 From the repository root in PowerShell:
 
 ```powershell

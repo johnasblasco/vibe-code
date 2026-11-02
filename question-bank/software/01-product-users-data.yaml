@@ -4,20 +4,19 @@ modules:
     stage: idea
     phase: 1
     questions:
-      - {id: product.name, ask: "What is the project called?", type: text, why: "Used in file names, docs, and the instructions your AI reads.", covers: [arc42:introduction-goals]}
+      - {id: product.name, ask: "Project name?", type: text, why: "Used in file names, docs, and the instructions your AI reads.", covers: [arc42:introduction-goals]}
       - id: product.platform
-        ask: What kind of project is it?
+        ask: What type of project?
         type: single_select
         options: [web_app, mobile_app, api_only, cli, browser_extension, desktop_app, game, ai_app, data_pipeline, library, hardware_device]
         option_labels: {web_app: Website or web app, mobile_app: Mobile app, api_only: API or backend, cli: Command-line tool, browser_extension: Browser extension, desktop_app: Desktop app, game: Game, ai_app: AI application, data_pipeline: Data pipeline, library: Reusable library, hardware_device: Hardware or connected device}
         why: This decides which questions come next.
         covers: [arc42:context-scope]
-      - {id: product.summary, ask: "Describe it in one or two sentences.", type: text, why: "The AI reads this every session so it never forgets the goal.", covers: [arc42:introduction-goals]}
-      - {id: product.audience, ask: "Who is it for, and what problem does it solve for them?", type: text, covers: [arc42:introduction-goals]}
-      - {id: product.maturity, ask: "Is this a prototype, an MVP, or a long-term product?", type: single_select, options: [prototype, mvp, long_term], default: mvp, covers: [arc42:constraints]}
-      - {id: product.team, ask: "Who is building it, and how experienced are they?", type: single_select, options: [solo_beginner, solo_experienced, small_team, larger_team], covers: [arc42:constraints, beginner-ops:skill-level]}
-      - {id: product.out_of_scope, ask: "What is explicitly NOT part of version 1?", type: text, why: "A written 'no' list stops the AI from adding features you did not ask for.", covers: [arc42:introduction-goals]}
-      - {id: product.depth, ask: "How thorough should setup be?", type: single_select, options: [quick, standard, full], default: standard, covers: [arc42:solution-strategy]}
+      - {id: product.summary, ask: "What do you want to build?", type: text, why: "The AI reads this every session so it never forgets the goal.", covers: [arc42:introduction-goals]}
+      - {id: product.audience, ask: "Who will use it?", type: text, covers: [arc42:introduction-goals]}
+      - {id: product.maturity, ask: "What stage is the project?", type: single_select, options: [prototype, mvp, long_term], option_labels: {prototype: Prototype, mvp: First usable version, long_term: Long-term product}, default: mvp, covers: [arc42:constraints]}
+      - {id: product.team, ask: "Who's building it?", type: single_select, options: [solo_beginner, solo_experienced, small_team, larger_team], option_labels: {solo_beginner: Just me - beginner, solo_experienced: Just me - experienced, small_team: Small team, larger_team: Larger team}, covers: [arc42:constraints, beginner-ops:skill-level]}
+      - {id: product.depth, ask: "How detailed should setup be?", type: single_select, options: [quick, standard, full], option_labels: {quick: Quick, standard: Standard, full: Detailed}, default: standard, covers: [arc42:solution-strategy]}
   - module: users-scale
     stage: plan
     phase: 2
@@ -35,8 +34,7 @@ modules:
     stage: idea
     phase: 3
     questions:
-      - {id: features.core, ask: "List the core features. Each becomes a user story.", type: text, covers: [arc42:context-scope, iso25010:functional-suitability]}
-      - {id: risks.known, ask: "What are you most worried could go wrong?", type: text, covers: [arc42:risks-technical-debt]}
+      - {id: features.core, ask: "What should the first version do?", type: text, covers: [arc42:context-scope, iso25010:functional-suitability]}
   - module: data-model
     stage: plan
     phase: 3
@@ -47,6 +45,8 @@ modules:
     stage: plan
     phase: 1.5
     questions:
+      - {id: product.out_of_scope, ask: "What is explicitly NOT part of version 1?", type: text, why: "A written 'no' list stops the AI from adding features you did not ask for.", covers: [arc42:introduction-goals]}
+      - {id: risks.known, ask: "What are you most worried could go wrong?", type: text, covers: [arc42:risks-technical-debt]}
       - {id: product.new_or_existing, ask: "Is this a new project or an existing codebase?", type: single_select, options: [new, existing], why: "Existing projects are scanned first, so we only ask what is missing.", covers: [arc42:constraints]}
       - {id: product.budget, ask: "What is your monthly budget for hosting and services?", type: single_select, options: [free_only, under_50_usd, flexible], covers: [arc42:constraints, project:cost]}
       - {id: product.timeline, ask: "When do you need the first version?", type: text, covers: [arc42:constraints]}

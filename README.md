@@ -62,10 +62,13 @@ Use `npm run vibecode -- next` to resume; Ctrl+C preserves accepted answers.
 Fresh interviews show the Vibecode banner, then numbered questions grouped into clear sections.
 Long menus scroll; recommendation reviews use brief labels and readable values. Help stays
 compact and a completed brief shows the next commands. See the
-[terminal design guide](specs/012-terminal-design/quickstart.md) for the local preview and checks.
-The guided opening starts with name, description and project type. Optional sign-in, payments
-and other routing features share one checklist. Budget, scale, detailed data choices and AI
-workflow policies are asked later when needed. Ordinary opening questions accept a direct
+[direct interview guide](specs/014-direct-project-interview/quickstart.md) for the local preview and checks.
+The guided opening asks for name, description, project type, audience and first-version features.
+Optional sign-in, payments and other routing features share one checklist, followed by builder
+experience. A simple website or account app needs seven prompts and one review of two defaults.
+Project text is visible as you type. Physical-harm questions appear for hardware or AI actions;
+budget, business validation and AI workflow policies are asked later when needed.
+Ordinary opening questions accept a direct
 answer; use `/defer` or `/na` in text fields, or the corresponding menu action, to record an
 explicit alternative. See [the shorter interview guide](specs/011-short-interview/quickstart.md).
 The state file defaults to `.scaffolder/state.json`, which is ignored by Git.

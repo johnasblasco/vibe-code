@@ -1,5 +1,8 @@
 # Feature: Modern terminal interview
 
+The masked-input and privacy-notice requirements below were subsequently replaced by the
+user's [direct interview request](../014-direct-project-interview/spec.md).
+
 Requested: a Vibecode banner on init and a friendlier, modern series of questions.
 
 - A fresh interactive interview opens with a cyan YAML wordmark/banner and a short welcome.
